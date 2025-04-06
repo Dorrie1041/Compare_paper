@@ -1,26 +1,28 @@
 import openai
 from dotenv import load_dotenv, find_dotenv
+from pdfminer.high_level import extract_text
+from markdownify import markdownify as md
 import sys
 import os
 import re
-
-if len(sys.argv) != 3:
-    print("Usage: python3 f.py paper_a.md paper_b.md")
-    sys.exit(1)
-file_a = sys.argv[1]
-file_b = sys.argv[2]
-
 
 _ = load_dotenv(find_dotenv())
 openai.api_key = "---"
 client = openai.OpenAI(api_key=openai.api_key)
 
-with open(file_a, "r", encoding="utf-8") as f:
-    paper_a = f.read()
+# STEP 1: Convert PDF to Markdown
+def convert_pdf_to_markdown(pdf_path):
+    if not os.path.exists(pdf_path):
+        print(f"File not found: {pdf_path}")
+        sys.exit(1)
 
-with open(file_b, "r", encoding="utf-8") as f:
-    paper_b = f.read()
+    print(f"[+] Extracting text from: {pdf_path}")
+    text = extract_text(pdf_path)
+    print(f"[+] Converting to Markdown...")
+    markdown = md(text)
+    return markdown
 
+# STEP 2: Extract Sections from Markdown
 def extract_sections(markdown_text):
     section_pattern = r'(?m)^(?P<header>([A-Z][A-Z\s\-]+|[0-9]+[\.\d]*\s+[A-Z][A-Z\s\-]+))$'
     matches = list(re.finditer(section_pattern, markdown_text))
@@ -33,19 +35,16 @@ def extract_sections(markdown_text):
         sections[title] = content
     return sections
 
+# STEP 3: Compare Sections
+def compare_sections(sections_a, sections_b):
+    common_sections = set(sections_a.keys()).intersection(sections_b.keys())
 
-sections_a = extract_sections(paper_a)
-sections_b = extract_sections(paper_b)
+    if not common_sections:
+        print("No matching top-level sections found between papers.")
+        sys.exit(1)
 
-# compare matching sections, like abstract compare with abstract
-common_sections = set(sections_a.keys()).intersection(sections_b.keys())
-
-if not common_sections:
-    print("No matching top-level sections found between papers.")
-    sys.exit(1)
-
-for section in sorted(common_sections):
-    prompt = f"""
+    for section in sorted(common_sections):
+        prompt = f"""
 Compare the following **{section}** sections from two papers:
 
 ### {section} of Paper A:
@@ -61,11 +60,30 @@ Evaluate them based on:
 
 Give 1 point to the better paper per category. Do not allow ties — always choose one paper as better for each criterion.
 """
-    print(f"\n===== Comparing Section: {section} =====\n")
-    response = client.chat.completions.create(
-        model="gpt-4-1106-preview",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.2,
-        max_tokens=1024
-    )
-    print(response.choices[0].message.content)
+        print(f"\n===== Comparing Section: {section} =====\n")
+        response = client.chat.completions.create(
+            model="gpt-4-1106-preview",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.2,
+            max_tokens=1024
+        )
+        print(response.choices[0].message.content)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python3 compare_papers_from_pdf.py paper_a.pdf paper_b.pdf")
+        sys.exit(1)
+
+    pdf_a = sys.argv[1]
+    pdf_b = sys.argv[2]
+
+    # Step 1: Convert PDFs to markdown
+    paper_a_md = convert_pdf_to_markdown(pdf_a)
+    paper_b_md = convert_pdf_to_markdown(pdf_b)
+
+    # Step 2: Extract sections
+    sections_a = extract_sections(paper_a_md)
+    sections_b = extract_sections(paper_b_md)
+
+    # Step 3: Compare them
+    compare_sections(sections_a, sections_b)
