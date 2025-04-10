@@ -9,7 +9,7 @@ import openai
 from dotenv import load_dotenv, find_dotenv
 
 _ = load_dotenv(find_dotenv())
-openai.api_key = "---"
+openai.api_key = "sk---"
 client = openai.OpenAI(api_key=openai.api_key)
 
 # Convert PDF to Markdown
@@ -95,7 +95,7 @@ Respond only with the final decision in this format: `Winner: Paper A` or `Winne
 """
         try:
             response = client.chat.completions.create(
-                model="gpt-4-1106-preview",
+                model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.2,
                 max_tokens=1024
