@@ -13,10 +13,11 @@ import matplotlib.pyplot as plt
 # === CONFIGURATION ===
 os.environ["OPENAI_API_KEY"] = ""
 output_dir = "C:/Users/chloe/Downloads/Compare_paper"
-result_txt_path = os.path.join(output_dir, "test_result_cache.txt")
-chart_path = os.path.join(output_dir, "test_result_chart_cache.png")
-LOG_PIPELINE = os.path.join(output_dir, "test_pipeline_log.txt")
+result_txt_path = os.path.join(output_dir, "tes_result_cache.txt")
+chart_path = os.path.join(output_dir, "tes_result_chart_cache.png")
+LOG_PIPELINE = os.path.join(output_dir, "tes_pipeline_log.txt")
 os.makedirs(output_dir, exist_ok=True)
+
 
 # === UPDATED SYSTEM PROMPT ===
 SYSTEM_PROMPT = (
@@ -62,6 +63,16 @@ def extract_sections(markdown_text):
     return secs
 
 # === LLM Comparison Helpers ===
+# Define section-specific weights
+SECTION_WEIGHTS = {
+    'experiments': 2.0,
+    'results':    1.5,
+    'conclusion': 1.2,
+    'abstract':   1.0,
+    'references': 0.8,
+    # default weight for any other section
+}
+
 def standardize_result(resp):
     if not resp:
         return None
@@ -77,14 +88,13 @@ def standardize_result(resp):
 
 def compare_with_caching(a, b, sec, limit=2000):
     """
-    Compare two sections using LiteLLM API with correct OpenAI‐style messages and increased max_tokens.
+    Compare two sections using LiteLLM API with section-weighted scoring and full explanation.
     """
     for lim in (limit, limit // 2):
         try:
             print(f"[DEBUG] (limit={lim}) Comparing section '{sec}'...")
-            # OpenAI-style chat messages
-            msg_sys = {'role': 'system', 'content': SYSTEM_PROMPT}
-            prompt_text = f"""Compare these {sec} sections:
+            msg_sys = {'role': 'system', 'content': SYSTEM_PROMPT + " Please provide detailed reasoning for each score."}
+            prompt_text = f"""Compare these {sec} sections (weight={SECTION_WEIGHTS.get(sec,1.0)}):
 
 ### Paper A:
 {a[:lim]}
@@ -92,30 +102,21 @@ def compare_with_caching(a, b, sec, limit=2000):
 ### Paper B:
 {b[:lim]}"""
             msg_usr = {'role': 'user', 'content': prompt_text}
-
-            # Call completion without custom cache, with higher max_tokens
             response = completion(
                 model='gpt-4o',
                 messages=[msg_sys, msg_usr],
                 temperature=0.0,
-                max_tokens=1000
+                max_tokens=800
             )
-
-            # Validate response
             if not hasattr(response, 'choices') or not response.choices:
-                print(f"[ERROR] No choices received for section '{sec}'")
                 continue
-            result = response.choices[0].message.content.strip()
-            print(f"[DEBUG] API returned result: {result[:100]}...")
-
-            # Log token usage if available
+            full_text = response.choices[0].message.content.strip()
+            print(f"[DEBUG] API returned full explanation: {full_text[:200]}...")
             if hasattr(response, 'usage') and hasattr(response.usage, 'prompt_tokens'):
                 print(f"[DEBUG] Tokens used: {response.usage.prompt_tokens}")
-
-            return result
+            return full_text
         except Exception as e:
-            print(f"[ERROR] (limit={lim}) API error for section '{sec}': {e}")
-    print(f"[ERROR] All attempts failed for section '{sec}'")
+            print(f"[ERROR] API error for section '{sec}': {e}")
     return None
 
 # === TOURNAMENT PIPELINE UTILITIES ===
@@ -189,14 +190,31 @@ if __name__ == '__main__':
         sys.exit(1)
 
     def cmp_p(a, b):
-        wa = wb = 0
-        common = set(papers[a]) & set(papers[b])
+        """
+        Head-to-head comparison that weights each section's win by its configured weight.
+        """
+        wa = wb = 0.0
+        common = set(papers[a].keys()) & set(papers[b].keys())
         for sec in common:
+            weight = SECTION_WEIGHTS.get(sec, 1.0)
             raw = compare_with_caching(papers[a][sec], papers[b][sec], sec)
             res = standardize_result(raw)
-            if res == 'Winner: Paper A': wa += 1
-            elif res == 'Winner: Paper B': wb += 1
-        return 'A' if wa > wb else 'B' if wb > wa else 'Draw'
+            # Add weighted score
+            if res == 'Winner: Paper A':
+                wa += weight
+            elif res == 'Winner: Paper B':
+                wb += weight
+            else:
+                # Draw: split weight equally
+                wa += weight * 0.5
+                wb += weight * 0.5
+        # Decide overall winner considering weights
+        if wa > wb:
+            return 'A'
+        elif wb > wa:
+            return 'B'
+        else:
+            return 'Draw'
 
     paper_list = list(papers.keys())
     sorted_p, class_scores, class_details = classification_round(paper_list, cmp_p)
@@ -234,11 +252,25 @@ if __name__ == '__main__':
         wins_a = wins_b = 0
         for sec in common_secs:
             print(f"[DEBUG] Comparing section: '{sec}'")
-            raw_res = compare_with_caching(papers[pa][sec], papers[pb][sec], sec)
-            std = standardize_result(raw_res) or "Error"
-            detailed_log.append(f"[RESULT] [{sec}] -> {std}")
-            if std == 'Winner: Paper A': wins_a += 1
-            elif std == 'Winner: Paper B': wins_b += 1
+            # Chunk section text if too long
+            def chunk_text(text, size=2000):
+                return [text[i:i+size] for i in range(0, len(text), size)]
+            a_chunks = chunk_text(papers[pa][sec])
+            b_chunks = chunk_text(papers[pb][sec])
+            raw_chunks = []
+            for idx, (ac, bc) in enumerate(zip(a_chunks, b_chunks)):
+                chunk_label = f"{sec} (chunk {idx+1}/{len(a_chunks)})"
+                raw = compare_with_caching(ac, bc, chunk_label)
+                raw_chunks.append(raw or "No response")
+            # Use first chunk to decide outcome
+            std = standardize_result(raw_chunks[0]) or "Error"
+            # Combine reasons from all chunks
+            reason = "; ".join([f"Chunk {i+1}: {txt.splitlines()[0]}" for i, txt in enumerate(raw_chunks)])
+            detailed_log.append(f"[RESULT] [{sec}] -> {std}, reason: {reason}")
+            if std == 'Winner: Paper A':
+                wins_a += 1
+            elif std == 'Winner: Paper B':
+                wins_b += 1
             time.sleep(1)
 
         if wins_a > wins_b:
@@ -260,6 +292,8 @@ if __name__ == '__main__':
 
         print(match_res)
         detailed_log.append(match_res)
+        # Wait 2 seconds between matches
+        time.sleep(2)
 
     with open(result_txt_path, 'a') as rf:
         rf.write("\n===== DETAILED MATCH RESPONSES =====\n")
@@ -267,7 +301,7 @@ if __name__ == '__main__':
         rf.write("===== FINAL RESULTS =====\n")
         ranked = sorted(results.items(), key=lambda x: x[1]['points'], reverse=True)
         for paper, stats in ranked:
-            rf.write(f"{os.path.basename(paper):<40} {stats['wins']:>3} {stats['draws']:>3} {stats['losses']:>3} {stats['points']:>5} ")
+            rf.write(f"{os.path.basename(paper):<40} {stats['wins']:>3} {stats['draws']:>3} {stats['losses']:>3} {stats['points']:>5}")
 
     # Generate and save chart
     try:
@@ -284,4 +318,4 @@ if __name__ == '__main__':
     except Exception as e:
         print(f"[ERROR] Failed to generate chart: {e}")
 
-    print(" [INFO] Processing complete.")
+    print("[INFO] Processing complete.")
