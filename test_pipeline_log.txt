@@ -1,0 +1,40 @@
+CLASSIFICATION
+Classify 4430_Meta_Continual_Learning_R.pdf vs 8660_Generalization_in_diffusi.pdf -> Draw
+Classify 8848_BooookScore_A_systematic_.pdf vs 2746_Monte_Carlo_guided_Denois.pdf -> A
+Classify 749_LRM_Large_Reconstruction_M.pdf vs 8504_The_mechanistic_basis_of_.pdf -> B
+Classify 6649_Understanding_and_Mitigat.pdf vs 789_DreamGaussian_Generative_G.pdf -> B
+Classify 62_Real3D_Portrait_One_shot_Re.pdf vs 6795_Beyond_Weisfeiler_Lehman_.pdf -> B
+Classify 749_LRM_Large_Reconstruction_M.pdf vs 8504_The_mechanistic_basis_of_.pdf -> B
+Classify 62_Real3D_Portrait_One_shot_Re.pdf vs 789_DreamGaussian_Generative_G.pdf -> B
+Classify 8660_Generalization_in_diffusi.pdf vs 6649_Understanding_and_Mitigat.pdf -> Draw
+Classify 2746_Monte_Carlo_guided_Denois.pdf vs 4430_Meta_Continual_Learning_R.pdf -> Draw
+Classify 8848_BooookScore_A_systematic_.pdf vs 6795_Beyond_Weisfeiler_Lehman_.pdf -> B
+Classify 789_DreamGaussian_Generative_G.pdf vs 8848_BooookScore_A_systematic_.pdf -> A
+Classify 62_Real3D_Portrait_One_shot_Re.pdf vs 6795_Beyond_Weisfeiler_Lehman_.pdf -> B
+Classify 8504_The_mechanistic_basis_of_.pdf vs 8660_Generalization_in_diffusi.pdf -> A
+Classify 4430_Meta_Continual_Learning_R.pdf vs 2746_Monte_Carlo_guided_Denois.pdf -> A
+Classify 749_LRM_Large_Reconstruction_M.pdf vs 6649_Understanding_and_Mitigat.pdf -> B
+Classify 8660_Generalization_in_diffusi.pdf vs 4430_Meta_Continual_Learning_R.pdf -> A
+Classify 2746_Monte_Carlo_guided_Denois.pdf vs 6649_Understanding_and_Mitigat.pdf -> A
+Classify 8504_The_mechanistic_basis_of_.pdf vs 789_DreamGaussian_Generative_G.pdf -> B
+Classify 62_Real3D_Portrait_One_shot_Re.pdf vs 8848_BooookScore_A_systematic_.pdf -> B
+Classify 6795_Beyond_Weisfeiler_Lehman_.pdf vs 749_LRM_Large_Reconstruction_M.pdf -> B
+GROUP STAGE
+Group 789_DreamGaussian_Generative_G.pdf vs 8504_The_mechanistic_basis_of_.pdf -> Draw
+Group 789_DreamGaussian_Generative_G.pdf vs 6795_Beyond_Weisfeiler_Lehman_.pdf -> B
+Group 789_DreamGaussian_Generative_G.pdf vs 8848_BooookScore_A_systematic_.pdf -> A
+Group 8504_The_mechanistic_basis_of_.pdf vs 6795_Beyond_Weisfeiler_Lehman_.pdf -> A
+Group 8504_The_mechanistic_basis_of_.pdf vs 8848_BooookScore_A_systematic_.pdf -> B
+Group 6795_Beyond_Weisfeiler_Lehman_.pdf vs 8848_BooookScore_A_systematic_.pdf -> B
+Group 8660_Generalization_in_diffusi.pdf vs 4430_Meta_Continual_Learning_R.pdf -> A
+Group 8660_Generalization_in_diffusi.pdf vs 2746_Monte_Carlo_guided_Denois.pdf -> Draw
+Group 8660_Generalization_in_diffusi.pdf vs 6649_Understanding_and_Mitigat.pdf -> A
+Group 4430_Meta_Continual_Learning_R.pdf vs 2746_Monte_Carlo_guided_Denois.pdf -> B
+Group 4430_Meta_Continual_Learning_R.pdf vs 6649_Understanding_and_Mitigat.pdf -> A
+Group 2746_Monte_Carlo_guided_Denois.pdf vs 6649_Understanding_and_Mitigat.pdf -> B
+Group 749_LRM_Large_Reconstruction_M.pdf vs 62_Real3D_Portrait_One_shot_Re.pdf -> B
+KNOCKOUT
+Knockout 2746_Monte_Carlo_guided_Denois.pdf vs 8848_BooookScore_A_systematic_.pdf -> 8848_BooookScore_A_systematic_.pdf
+Knockout 8660_Generalization_in_diffusi.pdf vs 62_Real3D_Portrait_One_shot_Re.pdf -> 8660_Generalization_in_diffusi.pdf
+Knockout 789_DreamGaussian_Generative_G.pdf vs 749_LRM_Large_Reconstruction_M.pdf -> 789_DreamGaussian_Generative_G.pdf
+Knockout 8848_BooookScore_A_systematic_.pdf vs 8660_Generalization_in_diffusi.pdf -> 8660_Generalization_in_diffusi.pdf
