@@ -1,0 +1,270 @@
+===== PAPER COMPARISON RESULTS =====
+
+
+===== DETAILED MATCH RESPONSES =====
+===== Match #1: 2746_Monte_Carlo_guided_Denois.pdf vs 4430_Meta_Continual_Learning_R.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Draw
+[INFO] This match resulted in a draw.
+===== Match #2: 2746_Monte_Carlo_guided_Denois.pdf vs 62_Real3D_Portrait_One_shot_Re.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Draw
+[INFO] This match resulted in a draw.
+===== Match #3: 2746_Monte_Carlo_guided_Denois.pdf vs 6649_Understanding_and_Mitigat.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 6649_Understanding_and_Mitigat.pdf
+===== Match #4: 2746_Monte_Carlo_guided_Denois.pdf vs 6795_Beyond_Weisfeiler_Lehman_.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 6795_Beyond_Weisfeiler_Lehman_.pdf
+===== Match #5: 2746_Monte_Carlo_guided_Denois.pdf vs 749_LRM_Large_Reconstruction_M.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 749_LRM_Large_Reconstruction_M.pdf
+===== Match #6: 2746_Monte_Carlo_guided_Denois.pdf vs 789_DreamGaussian_Generative_G.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper A
+[INFO] Winner for this match: 2746_Monte_Carlo_guided_Denois.pdf
+===== Match #7: 2746_Monte_Carlo_guided_Denois.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 8504_The_mechanistic_basis_of_.pdf
+===== Match #8: 2746_Monte_Carlo_guided_Denois.pdf vs 8660_Generalization_in_diffusi.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper A
+[INFO] Winner for this match: 2746_Monte_Carlo_guided_Denois.pdf
+===== Match #9: 2746_Monte_Carlo_guided_Denois.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper A
+[INFO] Winner for this match: 2746_Monte_Carlo_guided_Denois.pdf
+===== Match #10: 4430_Meta_Continual_Learning_R.pdf vs 62_Real3D_Portrait_One_shot_Re.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper A
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper A
+[INFO] Winner for this match: 4430_Meta_Continual_Learning_R.pdf
+===== Match #11: 4430_Meta_Continual_Learning_R.pdf vs 6649_Understanding_and_Mitigat.pdf =====
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [abstract] -> Draw
+[RESULT] [6 conclusion] -> Winner: Paper A
+[RESULT] [references] -> Winner: Paper A
+[INFO] Winner for this match: 4430_Meta_Continual_Learning_R.pdf
+===== Match #12: 4430_Meta_Continual_Learning_R.pdf vs 6795_Beyond_Weisfeiler_Lehman_.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [5 experiments] -> Winner: Paper B
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [6 conclusion] -> Draw
+[RESULT] [references] -> Winner: Paper A
+[INFO] Winner for this match: 6795_Beyond_Weisfeiler_Lehman_.pdf
+===== Match #13: 4430_Meta_Continual_Learning_R.pdf vs 749_LRM_Large_Reconstruction_M.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 749_LRM_Large_Reconstruction_M.pdf
+===== Match #14: 4430_Meta_Continual_Learning_R.pdf vs 789_DreamGaussian_Generative_G.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [abstract] -> Winner: Paper A
+[RESULT] [references] -> Winner: Paper A
+[INFO] Winner for this match: 4430_Meta_Continual_Learning_R.pdf
+===== Match #15: 4430_Meta_Continual_Learning_R.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 8504_The_mechanistic_basis_of_.pdf
+===== Match #16: 4430_Meta_Continual_Learning_R.pdf vs 8660_Generalization_in_diffusi.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper A
+[INFO] This match resulted in a draw.
+===== Match #17: 4430_Meta_Continual_Learning_R.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 8848_BooookScore_A_systematic_.pdf
+===== Match #18: 62_Real3D_Portrait_One_shot_Re.pdf vs 6649_Understanding_and_Mitigat.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper A
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] This match resulted in a draw.
+===== Match #19: 62_Real3D_Portrait_One_shot_Re.pdf vs 6795_Beyond_Weisfeiler_Lehman_.pdf =====
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [abstract] -> Winner: Paper B
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 6795_Beyond_Weisfeiler_Lehman_.pdf
+===== Match #20: 62_Real3D_Portrait_One_shot_Re.pdf vs 749_LRM_Large_Reconstruction_M.pdf =====
+[RESULT] [abstract] -> Winner: Paper A
+[RESULT] [5 conclusion] -> Draw
+[RESULT] [2 related work] -> Winner: Paper B
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 749_LRM_Large_Reconstruction_M.pdf
+===== Match #21: 62_Real3D_Portrait_One_shot_Re.pdf vs 789_DreamGaussian_Generative_G.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [abstract] -> Draw
+[RESULT] [2 related work] -> Winner: Paper B
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 789_DreamGaussian_Generative_G.pdf
+===== Match #22: 62_Real3D_Portrait_One_shot_Re.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 8504_The_mechanistic_basis_of_.pdf
+===== Match #23: 62_Real3D_Portrait_One_shot_Re.pdf vs 8660_Generalization_in_diffusi.pdf =====
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 8660_Generalization_in_diffusi.pdf
+===== Match #24: 62_Real3D_Portrait_One_shot_Re.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 8848_BooookScore_A_systematic_.pdf
+===== Match #25: 6649_Understanding_and_Mitigat.pdf vs 6795_Beyond_Weisfeiler_Lehman_.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [abstract] -> Draw
+[RESULT] [6 conclusion] -> Winner: Paper B
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 6795_Beyond_Weisfeiler_Lehman_.pdf
+===== Match #26: 6649_Understanding_and_Mitigat.pdf vs 749_LRM_Large_Reconstruction_M.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 749_LRM_Large_Reconstruction_M.pdf
+===== Match #27: 6649_Understanding_and_Mitigat.pdf vs 789_DreamGaussian_Generative_G.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 789_DreamGaussian_Generative_G.pdf
+===== Match #28: 6649_Understanding_and_Mitigat.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 8504_The_mechanistic_basis_of_.pdf
+===== Match #29: 6649_Understanding_and_Mitigat.pdf vs 8660_Generalization_in_diffusi.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 8660_Generalization_in_diffusi.pdf
+===== Match #30: 6649_Understanding_and_Mitigat.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 8848_BooookScore_A_systematic_.pdf
+===== Match #31: 6795_Beyond_Weisfeiler_Lehman_.pdf vs 749_LRM_Large_Reconstruction_M.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 749_LRM_Large_Reconstruction_M.pdf
+===== Match #32: 6795_Beyond_Weisfeiler_Lehman_.pdf vs 789_DreamGaussian_Generative_G.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Draw
+[INFO] Winner for this match: 789_DreamGaussian_Generative_G.pdf
+===== Match #33: 6795_Beyond_Weisfeiler_Lehman_.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 8504_The_mechanistic_basis_of_.pdf
+===== Match #34: 6795_Beyond_Weisfeiler_Lehman_.pdf vs 8660_Generalization_in_diffusi.pdf =====
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper A
+[INFO] Winner for this match: 6795_Beyond_Weisfeiler_Lehman_.pdf
+===== Match #35: 6795_Beyond_Weisfeiler_Lehman_.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 8848_BooookScore_A_systematic_.pdf
+===== Match #36: 749_LRM_Large_Reconstruction_M.pdf vs 789_DreamGaussian_Generative_G.pdf =====
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [abstract] -> Draw
+[RESULT] [2 related work] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 789_DreamGaussian_Generative_G.pdf
+===== Match #37: 749_LRM_Large_Reconstruction_M.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 8504_The_mechanistic_basis_of_.pdf
+===== Match #38: 749_LRM_Large_Reconstruction_M.pdf vs 8660_Generalization_in_diffusi.pdf =====
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 8660_Generalization_in_diffusi.pdf
+===== Match #39: 749_LRM_Large_Reconstruction_M.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[INFO] Winner for this match: 8848_BooookScore_A_systematic_.pdf
+===== Match #40: 789_DreamGaussian_Generative_G.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [references] -> Winner: Paper B
+[RESULT] [a appendix] -> Winner: Paper A
+[INFO] This match resulted in a draw.
+===== Match #41: 789_DreamGaussian_Generative_G.pdf vs 8660_Generalization_in_diffusi.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper B
+[RESULT] [acknowledgments] -> Draw
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Draw
+[INFO] Winner for this match: 8660_Generalization_in_diffusi.pdf
+===== Match #42: 789_DreamGaussian_Generative_G.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [1
+introduction] -> Winner: Paper A
+[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper A
+[INFO] Winner for this match: 789_DreamGaussian_Generative_G.pdf
+===== Match #43: 8504_The_mechanistic_basis_of_.pdf vs 8660_Generalization_in_diffusi.pdf =====
+[RESULT] [abstract] -> Winner: Paper A
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [references] -> Winner: Paper A
+[RESULT] [4 discussion] -> Draw
+[INFO] Winner for this match: 8504_The_mechanistic_basis_of_.pdf
+===== Match #44: 8504_The_mechanistic_basis_of_.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [abstract] -> Draw
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [references] -> Draw
+[INFO] This match resulted in a draw.
+===== Match #45: 8660_Generalization_in_diffusi.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [1
+introduction] -> Draw
+[RESULT] [abstract] -> Winner: Paper B
+[RESULT] [references] -> Winner: Paper A
+[INFO] This match resulted in a draw.
+
+===== FINAL RESULTS =====
+8504_The_mechanistic_basis_of_.pdf         7   2   0    23 8848_BooookScore_A_systematic_.pdf         5   2   2    17 789_DreamGaussian_Generative_G.pdf         5   1   3    16 6795_Beyond_Weisfeiler_Lehman_.pdf         5   0   4    15 749_LRM_Large_Reconstruction_M.pdf         5   0   4    15 8660_Generalization_in_diffusi.pdf         4   2   3    14 2746_Monte_Carlo_guided_Denois.pdf         3   2   4    11 4430_Meta_Continual_Learning_R.pdf         3   2   4    11 6649_Understanding_and_Mitigat.pdf         1   1   7     4 62_Real3D_Portrait_One_shot_Re.pdf         0   2   7     2 
