@@ -3,268 +3,268 @@
 
 ===== DETAILED MATCH RESPONSES =====
 ===== Match #1: 2746_Monte_Carlo_guided_Denois.pdf vs 4430_Meta_Continual_Learning_R.pdf =====
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Draw
+[RESULT] [references] -> Draw, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Paper A:; Chunk 6: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [INFO] This match resulted in a draw.
 ===== Match #2: 2746_Monte_Carlo_guided_Denois.pdf vs 62_Real3D_Portrait_One_shot_Re.pdf =====
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Draw
-[INFO] This match resulted in a draw.
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of References Sections; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Evaluation of Paper A:; Chunk 6: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
+[INFO] Winner for this match: 62_Real3D_Portrait_One_shot_Re.pdf
 ===== Match #3: 2746_Monte_Carlo_guided_Denois.pdf vs 6649_Understanding_and_Mitigat.pdf =====
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Evaluation of Paper A:; Chunk 5: ### Paper A:; Chunk 6: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [INFO] Winner for this match: 6649_Understanding_and_Mitigat.pdf
 ===== Match #4: 2746_Monte_Carlo_guided_Denois.pdf vs 6795_Beyond_Weisfeiler_Lehman_.pdf =====
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
-[INFO] Winner for this match: 6795_Beyond_Weisfeiler_Lehman_.pdf
+[RESULT] [references] -> Draw, reason: Chunk 1: ### Evaluation of References Sections; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Paper A:; Chunk 6: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
+[INFO] This match resulted in a draw.
 ===== Match #5: 2746_Monte_Carlo_guided_Denois.pdf vs 749_LRM_Large_Reconstruction_M.pdf =====
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of References Sections; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Evaluation of Paper A:; Chunk 6: ### Evaluation of Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [INFO] Winner for this match: 749_LRM_Large_Reconstruction_M.pdf
 ===== Match #6: 2746_Monte_Carlo_guided_Denois.pdf vs 789_DreamGaussian_Generative_G.pdf =====
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper A
-[INFO] Winner for this match: 2746_Monte_Carlo_guided_Denois.pdf
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Evaluation of Paper A:; Chunk 6: ### Paper A:
+[RESULT] [abstract] -> Winner: Paper B, reason: Chunk 1: ### Paper A:
+[INFO] Winner for this match: 789_DreamGaussian_Generative_G.pdf
 ===== Match #7: 2746_Monte_Carlo_guided_Denois.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
-[INFO] Winner for this match: 8504_The_mechanistic_basis_of_.pdf
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Paper A:
+[RESULT] [abstract] -> Winner: Paper A, reason: Chunk 1: ### Paper A:
+[INFO] This match resulted in a draw.
 ===== Match #8: 2746_Monte_Carlo_guided_Denois.pdf vs 8660_Generalization_in_diffusi.pdf =====
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper A
-[INFO] Winner for this match: 2746_Monte_Carlo_guided_Denois.pdf
+[RESULT] [references] -> Draw, reason: Chunk 1: ### Evaluation of References Sections; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
+[INFO] This match resulted in a draw.
 ===== Match #9: 2746_Monte_Carlo_guided_Denois.pdf vs 8848_BooookScore_A_systematic_.pdf =====
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper A
+[RESULT] [references] -> Winner: Paper A, reason: Chunk 1: ### Evaluation of References Sections; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [INFO] Winner for this match: 2746_Monte_Carlo_guided_Denois.pdf
 ===== Match #10: 4430_Meta_Continual_Learning_R.pdf vs 62_Real3D_Portrait_One_shot_Re.pdf =====
+[RESULT] [references] -> Winner: Paper A, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Evaluation of Paper A:; Chunk 5: ### Paper A:; Chunk 6: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper A
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper A
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
 [INFO] Winner for this match: 4430_Meta_Continual_Learning_R.pdf
 ===== Match #11: 4430_Meta_Continual_Learning_R.pdf vs 6649_Understanding_and_Mitigat.pdf =====
+[RESULT] [references] -> Draw, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Evaluation of Paper A:; Chunk 5: ### Paper A:; Chunk 6: ### Evaluation of Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [abstract] -> Draw
-[RESULT] [6 conclusion] -> Winner: Paper A
-[RESULT] [references] -> Winner: Paper A
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
+[RESULT] [6 conclusion] -> Winner: Paper A, reason: Chunk 1: ### Paper A:
 [INFO] Winner for this match: 4430_Meta_Continual_Learning_R.pdf
 ===== Match #12: 4430_Meta_Continual_Learning_R.pdf vs 6795_Beyond_Weisfeiler_Lehman_.pdf =====
-[RESULT] [abstract] -> Draw
-[RESULT] [5 experiments] -> Winner: Paper B
+[RESULT] [references] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Evaluation of Paper A:; Chunk 6: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
+[RESULT] [6 conclusion] -> Draw, reason: Chunk 1: ### Paper A:
+[RESULT] [5 experiments] -> Winner: Paper B, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [6 conclusion] -> Draw
-[RESULT] [references] -> Winner: Paper A
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
 [INFO] Winner for this match: 6795_Beyond_Weisfeiler_Lehman_.pdf
 ===== Match #13: 4430_Meta_Continual_Learning_R.pdf vs 749_LRM_Large_Reconstruction_M.pdf =====
+[RESULT] [references] -> Draw, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Evaluation of Paper A:; Chunk 6: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
 [INFO] Winner for this match: 749_LRM_Large_Reconstruction_M.pdf
 ===== Match #14: 4430_Meta_Continual_Learning_R.pdf vs 789_DreamGaussian_Generative_G.pdf =====
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Paper A:; Chunk 6: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [abstract] -> Winner: Paper A
-[RESULT] [references] -> Winner: Paper A
-[INFO] Winner for this match: 4430_Meta_Continual_Learning_R.pdf
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
+[INFO] Winner for this match: 789_DreamGaussian_Generative_G.pdf
 ===== Match #15: 4430_Meta_Continual_Learning_R.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
-[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Draw, reason: Chunk 1: ### Evaluation of References Sections; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Evaluation of Paper A:
+[RESULT] [abstract] -> Winner: Paper A, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [references] -> Winner: Paper B
-[INFO] Winner for this match: 8504_The_mechanistic_basis_of_.pdf
-===== Match #16: 4430_Meta_Continual_Learning_R.pdf vs 8660_Generalization_in_diffusi.pdf =====
-[RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper A
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
 [INFO] This match resulted in a draw.
-===== Match #17: 4430_Meta_Continual_Learning_R.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+===== Match #16: 4430_Meta_Continual_Learning_R.pdf vs 8660_Generalization_in_diffusi.pdf =====
+[RESULT] [references] -> Draw, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Paper A:
+[INFO] Winner for this match: 8660_Generalization_in_diffusi.pdf
+===== Match #17: 4430_Meta_Continual_Learning_R.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
+[RESULT] [1
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper A:
 [INFO] Winner for this match: 8848_BooookScore_A_systematic_.pdf
 ===== Match #18: 62_Real3D_Portrait_One_shot_Re.pdf vs 6649_Understanding_and_Mitigat.pdf =====
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Evaluation of References Sections; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Evaluation of Paper A:; Chunk 5: ### Paper A:; Chunk 6: ### Paper A:; Chunk 7: ### Paper A:
+[RESULT] [abstract] -> Winner: Paper A, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper A
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
-[INFO] This match resulted in a draw.
+introduction] -> Winner: Paper A, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Paper A:
+[INFO] Winner for this match: 62_Real3D_Portrait_One_shot_Re.pdf
 ===== Match #19: 62_Real3D_Portrait_One_shot_Re.pdf vs 6795_Beyond_Weisfeiler_Lehman_.pdf =====
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Evaluation of Paper Sections; Chunk 3: ### Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Evaluation of Paper A:; Chunk 6: ### Evaluation of Paper A:; Chunk 7: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [abstract] -> Winner: Paper B
-[RESULT] [references] -> Winner: Paper B
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Evaluation of Paper A:
 [INFO] Winner for this match: 6795_Beyond_Weisfeiler_Lehman_.pdf
 ===== Match #20: 62_Real3D_Portrait_One_shot_Re.pdf vs 749_LRM_Large_Reconstruction_M.pdf =====
-[RESULT] [abstract] -> Winner: Paper A
-[RESULT] [5 conclusion] -> Draw
-[RESULT] [2 related work] -> Winner: Paper B
+[RESULT] [5 conclusion] -> Draw, reason: Chunk 1: ### Paper A:
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Evaluation of Paper A:; Chunk 5: ### Paper A:; Chunk 6: ### Paper A:; Chunk 7: ### Evaluation of Paper A:
+[RESULT] [2 related work] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [references] -> Winner: Paper B
-[INFO] Winner for this match: 749_LRM_Large_Reconstruction_M.pdf
+introduction] -> Winner: Paper A, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
+[INFO] This match resulted in a draw.
 ===== Match #21: 62_Real3D_Portrait_One_shot_Re.pdf vs 789_DreamGaussian_Generative_G.pdf =====
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Evaluation of References Sections; Chunk 3: ### Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Evaluation of Paper A:; Chunk 6: ### Evaluation of Paper A:; Chunk 7: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
+[RESULT] [2 related work] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [abstract] -> Draw
-[RESULT] [2 related work] -> Winner: Paper B
-[RESULT] [references] -> Winner: Paper B
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Paper A:
 [INFO] Winner for this match: 789_DreamGaussian_Generative_G.pdf
 ===== Match #22: 62_Real3D_Portrait_One_shot_Re.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
-[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Evaluation of References Sections; Chunk 3: ### Paper A:
+[RESULT] [abstract] -> Winner: Paper A, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [references] -> Winner: Paper B
-[INFO] Winner for this match: 8504_The_mechanistic_basis_of_.pdf
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
+[INFO] This match resulted in a draw.
 ===== Match #23: 62_Real3D_Portrait_One_shot_Re.pdf vs 8660_Generalization_in_diffusi.pdf =====
+[RESULT] [references] -> Draw, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Paper A:
+[RESULT] [abstract] -> Winner: Paper A, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
-[INFO] Winner for this match: 8660_Generalization_in_diffusi.pdf
+introduction] -> Winner: Paper A, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
+[INFO] Winner for this match: 62_Real3D_Portrait_One_shot_Re.pdf
 ===== Match #24: 62_Real3D_Portrait_One_shot_Re.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Paper A:
+[RESULT] [abstract] -> Winner: Paper B, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
+introduction] -> Winner: Paper A, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Paper A:
 [INFO] Winner for this match: 8848_BooookScore_A_systematic_.pdf
 ===== Match #25: 6649_Understanding_and_Mitigat.pdf vs 6795_Beyond_Weisfeiler_Lehman_.pdf =====
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Evaluation of Paper A:; Chunk 6: ### Evaluation of Paper A:; Chunk 7: ### Evaluation of Paper A:; Chunk 8: ### Paper A:; Chunk 9: ### Evaluation of Paper A:; Chunk 10: ### Evaluation of Paper A:; Chunk 11: To evaluate the references sections of Paper A and Paper B, we will assess them based on novelty, technical rigor, and clarity.
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [abstract] -> Draw
-[RESULT] [6 conclusion] -> Winner: Paper B
-[RESULT] [references] -> Winner: Paper B
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Paper A:
+[RESULT] [6 conclusion] -> Winner: Paper B, reason: Chunk 1: ### Paper A:
 [INFO] Winner for this match: 6795_Beyond_Weisfeiler_Lehman_.pdf
 ===== Match #26: 6649_Understanding_and_Mitigat.pdf vs 749_LRM_Large_Reconstruction_M.pdf =====
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of References Sections; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Evaluation of Paper Sections; Chunk 4: ### Evaluation of Paper A:; Chunk 5: ### Evaluation of Paper A:; Chunk 6: ### Paper A:; Chunk 7: ### Paper A:; Chunk 8: ### Evaluation of Paper A:; Chunk 9: ### Paper A:; Chunk 10: ### Evaluation of Paper A:; Chunk 11: ### Evaluation of References Sections; Chunk 12: ### Evaluation of Paper A:; Chunk 13: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
 [INFO] Winner for this match: 749_LRM_Large_Reconstruction_M.pdf
 ===== Match #27: 6649_Understanding_and_Mitigat.pdf vs 789_DreamGaussian_Generative_G.pdf =====
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of References Sections; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Evaluation of Paper Sections; Chunk 6: ### Evaluation of Paper A:; Chunk 7: ### Evaluation of Paper A:; Chunk 8: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
 [INFO] Winner for this match: 789_DreamGaussian_Generative_G.pdf
 ===== Match #28: 6649_Understanding_and_Mitigat.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
-[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Evaluation of Paper Sections; Chunk 3: ### Evaluation of Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [references] -> Winner: Paper B
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
 [INFO] Winner for this match: 8504_The_mechanistic_basis_of_.pdf
 ===== Match #29: 6649_Understanding_and_Mitigat.pdf vs 8660_Generalization_in_diffusi.pdf =====
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
 [INFO] Winner for this match: 8660_Generalization_in_diffusi.pdf
 ===== Match #30: 6649_Understanding_and_Mitigat.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [references] -> Draw, reason: Chunk 1: ### Evaluation of References Sections; Chunk 2: ### Evaluation of Paper Sections; Chunk 3: ### Evaluation of Paper Sections; Chunk 4: ### Evaluation of Paper A:; Chunk 5: ### Evaluation of Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Evaluation of Paper A:; Chunk 5: ### Paper A:
 [INFO] Winner for this match: 8848_BooookScore_A_systematic_.pdf
 ===== Match #31: 6795_Beyond_Weisfeiler_Lehman_.pdf vs 749_LRM_Large_Reconstruction_M.pdf =====
+[RESULT] [references] -> Winner: Paper A, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Evaluation of Paper A:; Chunk 5: ### Evaluation of Paper A:; Chunk 6: ### Paper A:; Chunk 7: ### Paper A:; Chunk 8: ### Evaluation of Paper A:; Chunk 9: ### Evaluation of Paper A:; Chunk 10: ### Evaluation of Paper A:; Chunk 11: ### Evaluation of Paper Sections
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
-[INFO] Winner for this match: 749_LRM_Large_Reconstruction_M.pdf
-===== Match #32: 6795_Beyond_Weisfeiler_Lehman_.pdf vs 789_DreamGaussian_Generative_G.pdf =====
-[RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Draw
-[INFO] Winner for this match: 789_DreamGaussian_Generative_G.pdf
-===== Match #33: 6795_Beyond_Weisfeiler_Lehman_.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
-[RESULT] [abstract] -> Draw
-[RESULT] [1
-introduction] -> Draw
-[RESULT] [references] -> Winner: Paper B
-[INFO] Winner for this match: 8504_The_mechanistic_basis_of_.pdf
-===== Match #34: 6795_Beyond_Weisfeiler_Lehman_.pdf vs 8660_Generalization_in_diffusi.pdf =====
-[RESULT] [1
-introduction] -> Draw
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper A
+introduction] -> Winner: Paper A, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
 [INFO] Winner for this match: 6795_Beyond_Weisfeiler_Lehman_.pdf
+===== Match #32: 6795_Beyond_Weisfeiler_Lehman_.pdf vs 789_DreamGaussian_Generative_G.pdf =====
+[RESULT] [references] -> Winner: Paper A, reason: Chunk 1: ### Evaluation of Paper Sections; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper Sections; Chunk 4: ### Paper A:; Chunk 5: ### Evaluation of Paper A:; Chunk 6: ### Evaluation of Paper A:; Chunk 7: ### Evaluation of Paper A:; Chunk 8: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
+[RESULT] [1
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
+[INFO] This match resulted in a draw.
+===== Match #33: 6795_Beyond_Weisfeiler_Lehman_.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
+[RESULT] [references] -> Winner: Paper A, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
+[RESULT] [1
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
+[INFO] Winner for this match: 6795_Beyond_Weisfeiler_Lehman_.pdf
+===== Match #34: 6795_Beyond_Weisfeiler_Lehman_.pdf vs 8660_Generalization_in_diffusi.pdf =====
+[RESULT] [references] -> Draw, reason: Chunk 1: ### Evaluation of References Sections; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper A:; Chunk 4: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
+[RESULT] [1
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
+[INFO] This match resulted in a draw.
 ===== Match #35: 6795_Beyond_Weisfeiler_Lehman_.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [references] -> Winner: Paper A, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of References Sections; Chunk 4: ### Paper A:; Chunk 5: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
-[INFO] Winner for this match: 8848_BooookScore_A_systematic_.pdf
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper Sections; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Paper A:
+[INFO] This match resulted in a draw.
 ===== Match #36: 749_LRM_Large_Reconstruction_M.pdf vs 789_DreamGaussian_Generative_G.pdf =====
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of References Sections; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Paper A:; Chunk 5: ### Evaluation of Paper A:; Chunk 6: ### Evaluation of Paper A:; Chunk 7: ### Evaluation of References Sections; Chunk 8: ### Evaluation of Paper Sections
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
+[RESULT] [2 related work] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [abstract] -> Draw
-[RESULT] [2 related work] -> Draw
-[RESULT] [references] -> Winner: Paper B
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
 [INFO] Winner for this match: 789_DreamGaussian_Generative_G.pdf
 ===== Match #37: 749_LRM_Large_Reconstruction_M.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
-[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper A, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Paper A:
+[RESULT] [abstract] -> Winner: Paper A, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [references] -> Winner: Paper B
-[INFO] Winner for this match: 8504_The_mechanistic_basis_of_.pdf
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Paper A:
+[INFO] Winner for this match: 749_LRM_Large_Reconstruction_M.pdf
 ===== Match #38: 749_LRM_Large_Reconstruction_M.pdf vs 8660_Generalization_in_diffusi.pdf =====
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Paper A:
+[RESULT] [abstract] -> Winner: Paper A, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
-[INFO] Winner for this match: 8660_Generalization_in_diffusi.pdf
+introduction] -> Winner: Paper A, reason: Chunk 1: ### Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Paper A:
+[INFO] Winner for this match: 749_LRM_Large_Reconstruction_M.pdf
 ===== Match #39: 749_LRM_Large_Reconstruction_M.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [references] -> Draw, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Evaluation of Paper A:; Chunk 5: ### Paper A:
+[RESULT] [abstract] -> Winner: Paper B, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper B
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Paper A:
 [INFO] Winner for this match: 8848_BooookScore_A_systematic_.pdf
 ===== Match #40: 789_DreamGaussian_Generative_G.pdf vs 8504_The_mechanistic_basis_of_.pdf =====
-[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of References Sections; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
+[RESULT] [a appendix] -> Winner: Paper A, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [references] -> Winner: Paper B
-[RESULT] [a appendix] -> Winner: Paper A
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
 [INFO] This match resulted in a draw.
 ===== Match #41: 789_DreamGaussian_Generative_G.pdf vs 8660_Generalization_in_diffusi.pdf =====
+[RESULT] [references] -> Winner: Paper A, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of References Sections; Chunk 4: ### Paper A:
+[RESULT] [abstract] -> Winner: Paper A, reason: Chunk 1: ### Paper A:
+[RESULT] [acknowledgments] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper B
-[RESULT] [acknowledgments] -> Draw
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Draw
-[INFO] Winner for this match: 8660_Generalization_in_diffusi.pdf
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
+[INFO] Winner for this match: 789_DreamGaussian_Generative_G.pdf
 ===== Match #42: 789_DreamGaussian_Generative_G.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [references] -> Winner: Paper A, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Evaluation of Paper A:; Chunk 5: ### Evaluation of Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Winner: Paper A
-[RESULT] [abstract] -> Draw
-[RESULT] [references] -> Winner: Paper A
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Paper A:
 [INFO] Winner for this match: 789_DreamGaussian_Generative_G.pdf
 ===== Match #43: 8504_The_mechanistic_basis_of_.pdf vs 8660_Generalization_in_diffusi.pdf =====
-[RESULT] [abstract] -> Winner: Paper A
+[RESULT] [references] -> Winner: Paper B, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Evaluation of Paper A:; Chunk 3: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
+[RESULT] [4 discussion] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [references] -> Winner: Paper A
-[RESULT] [4 discussion] -> Draw
-[INFO] Winner for this match: 8504_The_mechanistic_basis_of_.pdf
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
+[INFO] Winner for this match: 8660_Generalization_in_diffusi.pdf
 ===== Match #44: 8504_The_mechanistic_basis_of_.pdf vs 8848_BooookScore_A_systematic_.pdf =====
-[RESULT] [abstract] -> Draw
+[RESULT] [references] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
+[RESULT] [abstract] -> Draw, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [references] -> Draw
+introduction] -> Draw, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Evaluation of Paper A:
 [INFO] This match resulted in a draw.
 ===== Match #45: 8660_Generalization_in_diffusi.pdf vs 8848_BooookScore_A_systematic_.pdf =====
+[RESULT] [references] -> Draw, reason: Chunk 1: ### Evaluation of Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:; Chunk 4: ### Evaluation of Paper A:
+[RESULT] [abstract] -> Winner: Paper B, reason: Chunk 1: ### Paper A:
 [RESULT] [1
-introduction] -> Draw
-[RESULT] [abstract] -> Winner: Paper B
-[RESULT] [references] -> Winner: Paper A
-[INFO] This match resulted in a draw.
+introduction] -> Winner: Paper B, reason: Chunk 1: ### Paper A:; Chunk 2: ### Paper A:; Chunk 3: ### Paper A:
+[INFO] Winner for this match: 8848_BooookScore_A_systematic_.pdf
 
 ===== FINAL RESULTS =====
-8504_The_mechanistic_basis_of_.pdf         7   2   0    23 8848_BooookScore_A_systematic_.pdf         5   2   2    17 789_DreamGaussian_Generative_G.pdf         5   1   3    16 6795_Beyond_Weisfeiler_Lehman_.pdf         5   0   4    15 749_LRM_Large_Reconstruction_M.pdf         5   0   4    15 8660_Generalization_in_diffusi.pdf         4   2   3    14 2746_Monte_Carlo_guided_Denois.pdf         3   2   4    11 4430_Meta_Continual_Learning_R.pdf         3   2   4    11 6649_Understanding_and_Mitigat.pdf         1   1   7     4 62_Real3D_Portrait_One_shot_Re.pdf         0   2   7     2 
+789_DreamGaussian_Generative_G.pdf         7   2   0    236795_Beyond_Weisfeiler_Lehman_.pdf         5   4   0    198848_BooookScore_A_systematic_.pdf         5   2   2    17749_LRM_Large_Reconstruction_M.pdf         5   1   3    1662_Real3D_Portrait_One_shot_Re.pdf         3   2   4    118660_Generalization_in_diffusi.pdf         3   2   4    114430_Meta_Continual_Learning_R.pdf         2   2   5     88504_The_mechanistic_basis_of_.pdf         1   5   3     82746_Monte_Carlo_guided_Denois.pdf         1   4   4     76649_Understanding_and_Mitigat.pdf         1   0   8     3
