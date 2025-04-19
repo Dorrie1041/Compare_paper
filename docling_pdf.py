@@ -7,7 +7,7 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
-pdf_link_file = "test_link.txt"
+pdf_link_file = "pdf_link.txt"
 output_yaml = "papers.yaml"
 artifacts_path = "/Users/dongruishen/.cache/docling/models"
 
