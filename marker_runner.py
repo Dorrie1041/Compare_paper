@@ -3,7 +3,6 @@ import os
 import re
 import yaml
 import urllib.request
-from urllib.parse import urlparse
 from collections import OrderedDict
 from marker.converters.pdf import PdfConverter
 from marker.models import create_model_dict
@@ -31,8 +30,10 @@ os.makedirs(download_dir, exist_ok=True)
 
 # === Utility functions ===
 def extract_id_from_url(url):
-    parsed = urlparse(url)
-    return os.path.splitext(os.path.basename(parsed.path))[0]
+    match = re.search(r'arxiv\.org/pdf/(\d{4}\.\d+)(v\d+)?', url)
+    if match:
+        return match.group(1), match.group(2) or ''
+    return None, ''
 
 def download_pdf(url, save_dir):
     paper_id = extract_id_from_url(url)
@@ -79,22 +80,27 @@ def split_sections(markdown_text):
     return sections
 
 def trim_document(markdown_text):
-    abstract_match = re.search(r"^##\s*abstract\s*$", markdown_text, re.IGNORECASE | re.MULTILINE)
-    if abstract_match:
-        remaining = markdown_text[abstract_match.end():]
-        next_heading = re.search(r"^##\s+", remaining, re.MULTILINE)
-        if next_heading:
-            return remaining[next_heading.start():].strip()
-    return markdown_text.strip()
+    intro_pattern = re.compile(
+        r"^(#{1,6})\s*(\d+[\.\d]*\s+)?Introduction\b", re.IGNORECASE | re.MULTILINE
+    )
+    match = intro_pattern.search(markdown_text)
+    if match:
+        return markdown_text[match.start():].strip()
+    return ""
 
 # === Main process ===
 papers = []
 with open(pdf_link_file, "r", encoding="utf-8") as f:
     pdf_urls = [line.strip() for line in f if line.strip()]
 
+seen_ids = set()
 for url in pdf_urls:
     try:
         paper_id = extract_id_from_url(url)
+        if paper_id in seen_ids:
+            print(f"[!] Skipping already-processed ID: {paper_id}")
+            continue
+        seen_ids.add(paper_id)
         print(f"[->] Converting {paper_id}")
 
         local_pdf_path = download_pdf(url, download_dir)
