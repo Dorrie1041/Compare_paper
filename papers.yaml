@@ -1,0 +1,2184 @@
+papers:
+- : 'Mind2Matter: Creating 3D Models from EEG Signals'
+  abstract: The reconstruction of 3D objects from brain signals has gained significant
+    attention in brain-computer interface (BCI) research. Current research predominantly
+    utilizes functional magnetic resonance imaging (fMRI) for 3D reconstruction tasks
+    due to its excellent spatial resolution. Nevertheless, the clinical utility of
+    fMRI is limited by its prohibitive costs and inability to support real-time operations.
+    In comparison, electroencephalography (EEG) presents distinct advantages as an
+    affordable, non-invasive, and mobile solution for real-time brain-computer interaction
+    systems. While recent advances in deep learning have enabled remarkable progress
+    in image generation from neural data, decoding EEG signals into structured 3D
+    representations remains largely unexplored. In this paper, we propose a novel
+    framework that translates EEG recordings into 3D object reconstructions by leveraging
+    neural decoding techniques and generative models. Our approach involves training
+    an EEG encoder to extract spatiotemporal visual features, fine-tuning a large
+    language model to interpret these features into descriptive multimodal outputs,
+    and leveraging generative 3D Gaussians with layoutguided control to synthesize
+    the final 3D structures. Experiments demonstrate that our model captures salient
+    geometric and semantic features, paving the way for applications in brain-computer
+    interfaces (BCIs), virtual reality, and neuroprosthetics. Our code is available
+    in [https://github.com/sddwwww/Mind2Matter.](https://github.com/sddwwww/Mind2Matter)
+  url: https://arxiv.org/pdf/2504.11936
+  keywords: Electroencephalogram, LLM, 3D gaussian splatting
+  document: '# 1 Introduction
+
+
+    Decoding brain signals to reconstruct 3D objects represents a transformative frontier
+    in brain-computer interface (BCI) research [\[6,](#page-8-0) [43\]](#page-8-1),
+    with profound implications for human-computer interaction, neuroscience, and assistive
+    technologies. By translating neural activity into tangible 3D representations,
+    such advancements could enable intuitive control of virtual environments, facilitate
+    neuroprosthetic design [\[4\]](#page-8-2), and deepen our understanding of how
+    the brain encodes complex visual perceptions [\[20,](#page-8-3) [39\]](#page-8-4).
+    Unlike traditional input methods that rely on manual or verbal commands, brain
+    signal decoding offers a direct, non-invasive pathway to bridge the gap between
+    mental imagery and digital output. This capability is particularly valuable for
+    applications requiring real-time interaction, such as immersive virtual reality
+    [\[51\]](#page-9-0) and creative 3D modeling [\[40\]](#page-8-5), where seamless
+    integration of human intent and computational systems is paramount.
+
+
+    Despite the promise of neural decoding, existing research has predominantly focused
+    on reconstructing perceptual experiences using functional magnetic resonance imaging
+    (fMRI). Leveraging fMRI''s high spatial resolution, many studies have successfully
+    mapped brain activity to visual reconstructions [\[11,](#page-8-6) [48,](#page-8-7)
+    [54,](#page-9-1) [58\]](#page-9-2). However, the clinical utility of fMRI remains
+    substantially limited by its prohibitive cost, lack of portability, and insufficient
+    temporal resolution to support real-time operation [\[25\]](#page-8-8). In contrast,
+    electroencephalography (EEG) represents a cost-effective, portable, and non-invasive
+    neuroimaging modality that offers distinct advantages for visual reconstruction
+    and real-time applications [\[19\]](#page-8-9).
+
+
+    This study pioneers a novel approach for reconstructing threedimensional objects
+    from EEG signals evoked by visual stimuli,
+
+
+    <sup>∗</sup>Both authors contributed equally to this research.
+
+
+    <sup>†</sup>Corresponding author.
+
+
+    utilizing 3D Gaussian splatting [\[24\]](#page-8-10) to bridge the gap between
+    neural activity and structured volumetric representations. The endeavor confronts
+    substantial methodological challenges stemming from fundamental limitations of
+    scalp-recorded EEG. Unlike fMRI, EEG struggles with low spatial resolution and
+    a low signal-to-noise ratio, which complicates the extraction of robust neural
+    representations. Additionally, EEG signals often fail to effectively capture high-level
+    semantic information, and the complexity of generative models further hinders
+    precise learning of structural details [\[18\]](#page-8-11). While EEG-based decoding
+    has made strides in 2D image generation [\[2,](#page-8-12) [23,](#page-8-13) [37,](#page-8-14)
+    [42,](#page-8-15) [50\]](#page-9-3), the extension to veridical 3D object recovery
+    remains largely unexplored territory.
+
+
+    To overcome these challenge, we propose Mind2Matter, a novel two-stage framework
+    that bridges neural decoding and 3D generation through hierarchical semantic understanding.
+    In the first stage, we train a deep multi-channel neural encoder to capture localized
+    semantic features from EEG recordings. This encoder effectively extracts spatiotemporal
+    patterns, which are then projected into a labeled embedding space to fine-tune
+    a language model. By aligning EEG embeddings with semantic representations, the
+    fine-tuned language model generates detailed textual descriptions of the observed
+    visual stimuli, such as object identities and their spatial relationships. This
+    cross-modal translation leverages the language model''s inherent world knowledge
+    [\[7,](#page-8-16) [26\]](#page-8-17) to compensate for EEG''s semantic sparsity,
+    effectively converting noisy neural patterns into structured object descriptions.
+
+
+    While most methods focus on reconstructing single objects, human visual perception
+    is intrinsically holistic, simultaneously encoding multiple objects along with
+    their functional properties and spatial configurations. In the second stage of
+    Mind2Matter, we leverage a scene-level text-to-3D framework based on generative
+    3D Gaussian techniques [\[9,](#page-8-18) [33,](#page-8-19) [59\]](#page-9-4)
+    to synthesize complex 3D scenes. This framework takes the generated textual descriptions
+    as input and produces high-fidelity, coherent 3D reconstructions featuring multiple
+    objects with precise interactions. By incorporating layout-guided control, our
+    approach ensures that the synthesized 3D scenes accurately reflect the spatial
+    and semantic relationships described in the text, overcoming the limitations of
+    EEG''s low spatial resolution. Through this two-stage pipeline, Mind2Matter not
+    only demonstrates the feasibility of EEG-based 3D reconstruction but also establishes
+    a scalable pathway for real-time BCI applications, with potential impacts in virtual
+    reality, neuroprosthetics, and intuitive 3D design.
+
+
+    In summary, this paper makes the following contributions:
+
+
+    - We presents Mind2Matter, a novel framework for EEG-to-3D scene reconstruction,
+    which enables the extraction of semantic and spatial features from EEG signals
+    to reconstruct complex, multi-object 3D scenes.
+
+    - A two-stage neural encoding-decoding framework is proposed, facilitating the
+    implicit encoding of EEG signals into textual descriptions and the subsequent
+    decoding into coherent 3D scenes with precise object interactions.
+
+    - Experimental results demonstrate that the proposed method can effectively reconstruct
+    complex 3D scenes with multiple objects using EEG signals, highlighting its potential
+    for realtime BCI applications.
+
+
+    # 2 Related Work
+
+
+    # 2.1 Generating texts from brain activities
+
+
+    The generation of textual descriptions from brain activities has emerged as a
+    promising direction in brain-computer interface (BCI) research, aiming to translate
+    neural signals into interpretable semantic outputs. Early research [\[3,](#page-8-20)
+    [32,](#page-8-21) [53\]](#page-9-5) predominantly focused on closed-vocabulary
+    approaches, wherein the decoding process was restricted to a predefined set of
+    words or phrases. Notably, Think2type [\[53\]](#page-9-5) converted activity intentions
+    of disabled individuals into Morse code representations, which were then transformed
+    into corresponding text. While these methods achieved initial success in controlled
+    environments, they encountered limitations regarding scalability and addressing
+    the complexity of natural language. More recent studies [\[1,](#page-8-22) [8,](#page-8-23)
+    [15,](#page-8-24) [56\]](#page-9-6) have transcended vocabulary constraints through
+    the development of open-vocabulary text generation systems. These approaches utilize
+    deep learning architectures and language models to generate unrestricted textual
+    outputs from neural signals. These investigations addressed several critical challenges,
+    including individual variability in EEG patterns [\[1\]](#page-8-22), cross-modal
+    representation learning [\[56\]](#page-9-6), and capturing complex temporal dependencies
+    in neural data [\[8\]](#page-8-23).
+
+
+    To address challenges such as defining word-level boundaries in EEG signals and
+    other language processing tasks, several investigations [\[21,](#page-8-25) [36\]](#page-8-26)
+    have proposed language-agnostic solutions that capture signals through image modality
+    and leverage advancements in image-text intermodality to generate text from the
+    collected data. Despite these advancements, challenges persist in achieving precise
+    neural-linguistic mapping and generating contextually appropriate descriptions.
+    Novel architectures and training strategies need to be explored to enhance the
+    accuracy and naturalness of EEG-to-text conversion.
+
+
+    # 2.2 Text-Driven 3D Generation
+
+
+    Text-driven 3D generation has become a rapidly evolving field in computer vision
+    and graphics, aiming to synthesize 3D objects or scenes directly from textual
+    descriptions. Early methods [\[22,](#page-8-27) [38\]](#page-8-28) using CLIP
+    [\[46\]](#page-8-29) for optimization often yielded inconsistent results but lacked
+    realism and fidelity. Recent approaches leverage 2D diffusion models, such as
+    Zero-1-to-3 [\[34\]](#page-8-30) and MVDream [\[49\]](#page-9-7), to generate
+    3D assets from multi-view images.
+
+
+    Another line of research [\[10,](#page-8-31) [29,](#page-8-32) [61\]](#page-9-8)
+    has focused on NeRF-based text-to-3D generation, utilizing neural radiance fields
+    (NeRF) [\[35\]](#page-8-33) to create 3D representations from text. Methods like
+    DreamFusion [\[45\]](#page-8-34) introduce score distillation sampling (SDS) to
+    optimize NeRF parameters using a pre-trained 2D diffusion model, achieving high-quality
+    single-object reconstructions. However, NeRF-based approaches suffer from low
+    efficiency due to their computationally intensive optimization process. To address
+    this, recent works [\[12,](#page-8-35) [28,](#page-8-36) [57,](#page-9-9) [60\]](#page-9-10)
+    have combined diffusion models with 3D Gaussian splatting (3DGS) to achieve rapid
+    and high-fidelity model generation.
+
+
+    # 3 Methods
+
+
+    As shown in Fig[.2,](#page-2-0) our method employs a two-stage pipeline to reconstruct
+    3D scenes from EEG signals, tackling their low spatial resolution and semantic
+    sparsity. A multi-hierarchical encoder and
+
+
+    <span id="page-2-0"></span>![](_page_2_Figure_0.jpeg)
+
+
+    Figure 2: Architecture of Mind2Matter. EEG signals are processed by a trainable
+    EEG Encoder to extract spatiotemporal features, generating EEG embeddings aligned
+    with image embeddings from a frozen CLIP Encoder. These embeddings are transformed
+    by a trainable Mapping Network and fed into a frozen LLM, which generates a textual
+    description (e.g., "A colorful butterfly is perched on a flower") using a prompt.
+    The text is then used by another LLM to create an initial 3D layout, followed
+    by object-level and scene-level optimization with 3D Gaussian splatting and diffusion
+    priors, producing a high-fidelity 3D scene.
+
+
+    fine-tuned language model first generate textual descriptions via cross-modal
+    alignment, which are then converted into 3D scenes using layout-constrained 3D
+    Gaussian splatting. Details follow in subsequent subsections.
+
+
+    Preliminaries. 3D Gaussian Splatting (3DGS) [\[24\]](#page-8-10) is a recent advancement
+    in 3D scene representation and rendering, offering an efficient alternative to
+    neural radiance fields (NeRF) [\[35\]](#page-8-33) for realtime applications.
+    3DGS represents a scene as a set of 3D Gaussians, denoted as { | = 1, 2, . . .
+    }. Each Gaussian is parameterized by a position ∈ R 3 , a covariance matrix Σ
+    ∈ R 3 , a color ∈ R 3 , and an opacity ∈ R. The Gaussian function is defined as:
+
+
+    $$G\_n(\boldsymbol{\rho}) = \exp\left(-\frac{1}{2}(\boldsymbol{\rho} - \boldsymbol{\mu}\_n)^T
+    \boldsymbol{\Sigma}\_n^{-1} (\boldsymbol{\rho} - \boldsymbol{\mu}\_n)\right) \tag{1}$$
+
+
+    Where Σ is parameterized by a rotation matrix ∈ R 4 and a scaling matrix ∈ R 3
+    to ensure positive definiteness, such that Σ = .
+
+
+    For rendering, 3DGS projects these Gaussians onto 2D camera planes using differentiable
+    splatting. Given a viewing transformation and Jacobian of the projective transformation,
+    the covariance in camera coordinates is computed as Σ ′ = Σ . The color along
+    a ray r is then calculated as:
+
+
+    $$C(\mathbf{r}) = \sum\_{i \in N} c\_i a\_i \prod\_{j=1}^{i-1} (1 - a\_j), \quad
+    a\_i = a\_i G\_i^{2D}(p) \tag{2}$$
+
+
+    where denotes the number of Gaussians along the ray, and 2 () is the 2D projection
+    of the Gaussian.
+
+
+    # 3.1 EEG-to-Text Generation
+
+
+    EEG Encoder. The EEG encoder constitutes a foundational framework for decoding
+    neural signals, with its primary function being the extraction of multi-hierarchical
+    semantic features from raw EEG data. We introduce a unified encoder architecture
+    that processes input signals via a modular, hierarchically structured composition.
+
+
+    As illustrated in Fig[.3,](#page-3-0) the proposed encoder begins with a Graph
+    Attention Module [\[5\]](#page-8-37), which leverages graph attention mechanisms
+    to model the relational dependencies among EEG electrodes. This block constructs
+    a graph representation of the EEG channels, where nodes represent electrodes and
+    edges capture their interactions, enabling the encoder to focus on relevant inter-electrode
+    relationships. To enhance the extraction of temporal features, we adopt multi-scale
+    temporal convolution, using a series of two-dimensional convolution modules with
+    gradually increasing dilation rates. This design expands the receptive field without
+    sacrificing the resolution, allowing the encoder to capture long-range dependencies
+    at different time scales. Subsequently, spatial convolution is utilized to further
+    optimize the spatial features by exploiting inter-electrode relationships. Moreover,
+    we augment the architecture with a Transformer-based module to model long-range
+    dependencies inherent in EEG signals. Inspired by residual learning principles,
+    we incorporate residual
+
+
+    <span id="page-3-0"></span>![](_page_3_Figure_0.jpeg)
+
+
+    Figure 3: Architecture of the EEG Encoder
+
+
+    blocks with bottleneck designs to ensure efficient feature propagation and gradient
+    stability during training. The encoder architecture culminates in a final convolutional
+    layer that integrates and refines extracted features, generating a compact and
+    semantically rich representation of the input EEG signal. For implementation details,
+    each convolutional block consists of a convolutional layer, followed by normalization
+    and ReLU activation, structured as a series of modular units.
+
+
+    Cross-modal Alignment. The model is trained by minimizing two distinct loss functions:
+
+
+    - (1) a classification cross-entropy loss (CE) between the predicted object labels
+    and the ground truth ImageNet labels.
+
+    - (2) the Contrastive-Adaptive Margin Loss (CAML) between the EEG embeddings and
+    the image embeddings derived from the pre-trained CLIP model.
+
+
+    These two losses jointly optimize the cross-modal alignment and the classification
+    task.
+
+
+    The classification objective is formulated as a cross-entropy loss between the
+    predicted object labels and ground-truth labels:
+
+
+    $$\mathcal{L}\_{CE} = -\sum y\_i \log(p\_l),\tag{3}$$
+
+
+    where is the ground-truth label and is the predicted probability distribution
+    over object categories obtained from the classifier.
+
+
+    The conventional contrastive loss approaches employ fixed margin thresholds, which
+    fail to adapt to varying semantic similarities between different sample pairs.
+    Inspired by the margin adaptation mechanisms in human perceptual learning [\[13\]](#page-8-38),
+    we propose an adaptive margin contrast loss (AMCL) that automatically adjusts
+    optimization boundaries based on sample-wise EEG embedding characteristics. The
+    ordinary contrastive learning uses InfoNCE loss[\[41\]](#page-8-39):
+
+
+    $$\mathcal{L}\_{InfoNCE} = -\frac{1}{N} \sum\_{i=1}^{N} \log \frac{\exp(S\_{E,I}/\tau)}{\sum\_{k=1}^{N}
+    \exp(S\_{E,I\_k}/\tau)},\tag{4}$$
+
+
+    where the , denotes the similarity score between EEG signal and image pairing
+    data, and is a temperature parameter. The InfoNCE loss encourages paired samples
+    to be closer in the embedding space while pushing unpaired samples apart.
+
+
+    To adaptively adjust the discrimination boundary between positive and negative
+    pairs, we introduce an adaptive margin mechanism. For each sample pair, the margin
+    is dynamically computed based on their similarity:
+
+
+    $$m\_{\ell} = \alpha \cdot (1 - S\_{E,I}),\tag{5}$$
+
+
+    where is a scaling factor that controls the margin''s sensitivity to similarity.
+    The adaptive margin loss is then defined as:
+
+
+    $$\mathcal{L}\_{margin} = \frac{1}{N} \sum\_{i=1}^{N} \frac{1}{k} \sum\_{j \neq
+    i} \max(0, m\_i - (S\_{E,i} - S\_{E,I\_k})).\tag{6}$$
+
+
+    The overall training objective can be written as:
+
+
+    $$
+
+    \mathcal{L}\_{total} = \mathcal{L}\_{CE} + \lambda\_1 \mathcal{L}\_{InfoNCE} +
+    \lambda\_2 \mathcal{L}\_{margin}, \tag{7}
+
+    $$
+
+
+    where 1, <sup>2</sup> is a balancing coefficient that controls the relative importance
+    of the cross-modal alignment term. This joint optimization enables our model to
+    simultaneously learn discriminative EEG representations for object recognition
+    and establish robust alignment between EEG and visual embeddings.
+
+
+    Language model fine-tuning. During training, a primary problem is the transformation
+    between EEG embeddings and language model representations. Consequently, we initially
+    proposed to finetune the language model while training the mapping network. This
+    approach provided additional flexibility to the network and yielded more expressive
+    results. However, directly fine-tuning pre-trained language models introduces
+    a substantial number of trainable parameters. [\[27\]](#page-8-40) proposed prefix-tuning
+    as a lightweight alternative to fine-tuning for natural language generation (NLG)
+    tasks, training an upstream prefix that guides the downstream LM while keeping
+    the latter unchanged. Inspired by this concept, we propose to avoid fine-tuning
+    and maintain the language model fixed during training, only training the mapping
+    network, thereby achieving a more lightweight model.
+
+
+    The mapping network serves as a crucial interface, transforming EEG embeddings
+    into a format compatible with the LLM. We implement a multi-layer perceptron (MLP)-based
+    mapping network, with the mapping process defined as:
+
+
+    $$H\_{hidden} = ReLU(W\_1 H\_{eeg} + b\_1) \tag{8}$$
+
+
+    $$H\_{\mathbf{i}} = W\_2 \cdot H\_{hidden} + b\_2, \quad \text{for } \mathbf{i}
+    = 1, 2, \dots, N \tag{9}$$
+
+
+    where 1, 2, <sup>1</sup> and <sup>2</sup> are learnable parameters of the mapping
+    network. Once transformed, these embeddings are then concatenated with token embeddings
+    derived from the input prompt, enabling the LLM to seamlessly process both text
+    and EEG embeddings.
+
+
+    The structure of the input prompt incorporates language instructions and actual
+    ImageNet class labels, formatted as follows:
+
+
+    system: You are an EEG signal interpreter. user: <EEG><Label> Describe it in one
+    sentence. where the <EEG> token is replaced by the mapped EEG embeddings, and
+    the <Label> token is replaced by the ground truth ImageNet class label. The tokenized
+    prompt, incorporating EEG-derived embeddings, is concatenated with special tokens
+    to form the input sequence for the LLM.
+
+
+    The fine-tuning objective is to minimize the cross-entropy loss between the LLM''s
+    predicted text and the ground truth description derived from the ImageNet class
+    label. Formally, let T denote the tokenized prompt, and represent the ground truth
+    description. The LLM, parameterized by , generates a predicted sequence ˆ conditioned
+    on the input and T. The fine-tuning loss is defined as:
+
+
+    $$\mathcal{L}\_{LLM} = -\frac{1}{M} \sum\_{m=1}^{M} \log P(Y\_m | \{H\_1, H\_2,
+    \dots, H\_N\}, \mathcal{T}; \theta\_{LLM}), \quad \text{(10)}$$
+
+
+    where M is the length of the ground truth description sequence, and P(·) is the
+    probability assigned by the LLM to the correct token at each position. Through
+    the utilization of MLP-based mapping network, the LLM is enabled to generate accurate
+    and contextually relevant descriptions of visual stimuli based on brain electrical
+    signals, thereby establishing a bridge between neural activity and language comprehension.
+
+
+    # 3.2 Text-to-3D Generation
+
+
+    Having successfully generated textual descriptions from EEG signals in Stage A,
+    Stage B focuses on transforming these text outputs into 3D object representations,
+    completing the pipeline from brain signals to visual reconstructions. Initially,
+    LLMs interpret the EEGderived text to produce an initial layout of the 3D scene,
+    capturing the spatial arrangement of objects as conceptualized from brain activity.
+    Subsequently, a layout-constrained 3D Gaussian optimization constructs the scene
+    using Gaussian splatting, ensuring geometric and textural accuracy under adaptive
+    constraints. This stage not only bridges the gap between neural signals and tangible
+    3D outputs, but also ensures the reconstructed objects reflect the user''s mental
+    imagery with precision and realism.
+
+
+    Generate Initial Layout with LLMs. To initialize the scene structure, we employ
+    a Large Language Model (LLM) to directly predict the spatial attributes of all
+    objects from a single input text. For each object entity identified in the prompt,
+    the LLM estimates a corresponding 3D bounding box defined by its center coordinates,
+    size, and orientation.
+
+
+    Formally, given an input description , the LLM produces a set of object-level
+    parameters B = {( , , ), ( , , ℎ), } =1 , where:
+
+
+    - ( , , ) denotes the 3D center of object in the global scene space;
+
+    - ( , , ℎ) specifies the size (length, width, height) of the bounding box;
+
+    - represents the yaw-angle of the object with respect to the world frame.
+
+
+    The predicted boxes form a preliminary scene layout B, providing a coherent and
+    semantically aligned spatial configuration. This layout serves as a strong initialization
+    for geometry generation, enabling efficient and controllable scene construction
+    without requiring manual placement or handcrafted rules.
+
+
+    Layout-Constrained 3D Gaussian Optimization. With the initial layout provided
+    by the LLM, we proceed to construct the full 3D scene using Gaussian splatting.
+    Each object is modeled as a set of anisotropic 3D Gaussians, with parameters encoding
+    its spatial location, shape, appearance, and visibility. The layout acts as a
+    spatial prior, guiding the initial placement and scale of each object, which is
+    further refined through a two-stage optimization process: first at the object
+    level and then at the scene level.
+
+
+    Object-Level Optimization. For each object , we initialize its Gaussian representation
+    G based on the predicted bounding box and refine it via Score Distillation Sampling
+    (SDS). Leveraging textconditioned diffusion models[\[17,](#page-8-41) [49\]](#page-9-7),
+    we update object parameters by minimizing the SDS gradient:
+
+
+    $$\nabla\_{\mathcal{G}\_{\ell}} \mathcal{L}\_{\text{obj}} = \mathbb{E}\_{e, \xi}
+    \left[ \lambda\_{\ell} \cdot \left( \epsilon\_{\mathcal{O}} \left( I\_{\ell}^{\text{pred}},
+    \xi \right) - \epsilon \right) \frac{\partial I\_{\ell}^{\text{pred}}}{\partial
+    \mathcal{G}\_{\ell}} \right], \tag{11}$$
+
+
+    where pred is the rendered image of object , is the noise sample, is the diffusion
+    condition (e.g., timestep, view), and is the denoising model.
+
+
+    Scene-Level Optimization. To ensure global spatial coherence and semantic alignment,
+    we jointly optimize all objects in the scene using a layout-constrained representation.
+    Each object is described by its Gaussian parameters G , and layout B . These components
+    collectively form the scene layout Xscene = {G , B } =1 .
+
+
+    We directly input this layout into the SDS guided by ControlNet and optimize the
+    entire scene:
+
+
+    $$\nabla\_{\mathcal{G}} \mathcal{L}\_{\text{sc}} = \lambda \cdot \mathbb{E}\_{e,
+    \psi} \left[ \lambda \cdot \left( \epsilon\_{\alpha} \left( I\_{\mathcal{X}\_{\text{scens}}}^{\text{pred}},
+    \psi \right) - \epsilon \right) \frac{\partial I\_{\mathcal{X}\_i}^{\text{pred}}}{\partial
+    \mathcal{G}} \right], \tag{12}$$
+
+
+    where denotes the prompt and rendering conditions, and is the denoising network.
+    This unified optimization updates all spatial and appearance attributes jointly,
+    producing a coherent and physically plausible 3D scene.
+
+
+    # 4 Experiments
+
+
+    # 4.1 Settings of Experiments
+
+
+    Dataset. We demonstrate the effectiveness of our Mind2Matter framework using the
+    EEG-Image Dataset [\[52\]](#page-9-11). This dataset comprises EEG recordings
+    collected from six subjects who were presented with a total of 2,000 object images.
+    The visual stimuli were selected from a subset of the widely-used ImageNet dataset
+    [\[47\]](#page-8-42), consisting of 40 categories with 50 easily recognizable
+    images per category. EEG signals were captured using a 128-electrode system at
+    a sampling rate of 1,000 Hz, with each image displayed for 500 ms. For analysis,
+    we utilized 440 ms signal segments to eliminate potential interference from previously
+    displayed images, while excluding the initial 40 ms of each recorded EEG sequence.
+    The dataset covers diverse image categories including animals, vehicles, fruits,
+    etc. Following a standard data partitioning strategy [\[23\]](#page-8-13), we
+    divided the dataset into training, validation, and test subsets with an 8:1:1
+    ratio.
+
+
+    <span id="page-5-0"></span>Table 1: Quantitative comparison of EEG-to-text generation
+    performance across different EEG encoders. Results are reported in ROUGE-1 (Recall/R,
+    Precision/P, F1-score/F), BLEU (B-1 to B-4), and BERTScore (R/P/F) metrics. Bold
+    values indicate the best performance.
+
+
+    |           | ROUGE-1(%)↑ |       |       | BLEU(%)↑ |       |      |      | BERT(%)↑
+    |       |       |
+
+    |-----------|-------------|-------|-------|----------|-------|------|------|----------|-------|-------|
+
+    | Model     | R           | P     | F     | B-1      | B-2   | B-3  | B-4  | R        |
+    P     | F     |
+
+    | Conformer | 30.98       | 34.96 | 31.84 | 31.96    | 15.32 | 9.02 | 6.14 | 34.98    |
+    35.86 | 35.41 |
+
+    | EEGNet    | 27.87       | 30.67 | 28.41 | 29.51    | 11.96 | 6.21 | 4.2  | 30.65    |
+    30.04 | 30.37 |
+
+    | DeepNet   | 23.92       | 27.17 | 24.8  | 27.41    | 9.97  | 4.79 | 3.19 | 26.81    |
+    28.33 | 27.6  |
+
+    | Ours      | 33.12       | 37.38 | 34.21 | 34.33    | 17.31 | 10.6 | 7.62 | 36.84    |
+    37.54 | 37.19 |
+
+
+    Table 2: Quantitative comparison of 3D generation performance across semantic
+    and structural metrics.
+
+
+    |               | Semantic-Level   | Structure-Level |       |       |
+
+    |---------------|------------------|-----------------|-------|-------|
+
+    | Model         | CLIP Similarity↑ | LPIPS↓          | CD↓   | EMD↓  |
+
+    | DreamGaussian | 0.4207           | 0.6675          | 18.43 | 35.59 |
+
+    | GSGEN         | 0.4834           | 0.6954          | 6.72  | 24.18 |
+
+    | GraphDreamer  | 0.602            | 0.689           | 10.68 | 14.55 |
+
+    | Ours          | 0.701            | 0.664           | 4.66  | 10.93 |
+
+
+    Implementation Details. Prior to training, all EEG signals were filtered within
+    the frequency range of 55 to 95 Hz. For the EEG encoder, we employed five convolutional
+    layers in the temporal block with progressively increasing kernel dilation values,
+    alongside four convolutional layers in the spatial block. The model parameters
+    were updated using the Adam optimizer, with a learning rate of 2 × 10−<sup>5</sup>
+    , a batch size of 8, and training conducted over 100 epochs. For fine-tuning the
+    LLM, we utilized mistralai/Mistral-7B-Instructv0.3 to generate text, adopting
+    the same training hyperparameters as the encoder. For the optimization of 3D Gaussians,
+    we employed MVDream [\[49\]](#page-9-7) as the multiview diffusion model, with
+    a guidance scale of 50. The guidance scale for ControlNet was set to 100. All
+    experiments were conducted on a single RTX 4090 GPU.
+
+
+    Evaluation Metrics. To evaluate the performance of our model, we employ metrics
+    that assess both the quality of the intermediate text generation and the fidelity
+    of the final 3D reconstruction. For the generated text, we utilize standard natural
+    language generation metrics including ROUGE [\[30\]](#page-8-43) to measure lexical
+    overlap between generated and reference descriptions, BLEU [\[44\]](#page-8-44)
+    for n-gram precision evaluation across multiple phrase lengths, and BERTScore
+    [\[63\]](#page-9-12) to quantify semantic similarity through contextual embeddings.
+    For the generated 3D objects, we assess quality at both semantic and geometric
+    levels. Semantically, we use CLIP Similarity [\[46\]](#page-8-29) and Learned
+    Perceptual Image Patch Similarity (LPIPS) [\[62\]](#page-9-13) to evaluate the
+    perceptual similarity between rendered images and visual stimulus. Geometrically,
+    we apply Chamfer Distance (CD) [\[14\]](#page-8-45) and Earth Mover''s Distance
+    (EMD) [\[31\]](#page-8-46) to quantify surface precision and global structural
+    fidelity, respectively. These metrics collectively provide a comprehensive evaluation
+    of our model''s ability to translate EEG signals into accurate and meaningful
+    3D reconstructions.
+
+
+    # 4.2 Quantitative Comparison
+
+
+    EEG-to-Text Evaluation: The quantitative results in Table[.1](#page-5-0) demonstrate
+    the effectiveness of the proposed EEG encoder in the EEGto-text generation task.
+    Our model consistently outperforms the baseline encoders—Conformer, EEGNet, and
+    DeepNet—across all evaluated metrics. Specifically, our approach achieves the
+    highest ROUGE-1 score of 33.12%, surpassing Conformer (30.98%), EEGNet (27.87%),
+    and DeepNet (23.92%), indicating superior overlap with reference descriptions.
+    In terms of BLEU scores, our model excels with 34.21% (B-1), 17.31% (B-2), 10.06%
+    (B-3), and 7.62% (B-4), reflecting better n-gram precision compared to the baselines,
+    particularly on higher-order n-grams (B-3 and B-4), where Conformer scores 15.32%
+    and 9.02%, respectively. Furthermore, our model achieves a BERTScore of 37.19%,
+    outperforming Conformer (35.41%), EEGNet (30.37%), and DeepNet (27.16%), indicating
+    stronger semantic alignment with ground-truth descriptions. These results demonstrate
+    the proposed EEG encoder''s ability to extract robust spatiotemporal features
+    from noisy EEG signals, enabling accurate and semantically coherent text generation.
+
+
+    Text-to-3D Evaluation: Table[.2](#page-2-0) presents the averaged metrics at both
+    the Semantic and Structural Levels for the 3D reconstruction task from EEG signals
+    across all evaluated methods. The proposed Mind2Matter framework achieves a CLIP
+    Similarity of 0.701, an LPIPS of 0.664, a Chamfer Distance (CD) of 4.66, and an
+    Earth Mover''s Distance (EMD) of 10.93, compared to DreamGaussian with scores
+    of 0.4207, 0.6675, 18.43, and 35.59, and GSGEN with scores of 0.4834, 0.6954,
+    6.72, and 24.18, respectively. These results indicate that Mind2Matter consistently
+    outperforms the baselines in semantic alignment, as evidenced by the 67% and 45%
+    higher CLIP Similarity scores compared to DreamGaussian and GSGEN, respectively,
+    while also achieving better structural accuracy with CD and EMD values that are
+    approximately 75% and 63% lower than DreamGaussian, and 31% and 55% lower than
+    GSGEN. The LPIPS score of Mind2Matter, although slightly lower than DreamGaussian
+    by 0.004, remains competitive, suggesting that the perceptual quality of the reconstructed
+    3D models is comparable across methods, with Mind2Matter excelling in capturing
+    both semantic and geometric details.
+
+
+    # 4.3 Qualitative Comparison
+
+
+    We present a qualitative comparison of EEG-to-3D reconstruction results against
+    baseline methods, including DreamGaussian [\[55\]](#page-9-14),
+
+
+    <span id="page-6-0"></span>![](_page_6_Figure_0.jpeg)
+
+
+    Figure 4: Qualitative comparison of EEG-to-3D generation results. Comparison between
+    Mind2Matter and baseline methods (DreamGaussian, GraphDreamer, and GSGEN) on four
+    representative visual stimuli. Each row shows: (top) the original visual stimulus
+    with reference description; (middle) the text description generated from EEG signals;
+    (bottom) the final 3D reconstruction results from different methods. Mind2Matter
+    demonstrates superior performance in both semantic preservation and geometric
+    fidelity, while baseline methods exhibit various artifacts such as duplicated
+    components or structural distortions.
+
+
+    GSGEN [\[12\]](#page-8-35), and GraphDreamer [\[16\]](#page-8-47). Fig[.4](#page-6-0)
+    illustrates the reconstruction outcomes for four representative visual stimuli,
+    each accompanied by the original stimulus, the EEG-derived textual description,
+    and the 3D models generated by each method. In the EEG-to-text translation stage,
+    Mind2Matter effectively translates EEG signals into meaningful descriptions. For
+    instance, the original stimulus "A small kitten with yellow eyes and a spotted
+    coat is sitting on a carpeted floor" is accurately interpreted as "A white cat
+    with black spots is sitting on a wooden floor," preserving all key semantic elements
+    despite minor variations in color and texture attributes. This demonstrates Mind2Matter''s
+    ability to extract semantic features from noisy EEG signals.
+
+
+    In the text-to-3D generation phase, our method consistently produces 3D reconstructions
+    that closely capture the semantic intent
+
+
+    and spatial details conveyed. In contrast, baseline methods reveal various limitations.
+    DreamGaussian struggles with structural coherence, often generating distorted
+    models. GraphDreamer and GSGEN generate recognizable but structurally flawed results
+    (e.g., two-faced cat, dual-keyboard piano). These errors stem from their reliance
+    on unstable generative processes that struggle to maintain structural coherence
+    during 3D synthesis. Mind2Matter surpasses the baselines by generating 3D scenes
+    with fewer artifacts, precise object details, and superior visual realism. These
+    qualitative results highlight the framework''s ability to effectively translate
+    noisy EEG signals into coherent and detailed 3D representations.
+
+
+    <span id="page-7-1"></span>Table 3: Ablation study of key components in the EEG-to-text
+    framework. Performance is evaluated using ROUGE-1 (Recall/R, Precision/P, F1-score/F),
+    BLEU (B-1 to B-4), and BERTScore (R/P/F) metrics. Bold values indicate the full
+    model''s performance.
+
+
+    |           | ROUGE-1(%)↑ |       |       | BLEU(%)↑ |       |      |      | BERT(%)↑
+    |       |       |
+
+    |-----------|-------------|-------|-------|----------|-------|------|------|----------|-------|-------|
+
+    | Model     | R           | P     | F     | B-1      | B-2   | B-3  | B-4  | R        |
+    P     | F     |
+
+    | w/o GA    | 30.93       | 34.48 | 31.75 | 32.28    | 15.16 | 8.83 | 5.98 | 35.24    |
+    35.34 | 35.13 |
+
+    | w/o CAML  | 31.39       | 32.13 | 30.85 | 32.16    | 14.46 | 8.22 | 5.62 | 34.44    |
+    33.29 | 33.88 |
+
+    | w/o Label | 28.27       | 27.87 | 27.35 | 29.17    | 11.8  | 6.29 | 4.06 | 31.23    |
+    28.52 | 31.23 |
+
+    | ALL       | 33.12       | 37.38 | 34.21 | 34.33    | 17.31 | 10.6 | 7.62 | 36.84    |
+    37.54 | 37.19 |
+
+
+    # 4.4 Compare with EEG-Image-3D
+
+
+    We compare the proposed EEG-Text-3D pipeline in the Mind2Matter framework with
+    EEG-Image-3D, an approach that reconstructs 3D models by first generating 2D images
+    from EEG signals and then converting these images into 3D representations. Fig[.5](#page-7-0)
+    presents the results for a stimulus described as "an elephant standing in a grassy
+    field," displaying reconstructions from multiple viewpoints. EEG-Text-3D produces
+    a consistent 3D model with well-defined features—such as the elephant''s trunk,
+    ears, and the grassy field—across frontal, side, and rear views, benefiting from
+    the semantic and spatial guidance provided by the intermediate textual descriptions
+    for a realistic and balanced representation.
+
+
+    In contrast, EEG-Image-3D exhibits notable inconsistencies across perspectives.
+    While the frontal view of the elephant appears visually acceptable, the side and
+    rear views reveal distortions, such as an incomplete trunk and a poorly textured
+    grassy field, due to the limitations of reconstructing 2D images from noisy EEG
+    signals and errors in the subsequent image-to-3D conversion. This comparison highlights
+    EEG-Text-3D''s superiority in achieving robust, view-consistent 3D reconstructions
+    through the use of textual representations.
+
+
+    # 4.5 Ablation Study
+
+
+    We conducted an ablation study by systematically removing or modifying critical
+    modules in the EEG-to-text generation stage. As shown in Table[.3,](#page-7-1)
+    we evaluated the impact of the Graph Attention module, the Contrastive-Adaptive
+    Margin Loss, and the inclusion of ImageNet label supervision during inference.
+
+
+    Graph Attention Module: Removing the GA module, which models inter-electrode relationships
+    in the EEG encoder, leads to a 2.46% drop in ROUGE-1 F1-score and a 1.64% decrease
+    in BLEU-4. This degradation highlights the GA module''s role in capturing relational
+    dependencies among EEG channels, enabling the encoder to extract more robust spatiotemporal
+    features critical for accurate semantic decoding.
+
+
+    Contrastive-Adaptive Margin Loss: When replacing our Contrastive Adaptive Margin
+    Loss with a standard contrastive loss, performance degrades significantly (3.36%
+    reduction in ROUGE-1 F1, 2.0% drop in BLEU-4). These reductions underscore CAML''s
+    importance in adaptively adjusting the discrimination boundary between EEG and
+    visual embeddings, enhancing the model''s ability to align noisy neural signals
+    with semantic representations.
+
+
+    <span id="page-7-0"></span>![](_page_7_Figure_9.jpeg)
+
+
+    Figure 5: Comparison of 3D Reconstruction Results for EEG-Text-3D and EEG-Image-3D.Top:
+    EEG-Image-3D results show good frontal view but distorted side views. Bottom:
+    Our EEG-Text-3D method maintains consistent quality from all angles.
+
+
+    Label Supervision: Omitting object labels during inference causes the most severe
+    performance drop (6.86% in ROUGE-1 F1, 3.56% in BLEU-4). This highlights the importance
+    of semantic supervision in guiding the language model to generate accurate descriptions.
+    Without label conditioning, the model struggles to disambiguate noisy EEG patterns,
+    leading to vague or incorrect text outputs.
+
+
+    # 5 Conclusion
+
+
+    In this paper, we present Mind2Matter, an innovative framework that pioneers EEG-based
+    3D object reconstruction. Technologically, we propose a novel two-stage approach
+    designed to decode brain activity into tangible 3D models. In the first stage,
+    our EEG encoder proficiently extracts spatiotemporal features from neural signals.
+    The second stage employs a fine-tuned language model and 3D Gaussian splatting
+    with layout control to transform these features into detailed 3D scenes. Evaluated
+    on the EEG-Image Dataset, our model demonstrates effectiveness in capturing semantic
+    and geometric properties, setting a new benchmark in EEG-driven BCI research.
+    Unlike costly fMRI methods, Mind2Matter leverages EEG''s affordability and real-time
+    potential, proving the feasibility of this task. This work not only proves the
+    feasibility of translating noisy, low-resolution EEG signals into structured 3D
+    representations but also provides a foundation for future advancements in neural
+    decoding and 3D generation.
+
+
+    # References
+
+
+    - <span id="page-8-22"></span>[1] Hamza Amrani, Daniela Micucci, and Paolo Napoletano.
+    2024. Deep Representation Learning for Open Vocabulary Electroencephalography-to-Text
+    Decoding. IEEE Journal of Biomedical and Health Informatics (2024).
+
+    - <span id="page-8-12"></span>[2] Yunpeng Bai, Xintao Wang, Yan-pei Cao, Yixiao
+    Ge, Chun Yuan, and Ying Shan. 2023. Dreamdiffusion: Generating high-quality images
+    from brain eeg signals. arXiv preprint arXiv:2306.16934 (2023).
+
+    - <span id="page-8-20"></span>[3] Siddharth Biswal, Cao Xiao, M Brandon Westover,
+    and Jimeng Sun. 2019. Eegtotext: learning to write medical reports from eeg recordings.
+    In Machine learning for healthcare conference. PMLR, 513–531.
+
+    - <span id="page-8-2"></span>[4] David Borton, Silvestro Micera, José del R Millán,
+    and Grégoire Courtine. 2013. Personalized neuroprosthetics. Science translational
+    medicine 5, 210 (2013), 210rv2–210rv2.
+
+    - <span id="page-8-37"></span>[5] Shaked Brody, Uri Alon, and Eran Yahav. 2021.
+    How attentive are graph attention networks? arXiv preprint arXiv:2105.14491 (2021).
+
+    - <span id="page-8-0"></span>[6] Jonathan S Brumberg, Kevin M Pitt, Alana Mantie-Kozlowski,
+    and Jeremy D Burnison. 2018. Brain–computer interfaces for augmentative and alternative
+    communication: A tutorial. American journal of speech-language pathology 27, 1
+    (2018), 1–12.
+
+    - <span id="page-8-16"></span>[7] Chengkun Cai, Haoliang Liu, Xu Zhao, Zhongyu
+    Jiang, Tianfang Zhang, Zongkai Wu, Jenq-Neng Hwang, Serge Belongie, and Lei Li.
+    2025. Bayesian optimization for controlled image editing via llms. arXiv preprint
+    arXiv:2502.18116 (2025).
+
+    - <span id="page-8-23"></span>[8] Qiupu Chen, Yimou Wang, Fenmei Wang, Duolin
+    Sun, and Qiankun Li. 2025. Decoding text from electroencephalography signals:
+    A novel Hierarchical Gated Recurrent Unit with Masked Residual Attention Mechanism.
+    Engineering Applications of Artificial Intelligence 139 (2025), 109615.
+
+    - <span id="page-8-18"></span>[9] Shen Chen, Jiale Zhou, Zhongyu Jiang, Tianfang
+    Zhang, Zongkai Wu, Jenq-Neng Hwang, and Lei Li. 2024. ScalingGaussian: Enhancing
+    3D Content Creation with Generative Gaussian Splatting. arXiv preprint arXiv:2407.19035
+    (2024).
+
+    - <span id="page-8-31"></span>[10] Yang Chen, Yingwei Pan, Yehao Li, Ting Yao,
+    and Tao Mei. 2023. Control3d: Towards controllable text-to-3d generation. In Proceedings
+    of the 31st ACM International Conference on Multimedia. 1148–1156.
+
+    - <span id="page-8-6"></span>[11] Zijiao Chen, Jiaxin Qing, Tiange Xiang, Wan
+    Lin Yue, and Juan Helen Zhou. 2023. Seeing beyond the brain: Conditional diffusion
+    model with sparse masked modeling for vision decoding. In Proceedings of the IEEE/CVF
+    Conference on Computer Vision and Pattern Recognition. 22710–22720.
+
+    - <span id="page-8-35"></span>[12] Zilong Chen, Feng Wang, Yikai Wang, and Huaping
+    Liu. 2024. Text-to-3d using gaussian splatting. In Proceedings of the IEEE/CVF
+    conference on computer vision and pattern recognition. 21401–21412.
+
+    - <span id="page-8-38"></span>[13] Barbara Anne Dosher and Zhong-Lin Lu. 1998.
+    Perceptual learning reflects external noise filtering and internal noise reduction
+    through channel reweighting. Proceedings of the National Academy of Sciences 95,
+    23 (1998), 13988–13993.
+
+    - <span id="page-8-45"></span>[14] Haoqiang Fan, Hao Su, and Leonidas J Guibas.
+    2017. A point set generation network for 3d object reconstruction from a single
+    image. In Proceedings of the IEEE conference on computer vision and pattern recognition.
+    605–613.
+
+    - <span id="page-8-24"></span>[15] Xiachong Feng, Xiaocheng Feng, Bing Qin, and
+    Ting Liu. 2023. Aligning semantic in brain and language: A curriculum contrastive
+    method for electroencephalography-to-text generation. IEEE Transactions on Neural
+    Systems and Rehabilitation Engineering 31 (2023), 3874–3883.
+
+    - <span id="page-8-47"></span>[16] Gege Gao, Weiyang Liu, Anpei Chen, Andreas
+    Geiger, and Bernhard Schölkopf. 2024. Graphdreamer: Compositional 3d scene synthesis
+    from scene graphs. In Proceedings of the IEEE/CVF Conference on Computer Vision
+    and Pattern Recognition. 21295–21304.
+
+    - <span id="page-8-41"></span>[17] Yunchuan Guan, Yu Liu, Ke Zhou, Zhiqi Shen,
+    Serge Belongie, Jenq-Neng Hwang, and Lei Li. 2025. Learning to Learn Weight Generation
+    via Trajectory Diffusion. arXiv preprint arXiv:2502.01117 (2025).
+
+    - <span id="page-8-11"></span>[18] Donald Olding Hebb. 2005. The organization
+    of behavior: A neuropsychological theory. Psychology press.
+
+    - <span id="page-8-9"></span>[19] John R Heckenlively and Geoffrey B Arden. 2006.
+    Principles and practice of clinical electrophysiology of vision. MIT press.
+
+    - <span id="page-8-3"></span>[20] Tomoyasu Horikawa and Yukiyasu Kamitani. 2017.
+    Generic decoding of seen and imagined objects using hierarchical visual features.
+    Nature communications 8, 1 (2017), 15037.
+
+    - <span id="page-8-25"></span>[21] Yuya Ikegawa, Ryohei Fukuma, Hidenori Sugano,
+    Satoru Oshino, Naoki Tani, Kentaro Tamura, Yasushi Iimura, Hiroharu Suzuki, Shota
+    Yamamoto, Yuya Fujita, et al. 2024. Text and image generation from intracranial
+    electroencephalography using an embedding space for text and images. Journal of
+    Neural Engineering 21, 3 (2024), 036019.
+
+    - <span id="page-8-27"></span>[22] Ajay Jain, Ben Mildenhall, Jonathan T Barron,
+    Pieter Abbeel, and Ben Poole. 2022. Zero-shot text-guided object generation with
+    dream fields. In Proceedings of the IEEE/CVF conference on computer vision and
+    pattern recognition. 867–876.
+
+    - <span id="page-8-13"></span>[23] Isaak Kavasidis, Simone Palazzo, Concetto Spampinato,
+    Daniela Giordano, and Mubarak Shah. 2017. Brain2image: Converting brain signals
+    into images. In Proceedings of the 25th ACM international conference on Multimedia.
+    1809–1817.
+
+    - <span id="page-8-10"></span>[24] Bernhard Kerbl, Georgios Kopanas, Thomas Leimkühler,
+    and George Drettakis. 2023. 3d gaussian splatting for real-time radiance field
+    rendering. ACM Trans. Graph. 42, 4 (2023), 139–1.
+
+    - <span id="page-8-8"></span>[25] Yu-Ting Lan, Kan Ren, Yansen Wang, Wei-Long
+    Zheng, Dongsheng Li, Bao-Liang Lu, and Lili Qiu. 2023. Seeing through the brain:
+    image reconstruction of visual perception from human brain signals. arXiv preprint
+    arXiv:2308.02510 (2023).
+
+    - <span id="page-8-17"></span>[26] Lei Li. 2024. Cpseg: Finer-grained image semantic
+    segmentation via chain-ofthought language prompting. In Proceedings of the IEEE/CVF
+    Winter Conference on Applications of Computer Vision. 513–522.
+
+    - <span id="page-8-40"></span>[27] Xiang Lisa Li and Percy Liang. 2021. Prefix-tuning:
+    Optimizing continuous prompts for generation. arXiv preprint arXiv:2101.00190
+    (2021).
+
+    - <span id="page-8-36"></span>[28] Yixun Liang, Xin Yang, Jiantao Lin, Haodong
+    Li, Xiaogang Xu, and Yingcong Chen. 2024. Luciddreamer: Towards high-fidelity
+    text-to-3d generation via interval score matching. In Proceedings of the IEEE/CVF
+    conference on computer vision and pattern recognition. 6517–6526.
+
+    - <span id="page-8-32"></span>[29] Chen-Hsuan Lin, Jun Gao, Luming Tang, Towaki
+    Takikawa, Xiaohui Zeng, Xun Huang, Karsten Kreis, Sanja Fidler, Ming-Yu Liu, and
+    Tsung-Yi Lin. 2023. Magic3d: High-resolution text-to-3d content creation. In Proceedings
+    of the IEEE/CVF conference on computer vision and pattern recognition. 300–309.
+
+    - <span id="page-8-43"></span>[30] Chin-Yew Lin. 2004. Rouge: A package for automatic
+    evaluation of summaries. In Text summarization branches out. 74–81.
+
+    - <span id="page-8-46"></span>[31] Haibin Ling and David W Jacobs. 2007. Shape
+    classification using the innerdistance. IEEE transactions on pattern analysis
+    and machine intelligence 29, 2 (2007), 286–299.
+
+    - <span id="page-8-21"></span>[32] Hanwen Liu, Daniel Hajialigol, Benny Antony,
+    Aiguo Han, and Xuan Wang. 2024. EEG2Text: Open Vocabulary EEG-to-Text Translation
+    with Multi-View Transformer. In 2024 IEEE International Conference on Big Data
+    (BigData). IEEE, 1824–1833.
+
+    - <span id="page-8-19"></span>[33] Libin Liu, Shen Chen, Sen Jia, Jingzhe Shi,
+    Zhongyu Jiang, Can Jin, Wu Zongkai, Jenq-Neng Hwang, and Lei Li. 2024. Graph Canvas
+    for Controllable 3D Scene Generation. arXiv preprint arXiv:2412.00091 (2024).
+
+    - <span id="page-8-30"></span>[34] Ruoshi Liu, Rundi Wu, Basile Van Hoorick, Pavel
+    Tokmakov, Sergey Zakharov, and Carl Vondrick. 2023. Zero-1-to-3: Zero-shot one
+    image to 3d object. In Proceedings of the IEEE/CVF international conference on
+    computer vision. 9298– 9309.
+
+    - <span id="page-8-33"></span>[35] Ben Mildenhall, Pratul P Srinivasan, Matthew
+    Tancik, Jonathan T Barron, Ravi Ramamoorthi, and Ren Ng. 2021. Nerf: Representing
+    scenes as neural radiance fields for view synthesis. Commun. ACM 65, 1 (2021),
+    99–106.
+
+    - <span id="page-8-26"></span>[36] Abhijit Mishra, Shreya Shukla, Jose Torres,
+    Jacek Gwizdka, and Shounak Roychowdhury. 2024. Thought2Text: Text Generation from
+    EEG Signal using Large Language Models (LLMs). arXiv preprint arXiv:2410.07507
+    (2024).
+
+    - <span id="page-8-14"></span>[37] Rahul Mishra, Krishan Sharma, Ranjeet Ranjan
+    Jha, and Arnav Bhavsar. 2023. NeuroGAN: image reconstruction from EEG signals
+    via an attention-based GAN. Neural Computing and Applications 35, 12 (2023), 9181–9192.
+
+    - <span id="page-8-28"></span>[38] Nasir Mohammad Khalid, Tianhao Xie, Eugene
+    Belilovsky, and Tiberiu Popa. 2022. Clip-mesh: Generating textured meshes from
+    text using pretrained image-text models. In SIGGRAPH Asia 2022 conference papers.
+    1–8.
+
+    - <span id="page-8-4"></span>[39] Thomas Naselaris, Ryan J Prenger, Kendrick N
+    Kay, Michael Oliver, and Jack L Gallant. 2009. Bayesian reconstruction of natural
+    images from human brain activity. Neuron 63, 6 (2009), 902–915.
+
+    - <span id="page-8-5"></span>[40] Hiroaki Nishino, Hideyuki Takagi, Sung-Bae Cho,
+    and Kouichi Utsumiya. 2001. A 3D modeling system for creative design. In Proceedings
+    15th international conference on information networking. IEEE, 479–486.
+
+    - <span id="page-8-39"></span>[41] Aaron van den Oord, Yazhe Li, and Oriol Vinyals.
+    2018. Representation learning with contrastive predictive coding. arXiv preprint
+    arXiv:1807.03748 (2018).
+
+    - <span id="page-8-15"></span>[42] Hongguang Pan, Zhuoyi Li, Yunpeng Fu, Xuebin
+    Qin, and Jianchen Hu. 2024. Reconstructing visual stimulus representation from
+    EEG signals based on deep visual representation model. IEEE Transactions on Human-Machine
+    Systems (2024).
+
+    - <span id="page-8-1"></span>[43] Chethan Pandarinath, Paul Nuyujukian, Christine
+    H Blabe, Brittany L Sorice, Jad Saab, Francis R Willett, Leigh R Hochberg, Krishna
+    V Shenoy, and Jaimie M Henderson. 2017. High performance communication by people
+    with paralysis using an intracortical brain-computer interface. elife 6 (2017),
+    e18554.
+
+    - <span id="page-8-44"></span>[44] Kishore Papineni, Salim Roukos, Todd Ward,
+    and Wei-Jing Zhu. 2002. Bleu: a method for automatic evaluation of machine translation.
+    In Proceedings of the 40th annual meeting of the Association for Computational
+    Linguistics. 311–318.
+
+    - <span id="page-8-34"></span>[45] Ben Poole, Ajay Jain, Jonathan T Barron, and
+    Ben Mildenhall. 2022. Dreamfusion: Text-to-3d using 2d diffusion. arXiv preprint
+    arXiv:2209.14988 (2022).
+
+    - <span id="page-8-29"></span>[46] Alec Radford, Jong Wook Kim, Chris Hallacy,
+    Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela
+    Mishkin, Jack Clark, et al. 2021. Learning transferable visual models from natural
+    language supervision. In International conference on machine learning. PmLR, 8748–8763.
+
+    - <span id="page-8-42"></span>[47] Olga Russakovsky, Jia Deng, Hao Su, Jonathan
+    Krause, Sanjeev Satheesh, Sean Ma, Zhiheng Huang, Andrej Karpathy, Aditya Khosla,
+    Michael Bernstein, et al. 2015. Imagenet large scale visual recognition challenge.
+    International journal of computer vision 115 (2015), 211–252.
+
+    - <span id="page-8-7"></span>[48] Paul Scotti, Atmadeep Banerjee, Jimmie Goode,
+    Stepan Shabalin, Alex Nguyen, Aidan Dempster, Nathalie Verlinde, Elad Yundler,
+    David Weisberg, Kenneth Norman, et al. 2023. Reconstructing the mind''s eye: fmri-to-image
+    with contrastive learning and diffusion priors. Advances in Neural Information
+    Processing Systems 36 (2023), 24705–24728.
+
+    - <span id="page-9-7"></span>[49] Yichun Shi, Peng Wang, Jianglong Ye, Mai Long,
+    Kejie Li, and Xiao Yang. 2023. Mvdream: Multi-view diffusion for 3d generation.
+    arXiv preprint arXiv:2308.16512 (2023).
+
+    - <span id="page-9-3"></span>[50] Prajwal Singh, Dwip Dalal, Gautam Vashishtha,
+    Krishna Miyapuram, and Shanmuganathan Raman. 2024. Learning robust deep visual
+    representations from eeg brain recordings. In Proceedings of the IEEE/CVF Winter
+    Conference on Applications of Computer Vision. 7553–7562.
+
+    - <span id="page-9-0"></span>[51] Mel Slater and Maria V Sanchez-Vives. 2016.
+    Enhancing our lives with immersive virtual reality. Frontiers in Robotics and
+    AI 3 (2016), 74.
+
+    - <span id="page-9-11"></span>[52] Concetto Spampinato, Simone Palazzo, Isaak
+    Kavasidis, Daniela Giordano, Nasim Souly, and Mubarak Shah. 2017. Deep learning
+    human mind for automated visual classification. In Proceedings of the IEEE conference
+    on computer vision and pattern recognition. 6809–6817.
+
+    - <span id="page-9-5"></span>[53] Aditya Srivastava, Tanvi Shinde, Sameer Ahmed
+    Ansari, and Mr Prashant Kanade. 2020. Think2Type: thoughts to text using EEG waves.
+    International Journal of Engineering Research & Technology (IJERT) 9, 06 (2020),
+    2278–018.
+
+    - <span id="page-9-1"></span>[54] Yu Takagi and Shinji Nishimoto. 2023. High-resolution
+    image reconstruction with latent diffusion models from human brain activity. In
+    Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition.
+    14453–14463.
+
+    - <span id="page-9-14"></span>[55] Jiaxiang Tang, Jiawei Ren, Hang Zhou, Ziwei
+    Liu, and Gang Zeng. 2023. Dreamgaussian: Generative gaussian splatting for efficient
+    3d content creation. arXiv preprint arXiv:2309.16653 (2023).
+
+    - <span id="page-9-6"></span>[56] Yitian Tao, Yan Liang, Luoyu Wang, Yongqing
+    Li, Qing Yang, and Han Zhang. 2025. See: Semantically aligned eeg-to-text translation.
+    In ICASSP 2025-2025 IEEE International Conference on Acoustics, Speech and Signal
+    Processing (ICASSP). IEEE, 1–5.
+
+    - <span id="page-9-9"></span>[57] Zike Wu, Pan Zhou, Xuanyu Yi, Xiaoding Yuan,
+    and Hanwang Zhang. 2024. Consistent3d: Towards consistent high-fidelity text-to-3d
+    generation with deterministic sampling prior. In Proceedings of the IEEE/CVF Conference
+    on Computer Vision and Pattern Recognition. 9892–9902.
+
+    - <span id="page-9-2"></span>[58] Weihao Xia, Raoul De Charette, Cengiz Oztireli,
+    and Jing-Hao Xue. 2024. Dream: Visual decoding from reversing human visual system.
+    In Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision.
+    8226–8235.
+
+    - <span id="page-9-4"></span>[59] Ziyang Yan, Lei Li, Yihua Shao, Siyu Chen, Zongkai
+    Wu, Jenq-Neng Hwang, Hao Zhao, and Fabio Remondino. 2024. 3dsceneeditor: Controllable
+    3d scene editing with gaussian splatting. arXiv preprint arXiv:2412.01583 (2024).
+
+    - <span id="page-9-10"></span>[60] Bowen Zhang, Yiji Cheng, Jiaolong Yang, Chunyu
+    Wang, Feng Zhao, Yansong Tang, Dong Chen, and Baining Guo. 2024. Gaussiancube:
+    Structuring gaussian splatting using optimal transport for 3d generative modeling.
+    arXiv e-prints (2024), arXiv–2403.
+
+    - <span id="page-9-8"></span>[61] Jingbo Zhang, Xiaoyu Li, Ziyu Wan, Can Wang,
+    and Jing Liao. 2024. Text2nerf: Text-driven 3d scene generation with neural radiance
+    fields. IEEE Transactions on Visualization and Computer Graphics 30, 12 (2024),
+    7749–7762.
+
+    - <span id="page-9-13"></span>[62] Richard Zhang, Phillip Isola, Alexei A Efros,
+    Eli Shechtman, and Oliver Wang. 2018. The unreasonable effectiveness of deep features
+    as a perceptual metric. In Proceedings of the IEEE conference on computer vision
+    and pattern recognition. 586–595.
+
+    - <span id="page-9-12"></span>[63] Tianyi Zhang, Varsha Kishore, Felix Wu, Kilian
+    Q Weinberger, and Yoav Artzi. 2019. Bertscore: Evaluating text generation with
+    bert. arXiv preprint arXiv:1904.09675 (2019).
+
+
+    # A Details of Graph Attention
+
+
+    The Graph Attention Module serves as a critical component in our EEG encoder,
+    designed to capture spatial relationships among electrodes by representing their
+    interactions as a graph-based structure. We formulate the 128-channel EEG montage
+    as a graph G = (V, E), where nodes ∈ V represent electrodes and edges ∈ E encode
+    their functional connectivity. This connectivity criterion ensures that the graph
+    reflects the spatial proximity of electrodes, enabling the module to focus on
+    local inter-electrode relationships while maintaining computational efficiency.
+
+
+    The GA module employs a multi-head attention mechanism comprising 4 attention
+    heads to model diverse spatial dependencies among electrodes. Each head processes
+    the input features, which are 64-dimensional channel-wise representations extracted
+    from the EEG signals after an initial temporal convolution block. These features
+    are transformed into a 128-dimensional space through a linear transformation,
+    followed by a LeakyReLU activation function with a negative slope of 0.2 to introduce
+    non-linearity and enhance gradient flow. The attention coefficients, which quantify
+    the relative importance of neighboring electrodes, are computed as:
+
+
+    $$\alpha\_{i,f} = \frac{\exp(\mathbf{a}^T \cdot \text{LeakyReLU}(\mathbf{W}[\mathbf{h}\_i
+    || \mathbf{h}\_f]))}{\sum\_{k \in \mathcal{N}\_l \cup \{i\}} \exp(\mathbf{a}^T
+    \cdot \text{LeakyReLU}(\mathbf{W}[\mathbf{h}\_l || \mathbf{h}\_k]))} \tag{13}$$
+
+
+    where h and h ∈ R <sup>64</sup> represent the feature vectors of nodes and , W
+    ∈ R <sup>128</sup>×<sup>64</sup> is the weight matrix of the linear transformation,
+    a ∈ R <sup>256</sup> is a learnable attention vector, and || denotes concatenation.
+    The LeakyReLU activation ensures numerical stability during attention computation.
+    For each head, the updated representation of a node is a weighted sum of the transformed
+    features of its neighbors, where the weights are the attention coefficients. The
+    outputs from all 4 heads are concatenated to produce a final 512 dimensional representation
+    per node (4 heads × 128 dimensions), capturing a rich set of spatial interactions.
+
+
+    The GA module is strategically placed after the temporal convolution block in
+    the EEG encoder, allowing it to operate on temporally refined features while focusing
+    on spatial patterns. By dynamically weighting the contributions of neighboring
+    electrodes, the module emphasizes spatially significant relationships, such as
+    those between adjacent electrodes that may exhibit correlated neural activity
+    during visual stimulus processing. This design choice enhances the EEG encoder''s
+    ability to extract robust spatiotemporal features, which are critical for aligning
+    EEG embeddings with textual and visual representations in the Mind2Matter pipeline.
+    The use of multi-head attention further ensures that the module captures a diverse
+    range of spatial dependencies, mitigating the risk of overlooking subtle but important
+    inter-electrode interactions. Consequently, the GA module significantly contributes
+    to the framework''s overall performance in EEG-to-text generation, as demonstrated
+    in the ablation study (Section 4.4), where its removal led to a notable decline
+    in semantic accuracy.
+
+
+    # B Details of Large Language Model
+
+
+    In the EEG-to-text generation stage, we utilize a Large Language Model (LLM) to
+    translate EEG-derived embeddings into coherent textual descriptions. To identify
+    the most suitable LLM for this task, we compare the text generation capabilities
+    of four models: Gemma-3-1B, Llama-3.1-8B, Qwen2.5-7B, and Mistral-7B-v0.3. Each
+    model is fine-tuned on the EEG-Image dataset with ImageNet labels as ground-truth
+    textual descriptions, mapping the EEG encoder''s 512-dimensional output to the
+    model''s input space via a two-layer MLP with ReLU activation. The performance
+    of these LLMs is evaluated using standard natural language generation metrics,
+    with results summarized in Figure [4.](#page-10-0) Mistral-7B-v0.3 outperforms
+    the other models across all metrics, demonstrating superior semantic accuracy
+    and fluency in generating descriptions. Consequently, we select Mistral-7B-v0.3
+    as the LLM for the Mind2Matter pipeline.
+
+
+    Mistral-7B-v0.3 leverages a decoder-only transformer architecture with 7 billion
+    parameters, incorporating grouped-query attention to optimize computational efficiency
+    while maintaining high-quality text generation. This design makes it particularly
+    effective for the cross-modal task of mapping EEG features to textual outputs,
+    where preserving semantic content and ensuring fluency are paramount. During fine-tuning,
+    the model is adapted to align EEG embeddings with corresponding textual representations,
+    enabling it to capture the semantic essence of visual stimuli encoded in
+
+
+    <span id="page-10-0"></span>Table 4: Quantitative comparison of EEG-to-text generation
+    performance across different LLMs. Results are reported in ROUGE-1 (Recall/R,
+    Precision/P, F1-score/F), BLEU (B-1 to B-4), and BERTScore (R/P/F) metrics. Bold
+    values indicate the best performance.
+
+
+    |                 | ROUGE-1(%)↑ |       |       | BLEU(%)↑ |       |      |      |
+    BERT(%)↑ |       |       |
+
+    |-----------------|-------------|-------|-------|----------|-------|------|------|----------|-------|-------|
+
+    | Model           | R           | P     | F     | B-1      | B-2   | B-3  | B-4  |
+    R        | P     | F     |
+
+    | Gemma-3-1b      | 25.51       | 28.1  | 26.0  | 27.97    | 10.55 | 5.3  | 7.18
+    | 36.57    | 36.34 | 36.12 |
+
+    | Llama-3.1-8B    | 32.62       | 36.6  | 33.96 | 33.66    | 17.02 | 9.75 | 5.38
+    | 35.12    | 35.40 | 35.27 |
+
+    | Qwen2.5-7B      | 30.54       | 31.96 | 28.53 | 30.37    | 13.92 | 8.15 | 5.38
+    | 35.12    | 35.40 | 35.27 |
+
+    | Mistral-7B-v0.3 | 33.12       | 37.38 | 34.21 | 34.33    | 17.31 | 10.6 | 7.62
+    | 36.84    | 37.54 | 37.19 |
+
+
+    the EEG signals. Integrated after the EEG encoder, Mistral-7B-v0.3 enhances the
+    pipeline''s ability to produce accurate and meaningful text, effectively bridging
+    the gap between neural signals and natural language in the Mind2Matter framework.
+
+
+    # C More Results
+
+
+    We present additional results for the EEG-to-text generation task in Figure[.6](#page-11-0)
+    to further evaluate the Mind2Matter framework. Generated descriptions capture
+    key visual attributes, including color ("white petals," "black coffee maker"),
+    structural details ("yellow center," "digital display"), and spatial context ("sitting
+    on a tree branch"), despite being more concise than reference descriptions. The
+    single misclassification (chair mislabeled as guitar) highlights a known challenge
+    in EEG-based decoding, where objects with similar silhouettes or textures may
+    be confused. In such cases, the model may propagate label errors to the generated
+    text or hallucinate plausible but incorrect details (e.g., describing a chair
+    as having "three strings"). These results illustrate the framework''s ability
+    to extract meaningful semantic information from EEG signals while also revealing
+    limitations in fine-grained discrimination, particularly for visually analogous
+    categories. Overall, the generated descriptions provide sufficient accuracy and
+    detail to support downstream 3D reconstruction, validating the efficacy of our
+    approach in bridging neural activity and language-based scene representation.
+
+
+    # D Failure case
+
+
+    Despite demonstrating promising EEG-to-3D reconstruction capabilities, our framework
+    exhibits several characteristic failure modes that reveal fundamental challenges
+    in cross-modal translation. The inherent noise and low spatial resolution of EEG
+    signals occasionally lead to category confusions, particularly for visually similar
+    objects sharing comparable silhouettes or textures (e.g., misclassifying chairs
+    as guitars), which subsequently propagates errors through both the generated descriptions
+    and 3D reconstructions. Spatial relationships in complex scenes sometimes suffer
+    from inaccuracies, with overlapping objects or precise relative positioning being
+    challenging to resolve due to limitations in both neural signal interpretation
+    and layout optimization. Furthermore, while the pipeline captures coarse geometric
+    structures effectively, high-frequency details and intricate textures often become
+    oversimplified during the Gaussian splatting process. These limitations primarily
+    stem from three factors: (1) information loss during the EEG-to-semantic encoding
+    stage, (2) the inherent trade-off between reconstruction
+
+
+    fidelity and computational efficiency in 3D Gaussian representations, and (3)
+    current constraints in modeling precise physical interactions between objects.
+    Future improvements could incorporate multi-scale EEG feature extraction to better
+    preserve fine details, integrate physics-aware constraints during scene optimization,
+    and employ hybrid representations that combine the efficiency of Gaussian splatting
+    with neural texture synthesis.
+
+
+    <span id="page-11-0"></span>
+
+
+    | Visual Stimuli | GT Label     | Predict Label | Reference Description                                                                                                                   |
+    Generate Description                                                                |
+
+    |----------------|--------------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+
+    |                | flower       | flower        | The image shows a close-up<br>of
+    a daisy with white petals<br>and a yellow center,<br>surrounded by other daisies<br>in
+    the background. | A beautiful white flower<br>with a yellow center.                                   |
+
+    |                | monkey       | monkey        | A monkey is sitting on a palm   A
+    brown monkey is sitting on<br>tree branch.                                                            |
+    a tree branch.                                                                      |
+
+    |                | coffee maker | coffee maker  | This is an image of a black<br>coffee
+    maker with a digital<br>display and buttons, placed on<br>a white background.                     |
+    A black coffee maker with a<br>silver carafe and a digital<br>display.              |
+
+    |                | pumpkin      | pumpkin       | A carved pumpkin with a<br>glowing
+    face and teeth,<br>sitting on a table.                                                               |
+    A large, orange pumpkin<br>sitting on a table.                                      |
+
+    |                | guitar       | quitar        | A white electric guitar<br>leaning
+    against a wall.                                                                                      |
+    A black electric guitar with<br>a white pickguard and three<br>single-coil pickups.
+    |
+
+    |                | chair        | guitar        | A wooden lawn chair with<br>slats
+    and armrests.                                                                                         |
+    A black electric quitar with<br>a white pickguard and three<br>strings.             |
+
+    |                | mushroom     | mushroom      | A mushroom growing out of al
+    A red mushroom with white<br>tree stump.                                                                   |
+    spots growing in the grass.                                                         |
+
+
+    Figure 6: Additional EEG-to-Text Generation Results.'
+- title: 'Probing the Unknown: Exploring Student Interactions with Probeable Problems
+    at Scale in Introductory Programming'
+  abstract: Introductory programming courses often rely on small code-writing exercises
+    that have clearly specified problem statements. This limits opportunities for
+    students to practice how to clarify ambiguous requirements – a critical skill
+    in real-world programming. In addition, the emerging capabilities of large language
+    models (LLMs) to produce code from well-defined specifications may harm student
+    engagement with traditional programming exercises. This study explores the use
+    of "Probeable Problems", automatically gradable tasks that have deliberately vague
+    or incomplete specifications. Such problems require students to submit test inputs,
+    or 'probes', to clarify requirements before implementation. Through analysis of
+    over 40,000 probes in an introductory course, we identify patterns linking probing
+    behaviors to task success. Systematic strategies, such as thoroughly exploring
+    expected behavior before coding, resulted in fewer incorrect code submissions
+    and correlated with course success. Feedback from nearly 1,000 participants highlighted
+    the challenges and real-world relevance of these tasks, as well as benefits to
+    critical thinking and metacognitive skills. Probeable Problems are easy to set
+    up and deploy at scale, and help students recognize and resolve uncertainties
+    in programming problems.
+  url: https://arxiv.org/pdf/2504.11723
+  keywords: Probeable Problems, CS1, test cases, requirements, ambiguity
+  document: '#### 1 Introduction
+
+
+    In real-world programming contexts, requirements are often conveyed in natural
+    language, which is prone to ambiguity, misinterpretation, and the need for clarification
+    [\[13,](#page-6-1) [36\]](#page-6-2). Failure to clarify ambiguities early can
+    be costly in software development [\[10\]](#page-6-3). Thus, identifying gaps
+    and clarifying missing details in specifications are essential practices for developers.
+    Despite their importance, they are often not emphasized in introductory programming
+    courses, where the focus tends to be on solving well-defined problems with clear,
+    detailed specifications written by the instructor [\[1,](#page-6-4) [3,](#page-6-5)
+    [7\]](#page-6-6). This approach has, at least in part, been popularized by the
+    use of automated grading tools that can instantly provide feedback on student
+    code but are typically used with well-defined problems [\[2,](#page-6-7) [14,](#page-6-8)
+    [23\]](#page-6-9).
+
+
+    While automated grading can scale well and is widely used in programming courses,
+    the arrival of large language models (LLMs) has presented a significant challenge.
+    Typical introductory-level programming tasks can now be reliably solved by LLMs
+    [\[9,](#page-6-10) [29\]](#page-6-11). This means that students can simply provide
+    a programming problem statement – exactly as defined by their instructor – to
+    an LLM as a prompt to generate working code. This not only reduces student engagement
+    with programming tasks, but it may lead students to question the value of writing
+    code for well-specified tasks.
+
+
+    One approach to address this challenge is the use of programming tasks with deliberately
+    vague or incomplete specifications. Unlike traditional tasks with well-defined
+    requirements, such problems are resistant to trivial solutions from LLMs because
+    they lack the details required for generating a correct response. More importantly,
+    these tasks provide students with an opportunity to practice identifying gaps
+    and ambiguities, and to pose questions to fill in the missing pieces. As an example,
+    consider the request to "search an array for the smallest even value". While this
+    initially seems straightforward, several key clarifications are needed in order
+    to implement a function to solve this task:
+
+
+    - Should the function return a value, or print output directly?
+
+    - What should be calculated, an index position or a value?
+
+    - What should happen if there are no even values present?
+
+    - What should happen if the smallest even value occurs at multiple positions within
+    the array?
+
+    - If multiple positions are indeed wanted, then in what order?
+
+
+    In this paper, we explore how students approach and perceive the challenge of
+    seeking answers to such clarifying questions.
+
+
+    ### Abstract
+
+
+    Introductory programming courses often rely on small code-writing exercises that
+    have clearly specified problem statements. This limits opportunities for students
+    to practice how to clarify ambiguous requirements – a critical skill in real-world
+    programming. In addition, the emerging capabilities of large language models (LLMs)
+    to produce code from well-defined specifications may harm student engagement with
+    traditional programming exercises. This study explores the use of "Probeable Problems",
+    automatically gradable tasks that have deliberately vague or incomplete specifications.
+    Such problems require students to submit test inputs, or ''probes'', to clarify
+    requirements before implementation. Through analysis of over 40,000 probes in
+    an introductory course, we identify patterns linking probing behaviors to task
+    success. Systematic strategies, such as thoroughly exploring expected behavior
+    before coding, resulted in fewer incorrect code submissions and correlated with
+    course success. Feedback from nearly 1,000 participants highlighted the challenges
+    and real-world relevance of these tasks, as well as benefits to critical thinking
+    and metacognitive skills. Probeable Problems are easy to set up and deploy at
+    scale, and help students recognize and resolve uncertainties in programming problems.
+
+
+    ### CCS Concepts
+
+
+    • Social and professional topics → Computing education.
+
+
+    ### Keywords
+
+
+    Probeable Problems, CS1, test cases, requirements, ambiguity
+
+
+    #### ACM Reference Format:
+
+
+    Paul Denny, Viraj Kumar, Stephen MacNeil, James Prather, and Juho Leinonen. 2025.
+    Probing the Unknown: Exploring Student Interactions with Probeable Problems at
+    Scale in Introductory Programming. In Proceedings of the 30th ACM Conference on
+    Innovation and Technology in Computer Science Education V. 1 (ITiCSE 2025), June
+    27-July 2, 2025, Nijmegen, Netherlands. ACM, New York, NY, USA, [7](#page-6-0)
+    pages.<https://doi.org/10.1145/3724363.3729093>
+
+
+    ITiCSE 2025, June 27-July 2, 2025, Nijmegen, Netherlands
+
+
+    <sup>©</sup> 2025 Copyright held by the owner/author(s).
+
+
+    This is the author''s version of the work. It is posted here for your personal
+    use. Not for redistribution. The definitive Version of Record was published in
+    Proceedings of the 30th ACM Conference on Innovation and Technology in Computer
+    Science Education V. 1 (ITiCSE 2025), June 27-July 2, 2025, Nijmegen, Netherlands,
+    [https://doi.org/10.1145/](https://doi.org/10.1145/3724363.3729093) [3724363.3729093.](https://doi.org/10.1145/3724363.3729093)
+
+
+    <span id="page-1-0"></span>Table 1: Possible ambiguities in the problem statement
+    "find the first vowel in a string", each with a corresponding ''probe'' (test
+    input) and ''clarification'' (expected output).
+
+
+    | Ambiguity                  | Probe   | Clarification     |
+
+    |----------------------------|---------|-------------------|
+
+    | Return character or index? | "cat"   | ''a'' (character)   |
+
+    | Lower or upper case?       | "APPLE" | ''a'' (lower)       |
+
+    | Vowel or character order?  | "pear"  | ''a'' (vowel order) |
+
+    | Special character if none? | "Mmmm"  | ''-'' (hyphen)      |
+
+
+    A "Probeable Problem", as defined by Pawagi and Kumar [\[26\]](#page-6-12), consists
+    of a deliberately ambiguous problem statement and a mechanism for seeking clarifications
+    regarding expected behaviour. A Probeable Problem can be implemented as a traditional
+    code-writing task (thus automatically gradable) along with an oracle that clarifies
+    the expected output for any given input, or ''probe''. Table [1](#page-1-0) shows
+    an example of how such probes can be used to clarify the missing details if asked
+    to "find the first vowel in a string".
+
+
+    The use of Probeable Problems has not been explored at scale in an introductory
+    programming context. In this work, we introduce such problems in the weekly laboratory
+    sessions of a large introductory programming course. These problems can easily
+    be configured using a standard auto-grader as a pair of tasks, each of which provides
+    clarifying feedback. Probes allow students to submit their own test inputs and
+    observe the expected outputs, whereas code evaluations check students'' code against
+    instructor-supplied tests and report any failing inputs. By imposing a small penalty
+    on the latter (which mimics the ''expensive'' clarify after coding behavior),
+    we hope to encourage the ''cheaper'' and more desirable clarify before coding
+    behavior. We collect over 40,000 probes and analyze how probing activity relates
+    to task success. We also investigate student perceptions of these problems, in
+    comparison to traditional programming exercises with well-defined requirements.
+    We organize our analysis around the following three research questions:
+
+
+    - RQ1: How frequently do students submit probes prior to writing any code, and
+    how does this relate to overall course performance?
+
+    - RQ2: To what extent do students rely on ''cheap'' (clarify before coding) probes
+    compared with ''expensive'' (clarify after coding) code evaluations?
+
+    - RQ3: How do students describe their experiences with Probeable Problems compared
+    to traditional programming tasks?
+
+
+    #### 2 Related Work
+
+
+    #### 2.1 Learning to Code Without Ambiguity
+
+
+    The idea of incorporating ambiguity into programming assignments dates back decades.
+    In 1978, Schneider [\[35\]](#page-6-13) argued that a key skill for CS1 students
+    is the ability to "recognize and resolve uncertainties in simple problem statements".
+    At the time, he proposed that "some programming assignments should intentionally
+    be left incomplete, requiring the student to consider the alternatives and to
+    make a reasonable decision on the omitted details". Despite its promise, this
+    approach has seen limited adoption in introductory programming education. Instead,
+    the widespread popularity of automated
+
+
+    assessment tools has reinforced a focus on solving well-defined problems with
+    clearly specified, unambiguous requirements [\[23,](#page-6-9) [25\]](#page-6-14).
+    This exercise-intensive approach remains central to introductory programming pedagogy,
+    as highlighted by Luxton-Reilly et al. in their comprehensive review of the literature
+    [\[21\]](#page-6-15).
+
+
+    While traditional code-writing exercises are effective for developing mastery
+    of syntax and basic programming concepts, they tend to neglect higher-order cognitive
+    and metacognitive skills such as handling ambiguous requirements, which is essential
+    for real-world programming [\[13,](#page-6-1) [36\]](#page-6-2). Moreover, the
+    ubiquity of large language models (LLMs) presents an immediate challenge to syntax-focused
+    pedagogies [\[9\]](#page-6-10). Modern LLMs are capable of solving well-defined
+    programming tasks with very high accuracy [\[11,](#page-6-16) [15,](#page-6-17)
+    [17,](#page-6-18) [34\]](#page-6-19). This has led to calls from the computing
+    education community to explore new types of learning activities that are more
+    authentic and relevant in the era of AI-assisted programming [\[12,](#page-6-20)
+    [33\]](#page-6-21).
+
+
+    #### 2.2 Embracing Ambiguity
+
+
+    While problem statements in introductory courses are usually wellspecified, this
+    does not guarantee that students develop a correct understanding of the problem
+    before attempting to solve it. One approach to address this challenge is to have
+    students create and solve test cases. For example, Craig et al. [\[6\]](#page-6-22)
+    and Denny et al. [\[8\]](#page-6-23) demonstrated that having students solve or
+    create test cases before writing code can enhance their understanding of problems
+    and reduce errors, even when a problem is well specified. Similarly, Pechorina
+    et al. designed a metacognitive scaffolding tool which encouraged students to
+    write and solve test cases prior to implementing any code, which reduced errors
+    during implementation [\[27\]](#page-6-24). This confirms earlier findings from
+    Prather et al. showing that when students solve a test case after reading a problem
+    statement, they build more accurate mental models of the problem [\[30\]](#page-6-25).
+    Wrenn and Krishnamurthi highlighted that flawed problem comprehension can lead
+    to flawed implementations, particularly when students develop tests and code based
+    on the same misunderstanding [\[38\]](#page-6-26). They addressed this by introducing
+    Examplar, which provides feedback on input-output examples to validate problem
+    comprehension.
+
+
+    Unlike Examplar, Pawagi and Kumar directly focus on the issue of ambiguous requirements
+    when introducing the idea of Probeable Problems [\[26\]](#page-6-12), where essential
+    details are deliberately omitted from the problem statement. They evaluated this
+    idea in a two-hour programming contest with 67 undergraduate students from multiple
+    institutions. While students could often identify some of the missing details
+    through probing, they frequently missed others, especially subtle omissions like
+    tie-break mechanisms. Although students could use AI tools like GitHub Copilot
+    or ChatGPT, the incomplete specifications meant these tools did not guarantee
+    correct solutions.
+
+
+    In the current work, we apply the concept of Probeable Problems for the first
+    time to a large introductory programming course and focus on analyzing both student
+    perceptions and probing behaviors at scale. We believe that Probeable Problems,
+    which can be implemented using existing automated grading tools, offer an exciting
+    way to build on Schneider''s 50-year old vision. They require students to uncover
+    missing specification details through an iterative process of writing test inputs
+    and obtaining oracle feedback, addressing a skill often neglected in traditional
+    CS1 pedagogy.
+
+
+    <span id="page-2-0"></span>Table 2: The Probeable Problem statements, the default
+    probe provided to students (which does not reveal an ambiguity), and a brief summary
+    of the ambiguities that students must identify to solve the problem. Model solutions
+    (commented with ambiguities and their resolutions) are available at:<https://onlinegdb.com/8ny78ivwV>
+
+
+    | Problem | Statement                                                                                       |
+    Default Probe                            | Summary of ambiguities                                                                           |
+
+    |---------|-------------------------------------------------------------------------------------------------|------------------------------------------|--------------------------------------------------------------------------------------------------|
+
+    | P7      | Implement a function to count the number of integers<br>between a
+    and b in an array of length n | CountBetween({1, 2, 3}, 3, 0, 5) → 3     | ''a''
+    and ''b'' can be specified in either order, and<br>they are strictly excluded
+    from the range   |
+
+    | P8      | Implement a function to search an array of length n<br>for the smallest
+    even value              | SmallestEven({50, 25, 2, 30, 45}, 5) → 2 | multiple
+    indices are printed in descending or<br>der, and special error printed if no evens      |
+
+    | P9      | Implement a function to find the first vowel in a string                                        |
+    FirstVowel("apple") → ''a''                | details in Table 1; return lower
+    case character<br>in vowel order, special character if no vowel |
+
+
+    #### 3 Methods
+
+
+    Our exploration of Probeable Problems takes place in the context of a large introductory
+    programming course taught at the University of Auckland in the second half of
+    2024, with a total enrolment of 1028 students. This first-year course is compulsory
+    for all engineering students, who only select specializations in their second
+    year. We identified three consecutive labs in the weekly lab schedule, and introduced
+    one Probeable Problem into each lab alongside several traditional programming
+    exercises. For convenience, we will refer to the three Probeable Problems as P7,
+    P8, and P9, where the numbers correspond to the week of the course. Table [2](#page-2-0)
+    lists the problem statements and the default probe (provided to students) for
+    each. Model solutions (commented with ambiguities and their resolutions) are available
+    online[1](#page-2-1) .
+
+
+    The course uses the CodeRunner platform for automating the grading of programming
+    exercises [\[19\]](#page-6-27). Instructors set up programming exercises by providing
+    a problem statement, a set of test case inputs with corresponding expected outputs,
+    and a model code solution (which is optional, but allows CodeRunner to verify
+    the test cases are valid during problem authoring). CodeRunner can be configured
+    to use regular expressions when matching expected outputs, and so the ''probe''
+    component of a Probeable Problem can be configured using a single test case with
+    a wildcard to successfully match any output. To serve as an oracle, the template
+    simply includes a model solution for the problem (not shown to students) which
+    prints the output produced when called using the student-provided inputs. Figure
+    [1](#page-2-2) illustrates the interface for accepting probes.
+
+
+    Consistent with course policy, for programming exercises a small grading penalty
+    applies for incorrect submissions (i.e. code submissions that do not completely
+    pass the test suite). A penalty is applied to the final score for a given problem,
+    which grows in 5% point increments for multiple incorrect code submissions. This
+    is a small penalty relative to the course – each lab contributes 1% towards the
+    final grade, and a single programming exercise contributes no more than 10% to
+    a given lab. Each Probeable Problem consists of the probe component (shown in
+    Figure [1\)](#page-2-2) and the corresponding programming exercise. No penalties
+    were applied for submitting probes – students could submit as many probes as they
+    wished – but the standard penalties applied for incorrect code submissions.
+
+
+    In terms of describing these tasks to students, we followed the approach of Pawagi
+    and Kumar and referred to them as "Ask the Client" questions. The framing shown
+    to students at the start of each question was as follows:
+
+
+    This is a "Ask The Client" question. You have been approached by a mysterious
+    client who would like you to write a program for them, however, they have been
+    a little vague. They have asked you to...
+
+
+    This framing was then followed by the problem statement, and a reminder that no
+    penalty was associated with submitting probes.
+
+
+    <span id="page-2-2"></span>
+
+
+    | 1<br>// You can modify any of these inputs as often as you like:<br>2<br>int
+    values[] = {1, 2, 3};<br>3<br>int n = 3;<br>4<br>int a = 0;<br>5<br>int b = 5;
+    |          |                                                    |  |  |
+
+    |-------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|----------------------------------------------------|--|--|
+
+    | Check                                                                                                                                                       |          |                                                    |  |  |
+
+    |                                                                                                                                                             |
+    Expected | Got                                                |  |  |
+
+    | >                                                                                                                                                           |
+    *        | CountBetween({1, 2, 3}, 3, 0, 5) should return 3 √ |  |  |
+
+    | Passed all tests! ✓                                                                                                                                         |          |                                                    |  |  |
+
+
+    Figure 1: The CodeRunner platform, a widely used automated grading tool, configured
+    to accept probes for P7: "Implement a function to count the number of integers
+    between a and b in an array of length n". Students modify inputs in the upper
+    editing pane, and view the expected output in the lower pane.
+
+
+    #### 3.1 Quantitative Analysis
+
+
+    We define an attempt as the complete sequence of ''s (probes), ''s (failing code
+    submissions) and ''s (successful code submissions) submitted by an individual
+    student. Excluding the attempt for one student who dropped the course after the
+    P7 assessment, we logged 2,896 attempts across all three problems, containing
+    a total of 44,068 probes. Of these, 3,649 probes were the defaults we had provided.
+    As shown in Table [2,](#page-2-0) each problem''s default probe was chosen to
+    avoid revealing any ambiguities about that problem. For our analysis, we eliminated
+    these default probes. For example, the attempt represents two non-default probes,
+    followed by a failing submission, and ending with a successful submission.
+
+
+    Fewer than 2% of attempts were just i.e., a single successful attempt without
+    any probes. We find it implausible that these were honest attempts. Hence, we
+    reject these attempts from our subsequent analysis in this paper (although note
+    that future work could
+
+
+    <span id="page-2-1"></span><sup>1</sup><https://onlinegdb.com/8ny78ivwV>
+
+
+    ITiCSE 2025, June 27-July 2, 2025, Nijmegen, Netherlands Paul Denny, Viraj Kumar,
+    Stephen MacNeil, James Prather, and Juho Leinonen
+
+
+    <span id="page-3-0"></span>![](_page_3_Figure_2.jpeg)
+
+
+    Figure 2: The cumulative percentage of students (-axis) in each grade category
+    for each Probeable Problem as a function of the number of probes (-axis) submitted
+    prior to the first code submission ( or ).
+
+
+    <span id="page-3-1"></span>![](_page_3_Figure_4.jpeg)
+
+
+    Figure 3: Box plots showing the ratio of probes issued per code submission in
+    each attempt, across all grade categories and problems. We exclude outliers where
+    this ratio exceeds 35 (i.e., 2.9%, 1.3%, and 0.7% of P7, P8, and P9 attempts respectively).
+
+
+    explore such attempts as an indicator of academic misconduct). In addition, we
+    excluded attempts that did not include at least one code submission ( or ). We
+    focus on the remaining 930 attempts for P7, 925 attempts for P8, and 901 attempts
+    for P9. The vast majority of these attempts were successful (i.e., they included
+    ). The proportion of all attempts that were successful was considerably higher
+    for P7 (878/930) than for P8 (809/925) and P9 (801/901).
+
+
+    #### 3.2 Thematic Analysis
+
+
+    One member of the research team conducted a reflexive thematic analysis [\[5\]](#page-6-28)
+    to understand how students perceived this novel problem type. We asked students
+    to respond to the question: "Please comment on your experience solving this type
+    of ''Ask the client'' task (where you must create input tests to clarify the behavior
+    of a vague problem statement) compared to a more traditional programming task
+    where a complete and detailed specification is provided to you."
+
+
+    Students'' responses were first open-coded by a single researcher. Next, the codes
+    were iteratively reviewed and organized into themes based on their relevance to
+    RQ3. Finally, to help contextualize the prevalence of the themes, we deductively
+    counted the number of instances for each theme. This final step is not a necessary
+    component of thematic analysis, but given the number of participants, it provided
+    helpful context for understanding the themes.
+
+
+    #### 4 Results
+
+
+    For our analysis, we partition attempts into four categories based on the eventual
+    course grade received by the student that made the attempt: category (grades A+,
+    A, or A-), category (grades B+, B, or B-), category (grades C+, C, or C-), and
+    category (grades D+, D, or D-). Category grades are failing grades in the course.
+
+
+    #### 4.1 RQ1: Probing Before Coding
+
+
+    Prior to the introduction of Probeable Problems on Lab 7, students were accustomed
+    to immediately start writing code. Since we encouraged students to probe before
+    coding, we hoped to see attempts starting with several ''s before the first code
+    submission ( or ). Figure [2](#page-3-0) shows the cumulative percentage of students
+    for each grade category as a function of the number of probes before their first
+    code submission ( or ). For a given number of probes on the -axis, observe that
+    the cumulative percentage of students (-axis) generally decreases as we move from
+    category to to to . For instance, on all three problems, more than half the students
+    in category issued no probes before starting to code. In contrast, only 5.1% of
+    category students started coding without probing on P7, and this percentage fell
+    to 2.4% on P9. We find it encouraging that students in all categories appeared
+    to see value in probing as they gained familiarity with Probeable Problems. Thus,
+    while fewer than 25% of students from category issued more than 5 probes before
+    coding on P7, this proportion increased to about 40% on later problems. Interestingly,
+    more than 10% of students in category issued over 30 probes when first exposed
+    to Probeable Problems (P7), but this percentage fell to less than 6% on the remaining
+    problems.
+
+
+    ## 4.2 RQ2: ''Cheap'' vs. ''Expensive'' Clarifications
+
+
+    We encourage students to discover and clarify ambiguities via ''cheap'' probing
+    by imposing no penalty on probes. Students who fail to discover certain ambiguities
+    may submit code that resolves these ambiguities differently from our model solution.
+    Such code is likely to fail at least one test case, and we show students the first
+    such failing test case to help them recognize this ambiguity. This is a more ''expensive''
+    way to discover and clarify ambiguities, since we impose a small penalty for failing
+    code submissions.
+
+
+    Figure [3](#page-3-1) shows the ratio of ''cheap'' probes versus ''expensive''
+    code submissions issued by students. For each problem, the median of this ratio
+    decreases from category to to to , suggesting a declining ability to imagine ambiguities
+    (and thus a relatively higher reliance on ''expensive'' clarify after coding feedback).
+    While this is concerning, suitable interventions supplemented with many Probeable
+    Problems may help all students develop this ability.
+
+
+    #### 4.3 RQ3: Qualitative Results
+
+
+    Our thematic analysis resulted in six key themes: difficulty and frustration,
+    real-world relevance, learning benefits, preference for traditional tasks, engagement,
+    and problem-solving strategies.
+
+
+    4.3.1 Difficulty and Frustration. The most common theme (436 responses) was that
+    students found the problems to be difficult, and at times, frustrating. The vague
+    problem descriptions and hidden requirements were challenging, and students reported
+    feeling overwhelmed by the need to identify edge cases and account for unanticipated
+    scenarios. One student said, "I find these tasks often quite difficult because
+    of how vague the question is. This means that I have to think ahead of time to
+    determine different variables and how each of the sections of code will be laid
+    out." Similarly, another student shared, "I struggled a lot when trying to find
+    what the client is asking for. Once I found out what was being asked, I solved
+    it, but there were things I forgot to check such as what if there is no evens."
+
+
+    4.3.2 Real-World Relevance. Students (348 responses) reported appreciating the
+    alignment between these tasks and real-world programming scenarios. Many recognized
+    that working with vague specifications and clarifying requirements are essential
+    skills for developers who interact with clients in professional contexts. One
+    student commented, "I enjoyed it; I thought it was more accurate to real-life
+    examples where the client is not a coder and cannot describe the code that well
+    but can give examples of exactly what they like." Another wrote, "This type of
+    exercise mimics a situation where a client asks the programmer to create a program
+    in a vague manner. It makes me think consciously through every possible scenario
+    and what the output of the program should be." Despite the prevalence of this
+    theme, some students also expressed unrealistic expectations about requirement
+    elicitation. For example, one student said, "In reality, the client should provide
+    a full list of requirements of what to achieve, or they should provide more details
+    on a specific component." Another student said, "I hate clients that aren''t clear
+    about what they want!" This highlights a disconnect for some students who may
+    not yet view requirement elicitation as an important skill.
+
+
+    4.3.3 Learning Benefits. Many responses (242) described the learning benefits
+    that students believed these tasks provided. For example, the process of probing
+    for requirements and addressing
+
+
+    edge cases improved their understanding of programming concepts and problem-solving
+    strategies. A student described this by saying, "These tasks helped me think more
+    deeply about the problem and discover aspects of the specification instead of
+    just having it provided to me." Another said, "It was frustrating at times, but
+    it helped me improve my problem-solving skills and learn how to communicate better
+    in code." In addition to improving problem-solving skills, students described
+    needing to think creatively. For example, a student said, "It creates a fun and
+    more problem-solving style approach to the questions. It also allows me to think
+    outside the box and challenge how I interpret the results." Some students also
+    described metacognitive benefits such as planning, reflection, and strategy development.
+    For instance, a student shared, "''Ask the Client'' tasks challenge me to clarify
+    vague requirements that reflect real-world scenarios. They improve problem-solving
+    and communication skills by focusing on understanding the problem before coding,
+    unlike traditional tasks with clear instructions." Although it is not yet clear
+    whether these benefits will translate to traditional programming tasks, it is
+    encouraging that so many students described these metacognitive benefits in their
+    responses.
+
+
+    4.3.4 Preference for Traditional Tasks. Most of the students (312 responses) preferred
+    traditional programming tasks with detailed problem specifications. They described
+    well-specified tasks as being more straightforward and less time-consuming. One
+    student stated, "I much prefer traditional programming tasks where it is less
+    guessing what is wanted. With the ''Ask the Client'' tasks, it is very easy to
+    forget certain edge cases, which can be frustrating." Students often referenced
+    the time wasted by probing for requirements. One student shared, "It can be a
+    bit of a pain due to the lack of information provided from the client...[which]
+    can lead to going down many rabbit holes and causing time to be wasted."
+
+
+    4.3.5 Enjoyment or Engagement. Despite the challenges, many students (247 responses)
+    described enjoying or feeling engaged by the experience of uncovering requirements
+    and edge cases. The challenge was intellectually stimulating. One student noted,
+    "I enjoyed these tasks; they are a good way to remember to make sure I am testing
+    for edge cases and fully understand what the code is supposed to do." Another
+    said, "I really like these questions! They challenge me to think critically and
+    improve my ability to look for edge cases."
+
+
+    4.3.6 Strategies and Problem-Solving. Finally, 198 responses highlighted the strategies
+    students developed to tackle the ''Ask the Client'' tasks. Many shared their approaches
+    for identifying edge cases, systematically testing inputs, and iterating on their
+    solutions. One student explained, "I found it quite important to begin by trying
+    all the potential input cases to see what the expected output should be so I got
+    an idea of how to handle boundary cases and typical inputs." Another said, "I
+    learned to be more critical in finding possible edge cases to test. In future
+    tasks, I will brainstorm edge cases before starting to code."
+
+
+    Overall, the thematic analysis shows that while the task is difficult and can
+    be frustrating, many students described experiencing benefits related to learning
+    or metacognition. They appreciated the real-world relevance of needing to clarify
+    problem specifications and found the challenge to be intellectualy stimulating.
+
+
+    #### 5 Discussion
+
+
+    One interesting aspect of the probing behavior is that it seems to encourage metacognitive
+    reflection. Metacognition, which is often termed "thinking about thinking" is
+    a crucial skill in programming problem solving [\[28\]](#page-6-29). Recent work
+    by Bubnic et al. has shown that student metacognition can predict success in programming
+    problem solving and could be one of the most important predictors of success in
+    introductory programming [\[4\]](#page-6-30). Prather et al. have noted introductory
+    programming students often struggle with metacognitive difficulties, such as solving
+    the wrong problem and a lack of awareness as to where they are in the problem
+    solving process [\[31\]](#page-6-31). The results of the thematic analysis above
+    showed that students were made aware of their own metacognition in ways that combat
+    these issues, such as thinking more critically and deeply about the problem before
+    beginning and that identifying the boundaries of the problem encourages finding
+    edge cases. While metacognition was not directly measured in this experiment,
+    it is often difficult to measure and student reflections can serve as a proxy
+    [\[20\]](#page-6-32). Furthermore, recent work has noted that student metacognition
+    and self-regulation suffer dramatically when solving traditional programming assignments
+    with LLMs [\[32\]](#page-6-33), and can decrease critical thinking skills [\[16\]](#page-6-34).
+    Therefore, Probeable Problems seem to be precisely the kind of metacognitive scaffolding
+    that the computing education research community has been calling for in response
+    to the threats of LLMs [\[9,](#page-6-10) [29,](#page-6-11) [32\]](#page-6-33).
+
+
+    Recent work on novice programmer use of generative AI reveals several striking
+    similarities to our findings presented above. Margulieux et al. reported that
+    higher performing students tended to use AI less and later in the problem solving
+    process [\[22\]](#page-6-35). This shows a tendency by high performers to try
+    and solve issues themselves before seeking help from AI tools. Our results above
+    showed that students in the A category submitted more probes before submitting
+    code (see Figure [2\)](#page-3-0), attempting to find the edge cases themselves
+    before hitting one with a failed code submission. These differences in behavior
+    between grade categories may be interpreted through the lens of Expectancy-Value
+    Theory [\[37\]](#page-6-36), which suggests that students are more likely to engage
+    in a task when they both value it and believe they can succeed. Students who recognized
+    the real-world relevance of Probeable Problems, which was a prominent theme in
+    our qualitative analysis, may have seen them as more worthwhile and thus engaged
+    more deeply with the probing process.
+
+
+    Encouragingly, we observed a positive trend in all groups over time as they progressed
+    from P7 to P9, with more students submitting probes before coding and more probe
+    submissions overall. Moreover, the thematic analysis revealed that Probeable Problems
+    encouraged students to engage in thorough planning. This suggests that Probeable
+    Problems may provide a useful way to scaffold metacognition in novices, and promote
+    critical thinking about programming that could decrease over-reliance on generative
+    AI.
+
+
+    #### 6 Future Work
+
+
+    While requirement elicitation is often reserved for upper-level courses, such
+    as Software Design or Project Based Capstone Courses [\[18,](#page-6-37) [24\]](#page-6-38),
+    the ability of LLMs to solve well-specified problems creates an opportunity to
+    integrate this critical skill earlier in the curriculum via Probeable Problems.
+    Future work could explore
+
+
+    how early exposure to Probeable Problems supports students in the lower-performing
+    categories, particularly those at risk of failure ( category), by scaffolding
+    critical skills like metacognition and problem-solving. These skills are not only
+    essential for navigating less well-specified labs or assignments in subsequent
+    courses but are also vital for tackling real-world programming challenges, where
+    ambiguity is a common obstacle.
+
+
+    Future work could also explore alternative grading strategies. While the current
+    approach does not penalize probing, it may be possible to incentivize thoughtful
+    engagement with the probing process. For example, penalties could be introduced
+    for making many redundant probes, or the code implementation step could be disabled
+    until a sufficient number of probes have been submitted to clarify the ambiguities
+    in the problem. Experimenting with a variety of grading models that emphasize
+    more strategic probing could deepen students'' critical thinking and task engagement.
+
+
+    Finally, the "Ask the Client" framing could be further enriched through natural
+    language or multimodal interfaces that simulate real-world client interactions.
+    Generative AI agents could simulate the client, allowing students to ask clarifying
+    questions in natural language or engage through voice. This would create a more
+    realistic and immersive experience, helping students build both technical and
+    communication skills essential for professional work.
+
+
+    #### 7 Limitations
+
+
+    One limitation of this work is that the analysis focuses on the quantity of probes
+    submitted by students. While this provides useful insights into engagement with
+    Probeable Problems, it does not account for the quality or types of test cases
+    used. A richer analysis that examines the diversity, relevance, and depth of submitted
+    probes could yield a better understanding of how students approach problem clarification.
+    Also, it is possible that motivated students who are performing well in the course
+    are more likely to engage in systematic probing. The observed correlation between
+    probing behavior and academic success does not establish causation and warrants
+    further investigation.
+
+
+    #### 8 Conclusion
+
+
+    We explored the use of Probeable Problems [\[26\]](#page-6-12) in an introductory
+    programming course, where students clarified vague problem specifications through
+    probing. Our results show that students appreciated the real-world relevance of
+    these tasks and reported benefits such as improved problem understanding, greater
+    attention to edge cases, and enhanced problem-solving strategies. Higher-performing
+    students engaged more systematically with probing, submitting more test inputs
+    before coding and relying less on failed code submissions to clarify ambiguities.
+    While some students found the ambiguity frustrating, many described the tasks
+    as intellectually stimulating and reflective of real programming practice. Probeable
+    Problems offer a scalable way to foster critical thinking and metacognitive skills,
+    and may help address some of the challenges posed by generative AI in programming
+    education.
+
+
+    #### Acknowledgments
+
+
+    This research was supported by the Research Council of Finland (Academy Research
+    Fellow grant number 356114).
+
+
+    #### <span id="page-6-0"></span>References
+
+
+    - <span id="page-6-4"></span>[1] Joe Michael Allen, Frank Vahid, Kelly Downey,
+    and Alex Daniel Edgcomb. 2018. Weekly programs in a CS1 class: Experiences with
+    auto-graded many-small programs (MSP). In 2018 ASEE Annual Conference & Exposition.
+
+    - <span id="page-6-7"></span>[2] Elisa Baniassad, Lucas Zamprogno, Braxton Hall,
+    and Reid Holmes. 2021. STOP THE (AUTOGRADER) INSANITY: Regression Penalties to
+    Deter Autograder Overreliance. In Proceedings of the 52nd ACM Technical Symposium
+    on Computer Science Education (Virtual Event, USA) (SIGCSE ''21). Association
+    for Computing Machinery, New York, NY, USA, 1062–1068.
+
+    - <span id="page-6-5"></span>[3] Arno Broeders, Ruud Hermans, Sylvia Stuurman,
+    Lex Bijlsma, and Harrie Passier. 2023. Improving students'' code correctness and
+    test completeness by informal specifications. arXiv preprint arXiv:2309.02221
+    (2023).
+
+    - <span id="page-6-30"></span>[4] Bostjan Bubnic, Željko Kovačević, and Tomaž
+    Kosar. 2024. Can metacognition predict your success in solving problems? An exploratory
+    case study in programming. In Proceedings of the 24th Koli Calling International
+    Conference on Computing Education Research. ACM, New York, NY, USA, Article 5,
+    12 pages.
+
+    - <span id="page-6-28"></span>[5] Victoria Clarke and Virginia Braun. 2017. Thematic
+    analysis. The journal of positive psychology 12, 3 (2017), 297–298.
+
+    - <span id="page-6-22"></span>[6] Michelle Craig, Andrew Petersen, and Jennifer
+    Campbell. 2019. Answering the Correct Question. In Proceedings of the ACM Conference
+    on Global Computing Education. ACM, New York, NY, USA, 72–77.
+
+    - <span id="page-6-6"></span>[7] Adrienne Decker, Stephen H. Edwards, Brian M.
+    McSkimming, Bob Edmison, Audrey Rorrer, and Manuel A. Pérez Quiñones. 2024. Transforming
+    Grading Practices in the Computing Education Community. In Proceedings of the
+    55th ACM Technical Symposium on Computer Science Education V. 1. ACM, New York,
+    NY, USA, 276–282.
+
+    - <span id="page-6-23"></span>[8] Paul Denny, James Prather, Brett A. Becker,
+    Zachary Albrecht, Dastyni Loksa, and Raymond Pettit. 2019. A Closer Look at Metacognitive
+    Scaffolding: Solving Test Cases Before Programming. In Proceedings of the 19th
+    Koli Calling International Conference on Computing Education Research (Koli, Finland).
+    ACM, New York, NY, USA, Article 11, 10 pages.
+
+    - <span id="page-6-10"></span>[9] Paul Denny, James Prather, Brett A. Becker,
+    James Finnie-Ansley, Arto Hellas, Juho Leinonen, Andrew Luxton-Reilly, Brent N.
+    Reeves, Eddie Antonio Santos, and Sami Sarsa. 2024. Computing Education in the
+    Era of Generative AI. Commun. ACM 67, 2 (Jan. 2024), 56–67.<https://doi.org/10.1145/3624720>
+
+    - <span id="page-6-3"></span>[10] D Méndez Fernández, Stefan Wagner, Marcos Kalinowski,
+    Michael Felderer, Priscilla Mafra, Antonio Vetrò, Tayana Conte, M-T Christiansson,
+    Des Greer, Casper Lassenius, et al. 2017. Naming the pain in requirements engineering:
+    Contemporary problems, causes, and effects in practice. Empirical software engineering
+    22 (2017), 2298–2338.
+
+    - <span id="page-6-16"></span>[11] James Finnie-Ansley, Paul Denny, Andrew Luxton-Reilly,
+    Eddie Antonio Santos, James Prather, and Brett A. Becker. 2023. My AI Wants to
+    Know if This Will Be on the Exam: Testing OpenAI''s Codex on CS2 Programming Exercises.
+    In Proceedings of the 25th Australasian Computing Education Conference (Melbourne,
+    VIC, Australia). ACM, New York, NY, USA, 97–104.
+
+    - <span id="page-6-20"></span>[12] Diana Franklin, Paul Denny, David A. Gonzalez-Maldonado,
+    and Minh Tran. 2025. Generative AI in Computer Science Education: Challenges and
+    Opportunities. Cambridge University Press.
+
+    - <span id="page-6-1"></span>[13] Vincenzo Gervasi, Alessio Ferrari, Didar Zowghi,
+    and Paola Spoletini. 2019. Ambiguity in Requirements Engineering: Towards a Unifying
+    Framework. Springer International Publishing, Cham, 191–210.
+
+    - <span id="page-6-8"></span>[14] Vincent Gramoli, Michael Charleston, Bryn Jeffries,
+    Irena Koprinska, Martin Mc-Grane, Alex Radu, Anastasios Viglas, and Kalina Yacef.
+    2016. Mining autograding data in computer science education. In Proceedings of
+    the Australasian Computer Science Week Multiconference (Canberra, Australia) (ACSW
+    ''16). ACM, New York, NY, USA, Article 1, 10 pages.
+
+    - <span id="page-6-17"></span>[15] Sebastian Gutierrez, Irene Hou, Jihye Lee,
+    Kenneth Angelikas, Owen Man, Sophia Mettille, James Prather, Paul Denny, and Stephen
+    MacNeil. 2025. Seeing the Forest and the Trees: Solving Visual Graph and Tree
+    Based Data Structure Problems using Large Multimodal Models. In Proceedings of
+    the 27th Australasian Computing Education Conference (ACE ''25). Association for
+    Computing Machinery, New York, NY, USA, 124–133.<https://doi.org/10.1145/3716640.3716654>
+
+    - <span id="page-6-34"></span>[16] Gregor Jošt, Viktor Taneski, and Sašo Karakatič.
+    2024. The Impact of Large Language Models on Programming Education and Student
+    Learning Outcomes. Applied Sciences 14, 10 (2024), 4115.
+
+    - <span id="page-6-18"></span>[17] Natalie Kiesler and Daniel Schiffner. 2023.
+    Large Language Models in Introductory Programming Education: ChatGPT''s Performance
+    and Implications for Assessments. arXiv[:2308.08572](https://arxiv.org/abs/2308.08572)
+    [cs.SE]<https://arxiv.org/abs/2308.08572>
+
+    - <span id="page-6-37"></span>[18] Amruth N Kumar, Rajendra K Raj, Sherif G Aly,
+    Monica D Anderson, Brett A Becker, Richard L Blumenthal, Eric Eaton, Susan L Epstein,
+    Michael Goldweber, Pankaj Jalote, et al. 2024. Computer Science Curricula 2023.
+
+    - <span id="page-6-27"></span>[19] Richard Lobb and Jenny Harlow. 2016. Coderunner:
+    a tool for assessing computer programming skills. ACM Inroads 7, 1 (Feb. 2016),
+    47–51.
+
+    - <span id="page-6-32"></span>[20] Dastyni Loksa, Lauren Margulieux, Brett A.
+    Becker, Michelle Craig, Paul Denny, Raymond Pettit, and James Prather. 2022. Metacognition
+    and Self-Regulation in Programming Education: Theories and Exemplars of Use. ACM
+    Trans. Comput. Educ. 22, 4, Article 39 (Sept. 2022), 31 pages.<https://doi.org/10.1145/3487050>
+
+    - <span id="page-6-15"></span>[21] Andrew Luxton-Reilly, Simon, Ibrahim Albluwi,
+    Brett A. Becker, Michail Giannakos, Amruth N. Kumar, Linda Ott, James Paterson,
+    Michael James Scott, Judy Sheard, and Claudia Szabo. 2018. Introductory programming:
+    a systematic literature review. In Proceedings Companion of the 23rd Annual ACM
+    Conference on Innovation and Technology in Computer Science Education (Larnaca,
+    Cyprus) (ITiCSE 2018 Companion). ACM, New York, NY, USA, 55–106.
+
+    - <span id="page-6-35"></span>[22] Lauren E. Margulieux, James Prather, Brent
+    N. Reeves, Brett A. Becker, Gozde Cetin Uzun, Dastyni Loksa, Juho Leinonen, and
+    Paul Denny. 2024. Self-Regulation, Self-Efficacy, and Fear of Failure Interactions
+    with How Novices Use LLMs to Solve Programming Problems. In Proceedings of the
+    2024 on Innovation and Technology in Computer Science Education V. 1 (Milan, Italy)
+    (ITiCSE 2024). ACM, New York, NY, USA, 276–282.
+
+    - <span id="page-6-9"></span>[23] Marcus Messer, Neil C. C. Brown, Michael Kölling,
+    and Miaojing Shi. 2024. Automated Grading and Feedback Tools for Programming Education:
+    A Systematic Review. ACM Trans. Comput. Educ. 24, 1, Article 10 (Feb. 2024), 43
+    pages.
+
+    - <span id="page-6-38"></span>[24] Beshoy Morkos, Shraddha Joshi, and Joshua D
+    Summers. 2019. Investigating the impact of requirements elicitation and evolution
+    on course performance in a pre-capstone design course. J. of Engineering Design
+    30, 4-5 (2019), 155–179.
+
+    - <span id="page-6-14"></span>[25] José Carlos Paiva, José Paulo Leal, and Álvaro
+    Figueira. 2022. Automated Assessment in Computer Science Education: A State-of-the-Art
+    Review. ACM Trans. Comput. Educ. 22, 3, Article 34 (June 2022), 40 pages.
+
+    - <span id="page-6-12"></span>[26] Mrigank Pawagi and Viraj Kumar. 2024. Probeable
+    Problems for Beginnerlevel Programming-with-AI Contests. In Proceedings of the
+    2024 ACM Conference on International Computing Education Research - Volume 1 (Melbourne,
+    VIC, Australia) (ICER ''24). ACM, New York, NY, USA, 166–176.
+
+    - <span id="page-6-24"></span>[27] Yulia Pechorina, Keith Anderson, and Paul Denny.
+    2023. Metacodenition: Scaffolding the Problem-Solving Process for Novice Programmers.
+    In Proceedings of the 25th Australasian Computing Education Conference (Melbourne,
+    VIC, Australia) (ACE ''23). ACM, New York, NY, USA, 59–68.
+
+    - <span id="page-6-29"></span>[28] James Prather, Brett A. Becker, Michelle Craig,
+    Paul Denny, Dastyni Loksa, and Lauren Margulieux. 2020. What Do We Think We Think
+    We Are Doing? Metacognition and Self-Regulation in Programming. In Proceedings
+    of the 2020 ACM Conference on International Computing Education Research (Virtual
+    Event, New Zealand) (ICER ''20). ACM, New York, NY, USA, 2–13.
+
+    - <span id="page-6-11"></span>[29] James Prather, Paul Denny, Juho Leinonen, Brett
+    A. Becker, Ibrahim Albluwi, Michelle Craig, Hieke Keuning, Natalie Kiesler, Tobias
+    Kohn, Andrew Luxton-Reilly, Stephen MacNeil, Andrew Petersen, Raymond Pettit,
+    Brent N. Reeves, and Jaromir Savelka. 2023. The Robots Are Here: Navigating the
+    Generative AI Revolution in Computing Education. In Proceedings of the 2023 Working
+    Group Reports on Innovation and Technology in Computer Science Education (Turku,
+    Finland) (ITiCSE-WGR ''23). ACM, New York, NY, USA, 108–159.
+
+    - <span id="page-6-25"></span>[30] James Prather, Raymond Pettit, Brett A. Becker,
+    Paul Denny, Dastyni Loksa, Alani Peters, Zachary Albrecht, and Krista Masci. 2019.
+    First Things First: Providing Metacognitive Scaffolding for Interpreting Problem
+    Prompts. In Proceedings of the 50th ACM Technical Symposium on Computer Science
+    Education (Minneapolis, MN, USA) (SIGCSE ''19). ACM, New York, NY, USA, 531–537.
+
+    - <span id="page-6-31"></span>[31] James Prather, Raymond Pettit, Kayla McMurry,
+    Alani Peters, John Homer, and Maxine Cohen. 2018. Metacognitive Difficulties Faced
+    by Novice Programmers in Automated Assessment Tools. In Proceedings of the 2018
+    ACM Conference on International Computing Education Research (Espoo, Finland)
+    (ICER ''18). ACM, New York, NY, USA, 41–50.
+
+    - <span id="page-6-33"></span>[32] James Prather, Brent N Reeves, Juho Leinonen,
+    Stephen MacNeil, Arisoa S Randrianasolo, Brett A. Becker, Bailey Kimmel, Jared
+    Wright, and Ben Briggs. 2024. The Widening Gap: The Benefits and Harms of Generative
+    AI for Novice Programmers. In Proceedings of the 2024 ACM Conference on International
+    Computing Education Research - Volume 1 (Melbourne, VIC, Australia) (ICER ''24).
+    ACM, New York, NY, USA, 469–486.
+
+    - <span id="page-6-21"></span>[33] Arun Raman and Viraj Kumar. 2022. Programming
+    Pedagogy and Assessment in the Era of AI/ML: A Position Paper. In Proceedings
+    of the 15th Annual ACM India Compute Conference (Jaipur, India). ACM, New York,
+    NY, USA, 29–34.
+
+    - <span id="page-6-19"></span>[34] Jaromir Savelka, Arav Agarwal, Marshall An,
+    Chris Bogart, and Majd Sakr. 2023. Thrilled by Your Progress! Large Language Models
+    (GPT-4) No Longer Struggle to Pass Assessments in Higher Education Programming
+    Courses. In Proceedings of the 2023 ACM Conference on International Computing
+    Education Research - Volume 1 (Chicago, IL, USA) (ICER ''23). ACM, New York, NY,
+    USA, 78–92.
+
+    - <span id="page-6-13"></span>[35] G. Michael Schneider. 1978. The introductory
+    programming course in computer science: ten principles. SIGCSE Bull. 10, 1 (Feb.
+    1978), 107–114.
+
+    - <span id="page-6-2"></span>[36] Unnati S. Shah and Devesh C. Jinwala. 2015.
+    Resolving Ambiguities in Natural Language Software Requirements: A Comprehensive
+    Survey. SIGSOFT Softw. Eng. Notes 40, 5 (Sept. 2015), 1–7.<https://doi.org/10.1145/2815021.2815032>
+
+    - <span id="page-6-36"></span>[37] Allan Wigfield and Jacquelynne S. Eccles. 2000.
+    Expectancy–Value Theory of Achievement Motivation. Contemporary Educational Psychology
+    25, 1 (2000), 68–81.<https://doi.org/10.1006/ceps.1999.1015>
+
+    - <span id="page-6-26"></span>[38] John Wrenn and Shriram Krishnamurthi. 2019.
+    Executable Examples for Programming Problem Comprehension. In Proc of the 2019
+    ACM Conf on Int.al Comp. Ed. Research (Toronto ON, Canada) (ICER ''19). ACM, New
+    York, NY, USA, 131–139.'
