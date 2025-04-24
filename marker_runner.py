@@ -8,8 +8,9 @@ from marker.converters.pdf import PdfConverter
 from marker.models import create_model_dict
 from marker.output import text_from_rendered
 from marker.config.parser import ConfigParser
-import openai
 from dotenv import load_dotenv, find_dotenv
+from litellm import completion
+
 
 
 # === Configuration ===
@@ -17,10 +18,9 @@ pdf_link_file = "pdf_link.txt"
 output_yaml = "papers.yaml"
 download_dir = "downloads"
 
-# Load .env and OpenAI API key
+# litellm key input
 _ = load_dotenv(find_dotenv())
-openai.api_key = "sk-"
-client = openai.OpenAI(api_key=openai.api_key)
+os.environ["OPENAI_API_KEY"] = "sk-"
 
 # === Marker configuration ===
 config = {"output_format": "markdown"}
@@ -145,14 +145,14 @@ Answer with either:
 - "Qualified"
 """
 
-    response = client.chat.completions.create(
+    response = completion(
         model="gpt-4",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.2,
+        max_tokens=200
     )
 
-    result = response.choices[0].message.content.strip()
-    return result
+    return response["choices"][0]["message"]["content"].strip()
 
 # === Main process ===
 papers = []

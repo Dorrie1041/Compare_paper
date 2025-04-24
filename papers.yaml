@@ -1,5 +1,5 @@
 papers:
-- : 'Mind2Matter: Creating 3D Models from EEG Signals'
+- title: 'Mind2Matter: Creating 3D Models from EEG Signals'
   abstract: The reconstruction of 3D objects from brain signals has gained significant
     attention in brain-computer interface (BCI) research. Current research predominantly
     utilizes functional magnetic resonance imaging (fMRI) for 3D reconstruction tasks
