@@ -1,0 +1,15 @@
+Loaded layout model s3://layout/2025_02_18 on device mps with dtype torch.float16
+Loaded texify model s3://texify/2025_02_18 on device mps with dtype torch.float16
+Loaded recognition model s3://text_recognition/2025_02_18 on device mps with dtype torch.float16
+Loaded table recognition model s3://table_recognition/2025_02_18 on device mps with dtype torch.float16
+Loaded detection model s3://text_detection/2025_02_28 on device mps with dtype torch.float16
+Loaded detection model s3://inline_math_detection/2025_02_24 on device mps with dtype torch.float16
+[->] Converting 2504.11936
+[FILTER] 2504.11936 → Qualified
+[->] Converting 2504.11723
+[FILTER] 2504.11723 → "Qualified"
+[->] Converting 2504.16562
+[FILTER] 2504.16562 → Disqualified: No evaluation
+[✓] Added: 2504.16562
+
+✅ All done! YAML saved to papers.yaml
