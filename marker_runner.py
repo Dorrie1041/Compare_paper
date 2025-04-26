@@ -63,12 +63,19 @@ def split_sections(markdown_text):
         line = line.strip()
         if not line:
             continue
-        heading_match = re.match(r"^(#+)\s+(.*)", line)
+        heading_match = (
+            re.match(r"^(#+)\s+(.*)", line) or                     
+            re.match(r"^(?:[IVXLCDM]+)\.\s+(.*)", line, re.IGNORECASE) or  
+            re.match(r"^\d+(\.\d+)*\.\s+(.*)", line)                
+        )
+
         if heading_match:
-            current_section = heading_match.group(2).strip().lower().replace(" ", "_")
+            heading_text = heading_match.groups()[-1] 
+            current_section = heading_text.strip().lower().replace(" ", "_")
             sections[current_section] = ""
         elif current_section:
             sections[current_section] += line + "\n"
+
     return sections
 
 
@@ -97,13 +104,16 @@ def extract_metadata(sections, markdown_text=None):
     return keywords
 
 def trim_document(markdown_text):
+    # Match various Introduction styles
     intro_pattern = re.compile(
-        r"^(#{1,6})\s*(\d+[\.\d]*\s+)?Introduction\b", re.IGNORECASE | re.MULTILINE
+        r"(?m)^(?:#+\s*)?(?:\d+\.\d*\s*)?(?:[IVXLCDM]+\.\s*)?(?:Introduction|INTRODUCTION)\b"
     )
+    
     match = intro_pattern.search(markdown_text)
     if match:
         return markdown_text[match.start():].strip()
-    return markdown_text
+    
+    return markdown_text.strip()
 
 def is_disqualified(markdown_text):
     prompt = f"""You are reviewing academic papers. Disqualify any paper that meets any of the following criteria:
