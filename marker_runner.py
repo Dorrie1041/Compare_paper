@@ -10,6 +10,9 @@ from marker.output import text_from_rendered
 from marker.config.parser import ConfigParser
 from dotenv import load_dotenv, find_dotenv
 from litellm import completion
+import requests
+import feedparser
+
 
 
 
@@ -42,7 +45,7 @@ def extract_id_from_url(url):
     if match:
         base = match.group(1)
         version = match.group(2) or ''
-        return base + version  # returns '2504.11380' or '2504.11380v2'
+        return base + version 
     return None
 
 def download_pdf(url, save_dir):
@@ -52,27 +55,6 @@ def download_pdf(url, save_dir):
         print(f"  [↓] Downloading {url} ...")
         urllib.request.urlretrieve(url, local_path)
     return local_path
-
-def extract_metadata(sections, markdown_text=None):
-    title = ""
-    abstract = ""
-    keywords = ""
-
-    # Try to find abstract and keywords from section keys
-    for key in sections:
-        lowered = key.lower()
-        if not abstract and 'abstract' in lowered:
-            abstract = sections[key].strip().replace('\n', ' ')
-        if not keywords and 'keywords' in lowered:
-            keywords = re.sub(r'[_\n]+', ' ', sections[key]).strip()
-
-    # Updated title logic: find the first level-1 heading if markdown is provided
-    if markdown_text:
-        title_match = re.search(r"^#\s+(.*)", markdown_text, re.MULTILINE)
-        if title_match:
-            title = title_match.group(1).strip()
-
-    return title, abstract, keywords
 
 def split_sections(markdown_text):
     sections = OrderedDict()
@@ -89,6 +71,31 @@ def split_sections(markdown_text):
             sections[current_section] += line + "\n"
     return sections
 
+
+def extract_metadata(sections, markdown_text=None):
+    keywords = ""
+
+    # 1. First, try normal section headings
+    for key in sections:
+        lowered = key.lower().replace('*', '').replace('_', ' ').strip()
+        if not keywords and any(kw in lowered for kw in ["keywords", "key words", "index terms", "index term"]):
+            keywords = re.sub(r'[_\n]+', ' ', sections[key]).strip()
+
+    # 2. If still not found, scan full markdown for "*Index Terms*" or "*Keywords*"
+    if not keywords and markdown_text:
+        pattern = re.compile(
+            r'\*(?:index terms|keywords|key words|index term)\*\s*[—\-–]?\s*(.+?)(?:\n|\#|\Z)', 
+            re.IGNORECASE | re.DOTALL
+        )
+        match = pattern.search(markdown_text)
+        if match:
+            keywords = match.group(1).strip()
+            # Post-clean: stop if there’s a heading or big paragraph start
+            keywords = keywords.split('\n')[0].strip()
+            keywords = re.sub(r'\s+', ' ', keywords)  # Fix multiple spaces
+
+    return keywords
+
 def trim_document(markdown_text):
     intro_pattern = re.compile(
         r"^(#{1,6})\s*(\d+[\.\d]*\s+)?Introduction\b", re.IGNORECASE | re.MULTILINE
@@ -96,7 +103,7 @@ def trim_document(markdown_text):
     match = intro_pattern.search(markdown_text)
     if match:
         return markdown_text[match.start():].strip()
-    return ""
+    return markdown_text
 
 def is_disqualified(markdown_text):
     prompt = f"""You are reviewing academic papers. Disqualify any paper that meets any of the following criteria:
@@ -155,16 +162,35 @@ Answer with either:
     return response["choices"][0]["message"]["content"].strip()
 
 # === Main process ===
-papers = []
 with open(pdf_link_file, "r", encoding="utf-8") as f:
     pdf_urls = [line.strip() for line in f if line.strip()]
 
+paper_ids = [extract_id_from_url(url) for url in pdf_urls]
+id_query = "+OR+".join([f"id:{pid.split('v')[0]}" for pid in paper_ids if pid]) 
+
+feed = feedparser.parse(requests.get(f"http://export.arxiv.org/api/query?search_query={id_query}&start=0&max_results=100").text)
+
+id_to_metadata = {}
+for entry in feed.entries:
+    paper_id = entry.id.split('/')[-1]
+    paper_id_base = paper_id.split('v')[0]
+    id_to_metadata[paper_id_base] = {
+        "title": entry.title.strip(),
+        "abstract": entry.summary.strip(),
+        "url": entry.id
+    }
+
+papers = []
 seen_ids = set()
 for url in pdf_urls:
     try:
         paper_id = extract_id_from_url(url)
         if paper_id in seen_ids:
             print(f"[!] Skipping already-processed ID: {paper_id}")
+            continue
+        paper_id_base = paper_id.split('v')[0]
+
+        if paper_id in seen_ids:
             continue
         seen_ids.add(paper_id)
         print(f"[->] Converting {paper_id}")
@@ -179,18 +205,20 @@ for url in pdf_urls:
         decision = is_disqualified(markdown_text)
         print(f"[FILTER] {paper_id} → {decision}")
 
-        cleaned = decision.strip().lower().strip('"').strip("'")
-
-        if cleaned.startswith("qualified"):
+        if decision.lower().startswith("qualified"):
+            metadata = id_to_metadata.get(paper_id_base, {})
+            title = metadata.get("title", paper_id)
+            abstract = metadata.get("abstract", "")
+            arxiv_url = metadata.get("url", url)
 
             sections = split_sections(markdown_text)
-            title, abstract, keywords = extract_metadata(sections, markdown_text)
-            document = trim_document(markdown_text) if title and abstract else markdown_text
+            keywords = extract_metadata(sections, markdown_text)
+            document = trim_document(markdown_text)
 
             papers.append({
-                "title": title or paper_id,
+                "title": title,
                 "abstract": abstract,
-                "url": url,
+                "url": arxiv_url,
                 "keywords": keywords,
                 "document": document
             })
