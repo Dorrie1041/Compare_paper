@@ -172,74 +172,75 @@ Answer with either:
     return response["choices"][0]["message"]["content"].strip()
 
 # === Main process ===
-with open(pdf_link_file, "r", encoding="utf-8") as f:
-    pdf_urls = [line.strip() for line in f if line.strip()]
+def main():
+    with open(pdf_link_file, "r", encoding="utf-8") as f:
+        pdf_urls = [line.strip() for line in f if line.strip()]
 
-paper_ids = [extract_id_from_url(url) for url in pdf_urls]
-id_query = "+OR+".join([f"id:{pid.split('v')[0]}" for pid in paper_ids if pid]) 
+    paper_ids = [extract_id_from_url(url) for url in pdf_urls]
+    id_query = "+OR+".join([f"id:{pid.split('v')[0]}" for pid in paper_ids if pid]) 
 
-feed = feedparser.parse(requests.get(f"http://export.arxiv.org/api/query?search_query={id_query}&start=0&max_results=100").text)
+    feed = feedparser.parse(requests.get(f"http://export.arxiv.org/api/query?search_query={id_query}&start=0&max_results=100").text)
 
-id_to_metadata = {}
-for entry in feed.entries:
-    paper_id = entry.id.split('/')[-1]
-    paper_id_base = paper_id.split('v')[0]
-    id_to_metadata[paper_id_base] = {
-        "title": entry.title.strip(),
-        "abstract": entry.summary.strip(),
-        "url": entry.id
-    }
-
-papers = []
-seen_ids = set()
-for url in pdf_urls:
-    try:
-        paper_id = extract_id_from_url(url)
-        if paper_id in seen_ids:
-            print(f"[!] Skipping already-processed ID: {paper_id}")
-            continue
+    id_to_metadata = {}
+    for entry in feed.entries:
+        paper_id = entry.id.split('/')[-1]
         paper_id_base = paper_id.split('v')[0]
+        id_to_metadata[paper_id_base] = {
+            "title": entry.title.strip(),
+            "abstract": entry.summary.strip(),
+            "url": entry.id
+        }
 
-        if paper_id in seen_ids:
-            continue
-        seen_ids.add(paper_id)
-        print(f"[->] Converting {paper_id}")
+    papers = []
+    seen_ids = set()
+    for url in pdf_urls:
+        try:
+            paper_id = extract_id_from_url(url)
+            if paper_id in seen_ids:
+                print(f"[!] Skipping already-processed ID: {paper_id}")
+                continue
+            paper_id_base = paper_id.split('v')[0]
 
-        local_pdf_path = download_pdf(url, download_dir)
+            seen_ids.add(paper_id)
+            print(f"[->] Converting {paper_id}")
 
-        # Use Marker Python API to convert
-        rendered = converter(local_pdf_path)
-        markdown_text, _, _ = text_from_rendered(rendered)
+            local_pdf_path = download_pdf(url, download_dir)
 
-        # avoid all disqualify papers save in the yaml
-        decision = is_disqualified(markdown_text)
-        print(f"[FILTER] {paper_id} → {decision}")
+            rendered = converter(local_pdf_path)
+            markdown_text, _, _ = text_from_rendered(rendered)
 
-        if decision.lower().startswith("qualified"):
-            metadata = id_to_metadata.get(paper_id_base, {})
-            title = metadata.get("title", paper_id)
-            abstract = metadata.get("abstract", "")
-            arxiv_url = metadata.get("url", url)
+            decision = is_disqualified(markdown_text)
+            print(f"[FILTER] {paper_id} → {decision}")
 
-            sections = split_sections(markdown_text)
-            keywords = extract_metadata(sections, markdown_text)
-            document = trim_document(markdown_text)
+            if decision.lower().startswith("qualified"):
+                metadata = id_to_metadata.get(paper_id_base, {})
+                title = metadata.get("title", paper_id)
+                abstract = metadata.get("abstract", "")
+                arxiv_url = metadata.get("url", url)
 
-            papers.append({
-                "title": title,
-                "abstract": abstract,
-                "url": arxiv_url,
-                "keywords": keywords,
-                "document": document
-            })
-        else:
-            print(f"[✓] Added: {paper_id}")
+                sections = split_sections(markdown_text)
+                keywords = extract_metadata(sections, markdown_text)
+                document = trim_document(markdown_text)
 
-    except Exception as e:
-        print(f"[✗] Failed to convert {url}: {e}")
+                papers.append({
+                    "title": title,
+                    "abstract": abstract,
+                    "url": arxiv_url,
+                    "keywords": keywords,
+                    "document": document
+                })
+            else:
+                print(f"[✓] Added: {paper_id}")
 
-# === Save all results to YAML ===
-with open(output_yaml, "w", encoding="utf-8") as f:
-    yaml.dump({"papers": papers}, f, allow_unicode=True, sort_keys=False)
+        except Exception as e:
+            print(f"[✗] Failed to convert {url}: {e}")
 
-print(f"\n✅ All done! YAML saved to {output_yaml}")
+    with open(output_yaml, "w", encoding="utf-8") as f:
+        yaml.dump({"papers": papers}, f, allow_unicode=True, sort_keys=False)
+
+    print(f"\n✅ All done! YAML saved to {output_yaml}")
+
+if __name__ == "__main__":
+    from multiprocessing import freeze_support
+    freeze_support()
+    main()
