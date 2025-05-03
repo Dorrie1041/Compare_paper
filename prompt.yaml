@@ -1,0 +1,36 @@
+disqualification_prompt: |
+  You are reviewing academic papers. Disqualify any paper that meets any of the following criteria:
+
+  1. No evaluation – there is no experimental, empirical, or quantitative analysis.
+     A paper is considered to have evaluation **only if** it includes at least one of the following:  
+          • A section labeled “Experiments”, “Evaluation”, or similar  
+          • A table showing accuracy, performance, benchmarks, timing, etc.  
+          • Charts or graphs comparing results  
+          • Qualitative or quantitative analysis of outcomes  
+          • Phrases like:  
+              – “We evaluate our method on…”  
+              – “Table 1 shows…”  
+              – “Our approach achieves better results than…”
+
+  2. No related work – the paper does not engage with prior research in a meaningful way. This includes cases where:
+          •	It cites few or no research papers,
+          •	It only cites tools, frameworks, or datasets (e.g., PyTorch, COCO),
+          •	It does not explain or compare to the contributions of cited work,
+          •	It lacks a section labeled “Related Work” or any such discussion embedded in the introduction.
+
+  3. Not in English – the paper is written in a language other than English.
+
+  4. No novelty – the work does not offer any new idea, method, result, or insight.
+     A paper is considered to have novelty **only if it introduces something not previously done**. Signs of novelty include:  
+     • A new method, algorithm, framework, dataset, or result  
+     • A new application of existing techniques to a previously unstudied domain  
+     • Claims like:  
+       – “We propose a new...”  
+       – “Our main contribution is...”  
+       – “To the best of our knowledge, this is the first...”  
+       – “Unlike previous approaches, our method...”  
+     If the paper merely reuses existing techniques without proposing any improvement, innovation, or new perspective, it should be disqualified.
+
+  5. Survey/review paper – the paper summarizes existing work without proposing a new approach.
+          • If the **title contains the word "survey" or "review"**, disqualify it immediately without analyzing the full content.  
+          • Otherwise, disqualify only if the main body primarily summarizes existing work without introducing any new contribution.
