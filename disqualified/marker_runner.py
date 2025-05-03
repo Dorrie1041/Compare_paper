@@ -110,7 +110,6 @@ def trim_document(markdown_text):
     return markdown_text.strip()
 
 # === Detect is EN ===
-
 def is_english(text):
     try:
         lang = detect(text)
@@ -125,117 +124,134 @@ def is_english(text):
     except:
         return False
 
-# === Main process ===
-def main():
-    # with open(pdf_link_file, "r", encoding="utf-8") as f:
-    #     pdf_urls = [line.strip() for line in f if line.strip()]
+def extract_title_abstract(markdown_text, sections, paper_id):
+    # Title: First heading or fallback to filename
+    lines = markdown_text.splitlines()
+    first_heading = next((line.strip("# ").strip() for line in lines if line.startswith("#")), None)
+    title = first_heading if first_heading else paper_id
 
-    # paper_ids = [extract_id_from_url(url) for url in pdf_urls]
-    # id_query = "+OR+".join([f"id:{pid.split('v')[0]}" for pid in paper_ids if pid]) 
+    # Abstract: Look for section named "abstract"
+    abstract = ""
+    for key in sections:
+        if "abstract" in key.lower():
+            abstract = sections[key].strip()
+            break
 
-    # feed = feedparser.parse(requests.get(f"http://export.arxiv.org/api/query?search_query={id_query}&start=0&max_results=100").text)
+    return title, abstract
 
-    # id_to_metadata = {}
-    # for entry in feed.entries:
-    #     paper_id = entry.id.split('/')[-1]
-    #     paper_id_base = paper_id.split('v')[0]
-    #     id_to_metadata[paper_id_base] = {
-    #         "title": entry.title.strip(),
-    #         "abstract": entry.summary.strip(),
-    #         "url": entry.id
-    #     }
-    # papers = []
-    # seen_ids = set()
-    # for url in pdf_urls:
-    #     try:
-    #         paper_id = extract_id_from_url(url)
-    #         if paper_id in seen_ids:
-    #             print(f"[!] Skipping already-processed ID: {paper_id}")
-    #             continue
-    #         paper_id_base = paper_id.split('v')[0]
-
-    #         seen_ids.add(paper_id)
-    #         print(f"[->] Converting {paper_id}")
-
-    #         local_pdf_path = download_pdf(url, download_dir)
-
-    #         rendered = converter(local_pdf_path)
-    #         markdown_text, _, _ = text_from_rendered(rendered)
-
-    #         if not is_english(markdown_text):
-    #             print(f"[SKIP] {paper_id} → Not English")
-    #             continue
-
-    
-    #         metadata = id_to_metadata.get(paper_id_base, {})
-    #         title = metadata.get("title", paper_id)
-    #         abstract = metadata.get("abstract", "")
-    #         arxiv_url = metadata.get("url", url)
-
-    #         sections = split_sections(markdown_text)
-    #         keywords = extract_metadata(sections, markdown_text)
-    #         document = trim_document(markdown_text)
-
-    #         papers.append({
-    #             "title": title,
-    #             "abstract": abstract,
-    #             "url": arxiv_url,
-    #             "keywords": keywords,
-    #             "document": document
-    #         })
-        
-    #         print(f"[✓] Added: {paper_id}")
-
-    #     except Exception as e:
-    #         print(f"[✗] Failed to convert {url}: {e}")
-
-    # with open(output_yaml, "w", encoding="utf-8") as f:
-    #     yaml.dump({"papers": papers}, f, allow_unicode=True, sort_keys=False)
-
-    # print(f"\n✅ All done! YAML saved to {output_yaml}")
-    pdf_files = [f for f in os.listdir(download_dir) if f.lower().endswith(".pdf")]
-
+def main(mode="pdf"):
     papers = []
 
-    for pdf_filename in pdf_files:
-        try:
-            paper_id = os.path.splitext(pdf_filename)[0]
-            print(f"[->] Converting {pdf_filename}")
+    if mode == "url":
+        # === Mode 1: Read from URLs ===
+        with open(pdf_link_file, "r", encoding="utf-8") as f:
+            pdf_urls = [line.strip() for line in f if line.strip()]
 
-            local_pdf_path = os.path.join(download_dir, pdf_filename)
+        paper_ids = [extract_id_from_url(url) for url in pdf_urls]
+        id_query = "+OR+".join([f"id:{pid.split('v')[0]}" for pid in paper_ids if pid]) 
 
-            rendered = converter(local_pdf_path)
-            markdown_text, _, _ = text_from_rendered(rendered)
+        feed = feedparser.parse(requests.get(
+            f"http://export.arxiv.org/api/query?search_query={id_query}&start=0&max_results=100"
+        ).text)
 
-            if not is_english(markdown_text):
-                print(f"[SKIP] {paper_id} → Not English")
-                continue
+        id_to_metadata = {}
+        for entry in feed.entries:
+            paper_id = entry.id.split('/')[-1]
+            paper_id_base = paper_id.split('v')[0]
+            id_to_metadata[paper_id_base] = {
+                "title": entry.title.strip(),
+                "abstract": entry.summary.strip(),
+                "url": entry.id
+            }
 
-            title = paper_id
-            abstract = ""
-            arxiv_url = ""
+        seen_ids = set()
+        for url in pdf_urls:
+            try:
+                paper_id = extract_id_from_url(url)
+                if paper_id in seen_ids:
+                    print(f"[!] Skipping already-processed ID: {paper_id}")
+                    continue
+                paper_id_base = paper_id.split('v')[0]
 
-            sections = split_sections(markdown_text)
-            keywords = extract_metadata(sections, markdown_text)
-            document = trim_document(markdown_text)
+                seen_ids.add(paper_id)
+                print(f"[->] Converting {paper_id}")
 
-            papers.append({
-                "title": title,
-                "abstract": abstract,
-                "url": arxiv_url,
-                "keywords": keywords,
-                "document": document
-            })
+                local_pdf_path = download_pdf(url, download_dir)
 
-            print(f"[✓] Added: {paper_id}")
+                rendered = converter(local_pdf_path)
+                markdown_text, _, _ = text_from_rendered(rendered)
 
-        except Exception as e:
-            print(f"[✗] Failed to convert {pdf_filename}: {e}")
+                if not is_english(markdown_text):
+                    print(f"[SKIP] {paper_id} → Not English")
+                    continue
+
+                sections = split_sections(markdown_text)
+                keywords = extract_metadata(sections, markdown_text)
+                document = trim_document(markdown_text)
+
+                metadata = id_to_metadata.get(paper_id_base, {})
+                title = metadata.get("title", paper_id)
+                abstract = metadata.get("abstract", "")
+                arxiv_url = metadata.get("url", url)
+
+                papers.append({
+                    "title": title,
+                    "abstract": abstract,
+                    "url": arxiv_url,
+                    "keywords": keywords,
+                    "document": document
+                })
+
+                print(f"[✓] Added: {paper_id}")
+
+            except Exception as e:
+                print(f"[✗] Failed to convert {url}: {e}")
+
+    elif mode == "pdf":
+        # === Mode 2: Read from local PDFs ===
+        pdf_files = [f for f in os.listdir(download_dir) if f.lower().endswith(".pdf")]
+
+        for pdf_filename in pdf_files:
+            try:
+                paper_id = os.path.splitext(pdf_filename)[0]
+                print(f"[->] Converting {pdf_filename}")
+
+                local_pdf_path = os.path.join(download_dir, pdf_filename)
+
+                rendered = converter(local_pdf_path)
+                markdown_text, _, _ = text_from_rendered(rendered)
+
+                if not is_english(markdown_text):
+                    print(f"[SKIP] {paper_id} → Not English")
+                    continue
+
+                sections = split_sections(markdown_text)
+                keywords = extract_metadata(sections, markdown_text)
+                document = trim_document(markdown_text)
+
+                title, abstract = extract_title_abstract(markdown_text, sections, paper_id)
+
+                papers.append({
+                    "title": title,
+                    "abstract": abstract,
+                    "keywords": keywords,
+                    "document": document
+                })
+
+                print(f"[✓] Added: {paper_id}")
+
+            except Exception as e:
+                print(f"[✗] Failed to convert {pdf_filename}: {e}")
+
+    else:
+        print("[!] Invalid mode. Use 'url' or 'pdf'.")
+        return
 
     with open(output_yaml, "w", encoding="utf-8") as f:
         yaml.dump({"papers": papers}, f, allow_unicode=True, sort_keys=False)
 
     print(f"\n✅ All done! YAML saved to {output_yaml}")
+
 
 if __name__ == "__main__":
     from multiprocessing import freeze_support
