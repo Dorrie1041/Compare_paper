@@ -111,18 +111,21 @@ def trim_document(markdown_text):
 
 # === Detect is EN ===
 def is_english(text):
-    try:
-        lang = detect(text)
-        if lang != "en":
-            return False
-
-        # Count proportion of ASCII letters to all characters
-        ascii_letters = sum(c.isascii() and c.isalpha() for c in text)
-        ratio = ascii_letters / max(len(text), 1)
-
-        return ratio >= 0.5
-    except:
+    # Extract all words from the text
+    words = re.findall(r'\b[a-zA-Z]{2,}\b', text)  # Words with at least 2 letters
+    total_words = len(words)
+    if total_words == 0:
         return False
+
+    # Count how many are common English words
+    # You could use a bigger dictionary here, this is just a simple example
+    common_english = {"the", "and", "of", "to", "in", "a", "is", "for", "that", "on", "with", "as", "by", "are", "this", "we", "an", "our", "it", "at"}
+
+    english_word_count = sum(1 for w in words if w.lower() in common_english)
+
+    # If at least 10% of words are common English, assume it's English
+    ratio = english_word_count / total_words
+    return ratio > 0.1
 
 def extract_title_abstract(markdown_text, sections, paper_id):
     # Title: First heading or fallback to filename
