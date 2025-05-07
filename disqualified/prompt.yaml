@@ -15,9 +15,9 @@ evaluation_prompt: |
 
   Otherwise, it should be considered qualified.
 
-  Answer with either:
-  - "Disqualified: no evaluation"
-  - "Qualified"
+  Answer in this format:
+  - If disqualified, write: "Disqualified: no evaluation. Reason: <brief explanation>"
+  - If qualified, write: "Qualified. Reason: <brief explanation>"
 
 related_work_prompt: |
   You are reviewing academic papers. Disqualify any paper **only if** it does not engage with prior research meaningfully.
@@ -30,9 +30,9 @@ related_work_prompt: |
 
   Otherwise, it should be considered qualified.
 
-  Answer with either:
-  - "Disqualified: no related work"
-  - "Qualified"
+  Answer in this format:
+  - If disqualified, write: "Disqualified: no related work. Reason: <brief explanation>"
+  - If qualified, write: "Qualified. Reason: <brief explanation>"
 
 novelty_prompt: |
   You are reviewing academic papers. Disqualify any paper **only if** it lacks novelty.
@@ -49,9 +49,9 @@ novelty_prompt: |
 
   Otherwise, it should be considered qualified.
 
-  Answer with either:
-  - "Disqualified: no novelty"
-  - "Qualified"
+  Answer in this format:
+  - If disqualified, write: "Disqualified: no novelty. Reason: <brief explanation>"
+  - If qualified, write: "Qualified. Reason: <brief explanation>"
 
 review_only_prompt: |
   You are reviewing academic papers. Disqualify any paper **only if** it is a survey or review paper.
@@ -62,6 +62,6 @@ review_only_prompt: |
 
   Otherwise, it should be considered qualified.
 
-  Answer with either:
-  - "Disqualified: survey/review paper"
-  - "Qualified"
+  Answer in this format:
+  - If disqualified, write: "Disqualified: review paper. Reason: <brief explanation>"
+  - If qualified, write: "Qualified. Reason: <brief explanation>"

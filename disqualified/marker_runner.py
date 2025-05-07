@@ -138,7 +138,7 @@ def extract_title_abstract(markdown_text, sections, paper_id):
 
     return title, abstract
 
-def main(mode="pdf"):
+def main(mode="url"):
     papers = []
 
     if mode == "url":
@@ -184,8 +184,7 @@ def main(mode="pdf"):
                     print(f"[SKIP] {paper_id} → Not English")
                     continue
 
-                sections = split_sections(markdown_text)
-                keywords = extract_metadata(sections, markdown_text)
+                keywords = extract_metadata({}, markdown_text)
                 document = trim_document(markdown_text)
 
                 metadata = id_to_metadata.get(paper_id_base, {})
