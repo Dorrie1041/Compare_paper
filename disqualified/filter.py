@@ -20,7 +20,7 @@ def is_disqualified(paper, prompt_text):
 
 Here is the paper content (in Markdown):
 
-\"\"\"{markdown_text[:8000]}\"\"\"  # Trim for token limits
+\"\"\"{markdown_text[:8000]}\"\"\"
 
 Answer with either:
 - Disqualified: <reason>
@@ -40,72 +40,64 @@ Do not explain your answer. Reply with only one of the two options.
     reply = reply.strip('"').strip("'").strip()
     return reply
 
-def filter_papers(papers, prompt_key):
-    qualified_papers = []
-
-    prompt_text = prompts[prompt_key]
-
+def run_all_checks(papers):
     for paper in papers:
-        try:
-            decision = is_disqualified(paper, prompt_text)
-            print(f"[CHECK] {paper['title']} → {decision}")
+        if "decisions" not in paper:
+            paper["decisions"] = {}
 
-            clean_decision = decision.strip('"').strip("'").strip().lower()
+        for prompt_key, _ in PROMPT_ORDER:
+            prompt_text = prompts[prompt_key]
+            try:
+                decision = is_disqualified(paper, prompt_text)
+                print(f"[CHECK] {paper['title']} → {prompt_key}: {decision}")
+                paper["decisions"][prompt_key] = decision
+            except Exception as e:
+                error_msg = f"ERROR: {str(e)}"
+                print(f"[ERROR] {paper['title']} → {prompt_key}: {error_msg}")
+                paper["decisions"][prompt_key] = error_msg
 
-            # Save the decision into the paper data
-            if "decisions" not in paper:
-                paper["decisions"] = {}
-            paper["decisions"][prompt_key] = decision  # Save exact reply
+    return papers
 
-            if clean_decision.startswith("qualified"):
-                qualified_papers.append(paper)
-                print(f"[✓] Passed: {paper['title']}")
-            else:
-                print(f"[SKIP] Disqualified at {prompt_key}: {decision}")
-
-        except Exception as e:
-            print(f"[ERROR] Failed to check paper '{paper['title']}': {e}")
-            decision = f"ERROR: {str(e)}"
-
-            if "decisions" not in paper:
-                paper["decisions"] = {}
-            paper["decisions"][prompt_key] = decision
-
-    return qualified_papers
+def is_fully_qualified(paper):
+    for prompt_key, _ in PROMPT_ORDER:
+        decision = paper.get("decisions", {}).get(prompt_key, "").lower()
+        if not decision.startswith("qualified"):
+            return False
+    return True
 
 def main():
     input_yaml = "papers.yaml"
     qualified_output_yaml = "qualified_papers.yaml"
     disqualified_output_yaml = "disqualified_papers.yaml"
+    full_log_yaml = "all_papers_with_reasons.yaml"
 
     with open(input_yaml, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
 
-    current_papers = data["papers"]
+    papers = data["papers"]
+    papers = run_all_checks(papers)
 
-    for prompt_key, _ in PROMPT_ORDER:
-        print(f"\n🔎 Running check: {prompt_key}")
-        current_papers = filter_papers(current_papers, prompt_key)
-        print(f"✅ Remaining papers after {prompt_key}: {len(current_papers)}")
+    qualified = [p for p in papers if is_fully_qualified(p)]
+    disqualified = [p for p in papers if not is_fully_qualified(p)]
 
-    # --- Split into qualified and disqualified papers ---
-    qualified_papers = current_papers
-    disqualified_papers = []
-
-    for paper in data["papers"]:
-        if paper in qualified_papers:
-            continue  # Already qualified
-        disqualified_papers.append(paper)
-
-    # --- Save final outputs ---
     with open(qualified_output_yaml, "w", encoding="utf-8") as f:
-        yaml.dump({"papers": qualified_papers}, f, allow_unicode=True, sort_keys=False)
+        yaml.dump({"papers": qualified}, f, allow_unicode=True, sort_keys=False)
 
     with open(disqualified_output_yaml, "w", encoding="utf-8") as f:
-        yaml.dump({"papers": disqualified_papers}, f, allow_unicode=True, sort_keys=False)
+        yaml.dump({"papers": disqualified}, f, allow_unicode=True, sort_keys=False)
+
+    with open(full_log_yaml, "w", encoding="utf-8") as f:
+        yaml.dump({"papers": papers}, f, allow_unicode=True, sort_keys=False)
 
     print(f"\n🎉 Qualified papers saved to {qualified_output_yaml}")
     print(f"❌ Disqualified papers (with reasons) saved to {disqualified_output_yaml}")
+    print(f"📋 All decision logs saved to {full_log_yaml}")
+
+    # --- Clean up temporary disqualification YAML files ---
+    for _, filename in PROMPT_ORDER:
+        if os.path.exists(filename):
+            os.remove(filename)
+            print(f"🗑 Deleted: {filename}")
 
 if __name__ == "__main__":
     main()
