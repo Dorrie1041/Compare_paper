@@ -65,3 +65,15 @@ review_only_prompt: |
   Answer in this format:
   - If disqualified, write: "Disqualified: review paper. Reason: <brief explanation>"
   - If qualified, write: "Qualified. Reason: <brief explanation>"
+
+verification_prompt: |
+  You are a senior reviewer asked to verify if prior decisions on paper acceptance were justified.
+
+  Below is a paper and a series of past disqualification or qualification decisions.
+
+  Please respond whether the **final decision** appears valid or not, considering all reasoning. Be brief.
+
+  Respond only with:
+  - Correct: <short comment>
+  - Incorrect: <short reason>
+
