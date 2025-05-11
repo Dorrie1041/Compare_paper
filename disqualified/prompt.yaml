@@ -1,57 +1,55 @@
 # --- Individual disqualification prompts ---
 
 evaluation_prompt: |
-  You are reviewing academic papers. Disqualify any paper **only if** it does not have experimental, empirical, or quantitative analysis.
-  
-  A paper should be disqualified if it lacks:
-  • A section labeled “Experiments”, “Evaluation”, or similar.
-  • Tables showing accuracy, benchmarks, timing, etc.
-  • Charts or graphs comparing results.
-  • Qualitative or quantitative analysis.
-  • Phrases like:
+  You are reviewing academic papers. Disqualify a paper **only if** it clearly lacks any form of empirical, experimental, or quantitative evaluation.
+
+  A paper should be considered **qualified** if it provides evidence of evaluation anywhere in the document, including:
+  • Sections or paragraphs labeled “Evaluation”, “Experiments”, “Results”, or similar.
+  • Text discussing benchmarks, metrics, comparisons, or datasets.
+  • Performance tables, figures, or graphs (even if not under a dedicated evaluation section).
+  • Phrases such as:
     – “We evaluate our method on…”
-    – “Table 1 shows…”
-    – “Our approach achieves better results than…”.
+    – “Our approach achieves better results than…”
+    – “Figure X shows…”
 
-  Otherwise, it should be considered qualified.
+  Do not disqualify a paper just because the evaluation appears later or is not clearly sectioned.
 
-  Answer in this format:
-  - If disqualified, write: "Disqualified: no evaluation. Reason: <brief explanation>"
-  - If qualified, write: "Qualified. Reason: <brief explanation>"
+  Answer with:
+  - Qualified. Reason: <brief explanation>
+  - Disqualified: no evaluation. Reason: <brief explanation>
 
 related_work_prompt: |
-  You are reviewing academic papers. Disqualify any paper **only if** it does not engage with prior research meaningfully.
+  You are reviewing academic papers. Disqualify a paper **only if** it does not meaningfully engage with prior research in any part of the text.
 
   Disqualify if:
-  • It cites few or no research papers.
-  • Only cites tools, frameworks, or datasets.
-  • Does not explain or compare to cited work.
-  • Lacks a section labeled “Related Work” or equivalent.
+  • The paper contains few or no academic citations.
+  • It only cites tools, frameworks, or datasets without context or discussion.
+  • It does not explain or compare its method to previous work.
+  • It completely lacks discussion of prior research, even outside a “Related Work” section.
 
-  Otherwise, it should be considered qualified.
+  If the paper includes meaningful citations or comparison to previous research anywhere (e.g., Introduction, Background, Implementation), it should be qualified.
 
-  Answer in this format:
-  - If disqualified, write: "Disqualified: no related work. Reason: <brief explanation>"
-  - If qualified, write: "Qualified. Reason: <brief explanation>"
+  Answer with:
+  - Qualified. Reason: <brief explanation>
+  - Disqualified: no related work. Reason: <brief explanation>
 
 novelty_prompt: |
-  You are reviewing academic papers. Disqualify any paper **only if** it lacks novelty.
+  You are reviewing academic papers. Disqualify a paper **only if** it clearly lacks novelty—meaning it contributes no new ideas, methods, applications, or results.
 
-  A paper should be disqualified if it does not offer a new idea, method, result, or insight.
-  Signs of novelty include:
-  • New method, algorithm, framework, dataset, or result.
-  • New application of existing techniques to a previously unstudied domain.
-  • Claims like:
+  Consider a paper **qualified** if it shows novelty in any of the following ways:
+  • Proposes a new method, algorithm, architecture, dataset, or insight.
+  • Applies known techniques in a novel context or domain.
+  • Makes clear claims of contribution, such as:
     – “We propose a new...”
     – “Our main contribution is...”
     – “To the best of our knowledge, this is the first...”
-    – “Unlike previous approaches, our method...”.
+    – “Unlike previous work...”
 
-  Otherwise, it should be considered qualified.
+  Do not disqualify based solely on summary tables or performance results—look for novelty claims anywhere in the text.
 
-  Answer in this format:
-  - If disqualified, write: "Disqualified: no novelty. Reason: <brief explanation>"
-  - If qualified, write: "Qualified. Reason: <brief explanation>"
+  Answer with:
+  - Qualified. Reason: <brief explanation>
+  - Disqualified: no novelty. Reason: <brief explanation>
 
 review_only_prompt: |
   You are reviewing academic papers. Disqualify any paper **only if** it is a survey or review paper.
@@ -63,8 +61,8 @@ review_only_prompt: |
   Otherwise, it should be considered qualified.
 
   Answer in this format:
-  - If disqualified, write: "Disqualified: review paper. Reason: <brief explanation>"
-  - If qualified, write: "Qualified. Reason: <brief explanation>"
+  - Disqualified: review paper. Reason: <brief explanation>
+  - Qualified. Reason: <brief explanation>
 
 verification_prompt: |
   You are a senior reviewer asked to verify if prior decisions on paper acceptance were justified.

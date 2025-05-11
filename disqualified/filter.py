@@ -1,10 +1,13 @@
 import yaml
 import litellm
 import os
+import re
 
 # === Load disqualification prompts from YAML ===
 with open("prompt.yaml", "r", encoding="utf-8") as f:
-    prompts = yaml.safe_load(f)
+    full_prompts = yaml.safe_load(f)
+
+prompts = {k: v for k, v in full_prompts.items() if k != "verification_prompt"}
 
 PROMPT_ORDER = [
     ("evaluation_prompt", "disqualify_result_eval.yaml"),
@@ -13,32 +16,74 @@ PROMPT_ORDER = [
     ("review_only_prompt", "disqualify_result_review.yaml"),
 ]
 
-def is_disqualified(paper, prompt_text):
+
+def split_by_section(markdown_text):
+    # Split at top-level section headings (## or ###)
+    section_headers = list(re.finditer(r"^#{2,3} .*", markdown_text, flags=re.MULTILINE))
+    if not section_headers:
+        return [markdown_text]
+
+    sections = []
+    for i in range(len(section_headers)):
+        start = section_headers[i].start()
+        end = section_headers[i + 1].start() if i + 1 < len(section_headers) else len(markdown_text)
+        sections.append(markdown_text[start:end])
+    return sections
+
+def is_disqualified(paper, prompt_text, prompt_key=None):
     markdown_text = paper["document"]
 
-    prompt = f"""{prompt_text}
+    if len(markdown_text) <= 100_000:
+        # Full context if size allows
+        content_to_use = markdown_text
+        prompt = f"""{prompt_text}
 
 Here is the paper content (in Markdown):
 
-\"\"\"{markdown_text[:8000]}\"\"\"
+\"\"\"{content_to_use}\"\"\"
 
-Answer with either:
-- Disqualified: <reason>
-- Qualified
-
-Do not explain your answer. Reply with only one of the two options.
+Answer using one of:
+- Qualified. Reason: <brief explanation>
+- Disqualified: <reason>. Reason: <brief explanation>
 """
+        response = litellm.completion(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.2,
+            max_tokens=200
+        )
+        return response["choices"][0]["message"]["content"].strip().strip('"').strip("'")
 
-    response = litellm.completion(
-        model="gpt-4o",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.2,
-        max_tokens=200
-    )
+    # Too long: split by section and evaluate ALL chunks
+    sections = split_by_section(markdown_text)
+    all_replies = []
+    disqualified_chunks = []
 
-    reply = response["choices"][0]["message"]["content"].strip()
-    reply = reply.strip('"').strip("'").strip()
-    return reply
+    for idx, section in enumerate(sections):
+        section_prompt = f"""{prompt_text}
+
+Here is a section from the paper (chunk {idx + 1}):
+
+\"\"\"{section[:8000]}\"\"\"
+
+Answer using one of:
+- Qualified. Reason: <brief explanation>
+- Disqualified: <reason>. Reason: <brief explanation>
+"""
+        response = litellm.completion(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": section_prompt}],
+            temperature=0.2,
+            max_tokens=200
+        )
+        reply = response["choices"][0]["message"]["content"].strip().strip('"').strip("'")
+        all_replies.append(f"Chunk {idx + 1}: {reply}")
+        if reply.lower().startswith("disqualified"):
+            disqualified_chunks.append(f"Chunk {idx + 1}: {reply}")
+
+    if disqualified_chunks:
+        return "Disqualified: " + " | ".join(disqualified_chunks)
+    return "Qualified. Reason: All relevant sections passed."
 
 def run_all_checks(papers):
     for paper in papers:
@@ -60,8 +105,9 @@ def run_all_checks(papers):
 
 def is_fully_qualified(paper):
     for prompt_key, _ in PROMPT_ORDER:
-        decision = paper.get("decisions", {}).get(prompt_key, "").lower()
-        if not decision.startswith("qualified"):
+        decision = paper.get("decisions", {}).get(prompt_key, "")
+        cleaned = decision.lower().lstrip("-• ").strip()
+        if not cleaned.startswith("qualified"):
             return False
     return True
 
