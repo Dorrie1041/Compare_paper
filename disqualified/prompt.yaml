@@ -3,18 +3,21 @@
 evaluation_prompt: |
   You are reviewing academic papers. Disqualify a paper **only if** it clearly lacks any form of empirical, experimental, or quantitative evaluation.
 
-  A paper should be considered **qualified** if it provides evidence of evaluation anywhere in the document, including:
-  • Sections or paragraphs labeled “Evaluation”, “Experiments”, “Results”, or similar.
-  • Text discussing benchmarks, metrics, comparisons, or datasets.
-  • Performance tables, figures, or graphs (even if not under a dedicated evaluation section).
+  A paper should be **qualified** if it provides **any evidence of structured evaluation**, including but not limited to:
+  • Dedicated sections or paragraphs titled “Evaluation”, “Experiments”, “Results”, “Empirical Analysis”, or similar.
+  • Concrete use of benchmarks, metrics, comparisons, datasets, or performance measurements.
+  • Tables, figures, or graphs presenting quantifiable outcomes of methods or systems.
   • Phrases such as:
     – “We evaluate our method on…”
-    – “Our approach achieves better results than…”
-    – “Figure X shows…”
+    – “We conducted experiments to measure…”
+    – “Figure X shows results from…”
+    – “We use metric X to assess performance…”
 
-  Do not disqualify a paper just because the evaluation appears later or is not clearly sectioned.
+  **Important clarifications**:
+  • *Do not* disqualify a paper merely because evaluation is brief, informal, or placed at the end.
+  • *Do disqualify* a paper if it contains **only design discussions, conceptual proposals, anecdotal use, or subjective reflections**, without any structured or reproducible testing.
 
-  Answer with:
+  Answer only with:
   - Qualified. Reason: <brief explanation>
   - Disqualified: no evaluation. Reason: <brief explanation>
 
@@ -52,17 +55,20 @@ novelty_prompt: |
   - Disqualified: no novelty. Reason: <brief explanation>
 
 review_only_prompt: |
-  You are reviewing academic papers. Disqualify any paper **only if** it is a survey or review paper.
+  You are reviewing academic papers. Disqualify a paper **only if** it is clearly a survey or review paper **without any novel contributions**.
 
-  Disqualify if:
+  Disqualify only if:
   • The **title contains the word "survey" or "review"**.
-  • OR the main body primarily summarizes existing work without introducing new contributions.
+  • AND the **main body primarily summarizes existing work** without introducing new methods, datasets, experiments, or frameworks.
 
-  Otherwise, it should be considered qualified.
+  Do **not** disqualify a paper if:
+  • It proposes a new method, framework, dataset, or application—even if it builds on prior work.
+  • It includes original experiments, definitions, or practical implementations.
+  • It claims novel contributions such as: “We propose…”, “To the best of our knowledge…”, or provides new tools, datasets, or architectures.
 
   Answer in this format:
-  - Disqualified: review paper. Reason: <brief explanation>
-  - Qualified. Reason: <brief explanation>
+  - If disqualified, write: "Disqualified: review paper. Reason: <brief explanation>"
+  - If qualified, write: "Qualified. Reason: <brief explanation>"
 
 verification_prompt: |
   You are a senior reviewer asked to verify if prior decisions on paper acceptance were justified.

@@ -10,7 +10,7 @@ from marker.output import text_from_rendered
 from marker.config.parser import ConfigParser
 import requests
 import feedparser
-from langdetect import detect
+import argparse
 
 
 # === Configuration ===
@@ -138,11 +138,15 @@ def extract_title_abstract(markdown_text, sections, paper_id):
 
     return title, abstract
 
-def main(mode="url"):
+def main(input_path, output_yaml):
     papers = []
 
-    if mode == "url":
-        # === Mode 1: Read from URLs ===
+    if input_path.endswith(".txt"):
+        mode = "url"
+        pdf_link_file = input_path
+        download_dir = "./downloaded_pdfs"
+        os.makedirs(download_dir, exist_ok=True)
+
         with open(pdf_link_file, "r", encoding="utf-8") as f:
             pdf_urls = [line.strip() for line in f if line.strip()]
 
@@ -176,7 +180,6 @@ def main(mode="url"):
                 print(f"[->] Converting {paper_id}")
 
                 local_pdf_path = download_pdf(url, download_dir)
-
                 rendered = converter(local_pdf_path)
                 markdown_text, _, _ = text_from_rendered(rendered)
 
@@ -205,17 +208,17 @@ def main(mode="url"):
             except Exception as e:
                 print(f"[✗] Failed to convert {url}: {e}")
 
-    elif mode == "pdf":
-        # === Mode 2: Read from local PDFs ===
-        pdf_files = [f for f in os.listdir(download_dir) if f.lower().endswith(".pdf")]
+    else:
+        mode = "pdf"
+        download_dir = input_path
 
+        pdf_files = [f for f in os.listdir(download_dir) if f.lower().endswith(".pdf")]
         for pdf_filename in pdf_files:
             try:
                 paper_id = os.path.splitext(pdf_filename)[0]
                 print(f"[->] Converting {pdf_filename}")
 
                 local_pdf_path = os.path.join(download_dir, pdf_filename)
-
                 rendered = converter(local_pdf_path)
                 markdown_text, _, _ = text_from_rendered(rendered)
 
@@ -226,7 +229,6 @@ def main(mode="url"):
                 sections = split_sections(markdown_text)
                 keywords = extract_metadata(sections, markdown_text)
                 document = trim_document(markdown_text)
-
                 title, abstract = extract_title_abstract(markdown_text, sections, paper_id)
 
                 papers.append({
@@ -241,17 +243,18 @@ def main(mode="url"):
             except Exception as e:
                 print(f"[✗] Failed to convert {pdf_filename}: {e}")
 
-    else:
-        print("[!] Invalid mode. Use 'url' or 'pdf'.")
-        return
-
     with open(output_yaml, "w", encoding="utf-8") as f:
         yaml.dump({"papers": papers}, f, allow_unicode=True, sort_keys=False)
 
     print(f"\n✅ All done! YAML saved to {output_yaml}")
 
-
 if __name__ == "__main__":
     from multiprocessing import freeze_support
     freeze_support()
-    main()
+
+    parser = argparse.ArgumentParser(description="Extract and convert arXiv papers to YAML.")
+    parser.add_argument("-f", "--file", required=True, help="Path to folder (PDFs) or file (URLs)")
+    parser.add_argument("-o", "--output", required=True, help="Output YAML file")
+
+    args = parser.parse_args()
+    main(args.file, args.output)

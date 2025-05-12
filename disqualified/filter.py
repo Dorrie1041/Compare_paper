@@ -2,6 +2,7 @@ import yaml
 import litellm
 import os
 import re
+import argparse
 
 # === Load disqualification prompts from YAML ===
 with open("prompt.yaml", "r", encoding="utf-8") as f:
@@ -18,7 +19,6 @@ PROMPT_ORDER = [
 
 
 def split_by_section(markdown_text):
-    # Split at top-level section headings (## or ###)
     section_headers = list(re.finditer(r"^#{2,3} .*", markdown_text, flags=re.MULTILINE))
     if not section_headers:
         return [markdown_text]
@@ -111,8 +111,7 @@ def is_fully_qualified(paper):
             return False
     return True
 
-def main():
-    input_yaml = "papers.yaml"
+def main(input_yaml):
     qualified_output_yaml = "qualified_papers.yaml"
     disqualified_output_yaml = "disqualified_papers.yaml"
     full_log_yaml = "all_papers_with_reasons.yaml"
@@ -139,11 +138,14 @@ def main():
     print(f"❌ Disqualified papers (with reasons) saved to {disqualified_output_yaml}")
     print(f"📋 All decision logs saved to {full_log_yaml}")
 
-    # --- Clean up temporary disqualification YAML files ---
     for _, filename in PROMPT_ORDER:
         if os.path.exists(filename):
             os.remove(filename)
             print(f"🗑 Deleted: {filename}")
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Filter papers by qualification status.")
+    parser.add_argument("input_yaml", help="YAML file containing papers to filter")
+    args = parser.parse_args()
+
+    main(args.input_yaml)
