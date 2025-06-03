@@ -5,7 +5,6 @@ import litellm
 with open("prompt.yaml", "r", encoding="utf-8") as f:
     prompts = yaml.safe_load(f)
 
-verification_prompt = prompts["verification_prompt"]
 
 def verify_paper(paper):
     title = paper.get("title", "")

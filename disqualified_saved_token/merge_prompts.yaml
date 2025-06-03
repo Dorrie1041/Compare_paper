@@ -1,0 +1,157 @@
+# --- Individual disqualification prompts (only review Abs + Intro)---
+
+evaluation_prompt: |
+  You are reviewing academic papers using **only the abstract and introduction** to decide if they include structured evaluation.
+
+  Disqualify a paper **only if** it clearly lacks any form of empirical, experimental, or quantitative evaluation based on the abstract and introduction.
+
+  A paper should be **qualified** if the abstract or introduction provides **any evidence** of structured evaluation, including:
+  • Mentions of experiments, benchmarks, metrics, comparisons, or datasets.
+  • Statements like:
+    – “We evaluate our method on…”
+    – “We conducted experiments to measure…”
+    – “We use metric X to assess…”
+    – “Figure X shows performance results…”
+
+  **Important clarifications**:
+  • *Do not* disqualify a paper just because the evaluation is described briefly or informally.
+  • *Do disqualify* a paper if the abstract/introduction contains only conceptual discussion or proposals, with no mention of empirical validation.
+
+  Answer with:
+  - Qualified. Reason: <brief explanation>
+  - Disqualified: no evaluation. Reason: <brief explanation>
+
+related_work_prompt: |
+  You are reviewing academic papers using **only the abstract and introduction** to determine if they engage with prior research.
+
+  Disqualify a paper **only if** the abstract and introduction contain **no evidence** of engagement with prior work.
+
+  Disqualify if:
+  • There are no academic citations or references.
+  • Prior work is not mentioned, compared to, or discussed in any way.
+
+  A paper should be **qualified** if it includes any meaningful reference to earlier research, such as:
+  • Mentioning related approaches or previous findings.
+  • Comparing its goals or contributions with existing work.
+  • Referencing prior methods, papers, or datasets.
+
+  Answer with:
+  - Qualified. Reason: <brief explanation>
+  - Disqualified: no related work. Reason: <brief explanation>
+
+novelty_prompt: |
+  You are reviewing academic papers using **only the abstract and introduction** to assess novelty.
+
+  Disqualify a paper **only if** there are **no signs of new contributions** in the abstract or introduction.
+
+  Consider a paper **qualified** if the abstract or introduction claims novelty, such as:
+  • Proposing a new method, model, framework, or system.
+  • Applying known techniques in a novel domain.
+  • Stating contributions explicitly, e.g.:
+    – “We propose a new…”
+    – “Our contribution is…”
+    – “To the best of our knowledge…”
+
+  **Do not** disqualify a paper based on implementation or results—it’s enough to see a **clear claim of novelty**.
+
+  Answer with:
+  - Qualified. Reason: <brief explanation>
+  - Disqualified: no novelty. Reason: <brief explanation>
+
+review_only_prompt: |
+  You are reviewing academic papers using **only the abstract and introduction** to check if the paper is a survey **without new contributions**.
+
+  Disqualify only if:
+  • The title contains the word "survey" or "review",
+  • AND the abstract/introduction describe the paper as primarily summarizing existing work,
+  • AND no new methods, results, or tools are proposed.
+
+  Do **not** disqualify a paper if the abstract or intro:
+  • Proposes a method, dataset, framework, or tool,
+  • Mentions experiments or implementation,
+  • Contains novelty claims (e.g., “We propose…” or “Our contribution…”).
+
+  Answer with:
+  - Qualified. Reason: <brief explanation>
+  - Disqualified: review paper. Reason: <brief explanation>
+
+
+# --- Individual disqualification prompts (review full paper)---
+
+evaluation_prompt_full: |
+  You are reviewing academic papers. Disqualify a paper **only if** it clearly lacks any form of empirical, experimental, or quantitative evaluation.
+
+  A paper should be **qualified** if it provides **any evidence of structured evaluation**, including but not limited to:
+  • Dedicated sections or paragraphs titled “Evaluation”, “Experiments”, “Results”, “Empirical Analysis”, or similar.
+  • Concrete use of benchmarks, metrics, comparisons, datasets, or performance measurements.
+  • Tables, figures, or graphs presenting quantifiable outcomes of methods or systems.
+  • Phrases such as:
+    – “We evaluate our method on…”
+    – “We conducted experiments to measure…”
+    – “Figure X shows results from…”
+    – “We use metric X to assess performance…”
+
+  **Important clarifications**:
+  • *Do not* disqualify a paper merely because evaluation is brief, informal, or placed at the end.
+  • *Do disqualify* a paper if it contains **only design discussions, conceptual proposals, anecdotal use, or subjective reflections**, without any structured or reproducible testing.
+
+  Answer only with:
+  - Qualified. Reason: <brief explanation>
+  - Disqualified: no evaluation. Reason: <brief explanation>
+
+related_work_prompt_full: |
+  You are reviewing academic papers. Disqualify a paper **only if** it clearly fails to engage with prior research, literature, or previously published methods.
+
+  Disqualify the paper if any of the following are true:
+  • It contains **few or no academic citations** (i.e., references to prior work, papers, or methods).
+  • It does **not contain a “Related Work” section**, or any substitute section that discusses prior research.
+  • It only **mentions tools, technologies, or frameworks** (e.g., Tor, Python, AnyDesk) without citing **academic sources** or comparing prior techniques.
+  • It does not **explain how the work differs from or builds upon** previous studies.
+
+  A paper should be **qualified** if it contains:
+  • A Related Work section or equivalent discussion.
+  • Meaningful citations to academic papers, research reports, or other scholarly publications.
+  • Comparisons, critiques, or summaries of prior methods that frame the paper's contributions.
+
+  **Important clarification**:
+  • Citing or describing tools **without attribution to prior research** does not count as engagement with related work.
+  • The presence of a single sentence mentioning prior work is not enough—there must be **substantive discussion** of past literature.
+
+  Answer with:
+  - Qualified. Reason: <brief explanation>
+  - Disqualified: no related work. Reason: <brief explanation>
+
+novelty_prompt_full: |
+  You are reviewing academic papers. Disqualify a paper **only if** it clearly lacks novelty—meaning it contributes no new ideas, methods, applications, or results.
+
+  Consider a paper **qualified** if it shows novelty in any of the following ways:
+  • Proposes a new method, algorithm, architecture, dataset, or insight.
+  • Applies known techniques in a novel context or domain.
+  • Makes clear claims of contribution, such as:
+    – “We propose a new...”
+    – “Our main contribution is...”
+    – “To the best of our knowledge, this is the first...”
+    – “Unlike previous work...”
+
+  Do not disqualify based solely on summary tables or performance results—look for novelty claims anywhere in the text.
+
+  Answer with:
+  - Qualified. Reason: <brief explanation>
+  - Disqualified: no novelty. Reason: <brief explanation>
+
+review_only_prompt_full: |
+  You are reviewing academic papers. Disqualify a paper **only if** it is clearly a survey or review paper **without any novel contributions**.
+
+  Disqualify only if:
+  • The **title contains the word "survey" or "review"**.
+  • AND the **main body primarily summarizes existing work** without introducing new methods, datasets, experiments, or frameworks.
+
+  Do **not** disqualify a paper if:
+  • It proposes a new method, framework, dataset, or application—even if it builds on prior work.
+  • It includes original experiments, definitions, or practical implementations.
+  • It claims novel contributions such as: “We propose…”, “To the best of our knowledge…”, or provides new tools, datasets, or architectures.
+
+  Answer in this format:
+  - If disqualified, write: "Disqualified: review paper. Reason: <brief explanation>"
+  - If qualified, write: "Qualified. Reason: <brief explanation>"
+

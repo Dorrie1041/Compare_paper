@@ -1,0 +1,440 @@
+papers:
+- title: Floating Point HUB Adder for RISC-V Sargantana Processor
+  id: floating_point_hub_adder_for_risc_v_sargantana_processor_gerardo_bandera1_javier_salamero2_miquel_moreto2_3_and_julio_villalba1
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Disqualified: no evaluation. Reason: The paper lacks any form
+      of empirical, experimental, or quantitative evaluation. There are no sections
+      or paragraphs dedicated to evaluation, experiments, or results, nor are there
+      any benchmarks, metrics, datasets, or performance measurements presented. The
+      content focuses on design and conceptual proposals without structured testing
+      or evidence of evaluation.'
+    related_work_prompt: '- Qualified. Reason: The paper contains a "References" section
+      with meaningful citations to academic papers and scholarly publications. It
+      also includes a discussion of prior work, particularly in the "HUB format background"
+      section, where it references previous research on the HUB format and its mathematical
+      foundations. The paper builds upon these prior studies by integrating the HUB
+      adder into the Sargantana processor and discusses how this work differs from
+      conventional methods.'
+    novelty_prompt: '- Qualified. Reason: The paper proposes a novel integration of
+      a floating point HUB adder into the Sargantana RISC-V processor, which reduces
+      the number of stages and area compared to conventional FPUs. This represents
+      a new application of the HUB format in a RISC-V processor, showing novelty in
+      both method and application.'
+    review_only_prompt: '- Qualified. Reason: The abstract mentions the implementation
+      of a tailored floating point HUB adder in a specific processor, suggesting the
+      paper proposes a new method or tool.'
+  token_usage: 8882
+  time_usage: 12.07
+- title: 'The Silent Scientist: When Software Research Fails to Reach Its Audience'
+  id: the_silent_scientist_when_software_research_fails_to_reach_its_audience_the_silent_scientist_when_software_research_fails_to_reach_its_audience
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Disqualified: no evaluation. Reason: The paper lacks any form
+      of empirical, experimental, or quantitative evaluation. It primarily consists
+      of conceptual discussions and reflections on the relevance and communication
+      of software research without presenting structured or reproducible testing or
+      evaluation.'
+    related_work_prompt: 'Qualified. Reason: The paper contains a substantial number
+      of academic citations and includes discussions that engage with prior research.
+      It references various scholarly publications and critiques the current state
+      of science communication within software research, providing a meaningful context
+      for its contributions.'
+    novelty_prompt: '- Disqualified: no novelty. Reason: The paper primarily discusses
+      the challenges of science communication in software research and emphasizes
+      the importance of reaching the right audience for research impact. However,
+      it does not propose any new methods, algorithms, architectures, datasets, or
+      insights, nor does it apply known techniques in a novel context or domain. The
+      paper lacks clear claims of contribution or novelty, such as proposing a new
+      approach or being the first to address a particular issue.'
+    review_only_prompt: '- Qualified. Reason: The abstract does not indicate that
+      the paper is a survey or review. It does not mention summarizing existing work
+      or lack of new contributions. Instead, it uses a metaphor to discuss the state
+      of software research, implying a broader discussion rather than a survey.'
+  token_usage: 16533
+  time_usage: 10.02
+- title: "XiSort: Deterministic Sorting via IEEE-754 Total Ordering and Entropy\n\
+    \  Minimization"
+  id: xisort_deterministic_sorting_via_ieee_754_total_ordering_and_entropy_minimization_xisort_deterministic_sorting_via_ieee_754_total_ordering_and_entropy_minimization
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract mentions "empirical benchmarks"
+      and "performance results," and the introduction refers to an "Experimental Evaluation"
+      section where performance results of XiSort on large datasets are reported.
+      This indicates the presence of structured evaluation in the paper.'
+    related_work_prompt: 'Disqualified: no related work. Reason: The paper lacks a
+      "Related Work" section or any substitute section that discusses prior research.
+      While it contains a list of references, there is no substantive discussion or
+      engagement with prior literature, methods, or how the work builds upon previous
+      studies. The paper primarily focuses on the algorithm''s description and performance
+      without situating it within the context of existing research.'
+    novelty_prompt: 'Qualified. Reason: The abstract and introduction clearly claim
+      novelty by introducing XiSort, a new deterministic and reproducible sorting
+      algorithm for floating-point sequences. The paper emphasizes its novel approach
+      to handling tie-breaking through information-theoretic and symbolic methods,
+      and its integration into the Alpay Algebra framework. These elements indicate
+      new contributions in the field of sorting algorithms.'
+    review_only_prompt: '- Qualified. Reason: The abstract and introduction describe
+      a new sorting algorithm, XiSort, which introduces novel methods for deterministic
+      and reproducible sorting of floating-point sequences. The paper discusses the
+      algorithm''s design, theoretical foundations, and empirical benchmarks, indicating
+      new contributions rather than just summarizing existing work.'
+  token_usage: 20098
+  time_usage: 9.76
+- title: 'Quantum-dot Cellular Automata (QCA): A Survey'
+  id: quantum_dot_cellular_automata_qca_a_survey_1usha_mehta_2vaishali_dhare
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Disqualified: no evaluation. Reason: The paper is a survey
+      of Quantum-dot Cellular Automata (QCA) and does not contain any empirical, experimental,
+      or quantitative evaluation. It focuses on providing a comprehensive overview
+      of QCA, its defects, fault models, and testing methods without presenting any
+      structured or reproducible testing or evaluation.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction contain
+      multiple references to prior work, including citations [1-7] that discuss the
+      limitations of current CMOS technology and introduce alternative technologies
+      such as Single Electron Transistor (SET), Quantum-dot Cellular Automata (QCA),
+      and Resonant Tunneling Diodes (RTD). The paper also mentions a survey of existing
+      QCA research, indicating engagement with prior research.'
+    novelty_prompt: '- Disqualified: no novelty. Reason: The paper is a survey of
+      existing work on Quantum-dot Cellular Automata (QCA) and does not propose any
+      new methods, algorithms, architectures, datasets, or insights. It summarizes
+      existing knowledge and identifies areas for future research but does not make
+      any claims of novel contributions or applications.'
+    review_only_prompt: 'Disqualified: review paper. Reason: The title contains the
+      word "survey," and the main body primarily summarizes existing work on Quantum-dot
+      Cellular Automata (QCA) without introducing new methods, datasets, experiments,
+      or frameworks.'
+  token_usage: 45607
+  time_usage: 15.5
+- title: A Survey of Aging Monitors and Reconfiguration Techniques
+  id: a_survey_of_aging_monitors_and_reconfiguration_techniques_leonardo_r_juracy_matheus_trevisan_moreira_alexandre_de_morais_amory_fernando_gehm_moraes_pucrs_av_ipiranga_6681_porto_alegre_brazil_fernando_moraes_pucrs_br
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: '- Disqualified: no evaluation. Reason: The paper is a survey
+      and does not contain any empirical, experimental, or quantitative evaluation
+      of its own. It reviews existing literature but does not present structured or
+      reproducible testing or evaluation.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction of the
+      paper clearly engage with prior research by mentioning contemporary literature,
+      citing specific papers, and discussing existing solutions for monitoring and
+      mitigating aging in integrated circuits. The paper also references previous
+      surveys and maps existing literature, indicating a thorough engagement with
+      prior work.'
+    novelty_prompt: '- Disqualified: no novelty. Reason: The paper is a survey of
+      existing aging monitors and reconfiguration techniques, focusing on classifying
+      and reviewing literature from 2012 to 2019. It does not propose any new methods,
+      algorithms, architectures, datasets, or insights, nor does it apply known techniques
+      in a novel context or domain. The paper primarily summarizes and categorizes
+      existing work without making any claims of novel contributions.'
+    review_only_prompt: 'Disqualified: review paper. Reason: The title contains the
+      word "survey," and the main body primarily summarizes existing work without
+      introducing new methods, datasets, experiments, or frameworks.'
+  token_usage: 73099
+  time_usage: 16.77
+- title: "The Landscape of Compute-near-memory and Compute-in-memory: A Research\n\
+    \  and Commercial Overview"
+  id: the_landscape_of_compute_near_memory_and_compute_in_memory_a_research_and_commercial_overview_the_landscape_of_compute_near_memory_and_compute_in_memory_a_research_and_commercial_overview
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Disqualified: no evaluation. Reason: The paper is a survey
+      and overview of compute-near-memory and compute-in-memory technologies and does
+      not include any empirical, experimental, or quantitative evaluation of its own.
+      It lacks sections or content dedicated to structured evaluation, experiments,
+      or results.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction of the
+      paper contain multiple references to prior work, including citations [\[1\]](#page-33-0),
+      [\[2\]](#page-34-0), and others. The introduction discusses the historical context
+      of CNM and CIM, mentions recent advancements in machine learning, and references
+      specific technologies and companies involved in the development of these computing
+      paradigms. This indicates engagement with existing research and industry developments.'
+    novelty_prompt: 'Disqualified: no novelty. Reason: The paper is a survey that
+      provides an overview of existing compute-near-memory (CNM) and compute-in-memory
+      (CIM) technologies, architectures, and commercial products. It does not propose
+      any new methods, algorithms, architectures, datasets, or insights, nor does
+      it apply known techniques in a novel context or domain. The paper summarizes
+      existing work and commercial trends without making claims of novel contributions.'
+    review_only_prompt: 'Disqualified: review paper. Reason: The title contains the
+      word "overview," which is synonymous with "review," and the main body primarily
+      summarizes existing work on compute-near-memory and compute-in-memory technologies
+      without introducing new methods, datasets, experiments, or frameworks.'
+  token_usage: 125355
+  time_usage: 16.48
+- title: "On the Prospects of Incorporating Large Language Models (LLMs) in\n  Automated\
+    \ Planning and Scheduling (APS)"
+  id: on_the_prospects_of_incorporating_large_language_models_llms_in_automated_planning_and_scheduling_aps_on_the_prospects_of_incorporating_large_language_models_llms_in_automated_planning_and_scheduling_aps
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Disqualified: no evaluation. Reason: The paper lacks any form
+      of empirical, experimental, or quantitative evaluation. It primarily consists
+      of a literature review and conceptual discussions without presenting structured
+      or reproducible testing, benchmarks, metrics, or results.'
+    related_work_prompt: '- Qualified. Reason: The abstract and introduction both
+      reference prior work extensively. The abstract mentions a comprehensive review
+      of 126 papers, indicating engagement with existing literature. The introduction
+      cites foundational works in the field (e.g., Russell and Norvig 2003; Ghallab,
+      Nau, and Traverso 2004) and discusses the evolution of Automated Planning and
+      Scheduling alongside the development of LLMs, showing a clear engagement with
+      prior research.'
+    novelty_prompt: 'Qualified. Reason: The paper presents a comprehensive review
+      of the integration of large language models (LLMs) in automated planning and
+      scheduling (APS), identifying eight distinct categories of application. It offers
+      novel insights by proposing a neuro-symbolic approach that combines LLMs with
+      traditional symbolic planners, highlighting the potential for addressing complex
+      planning challenges. The paper also identifies existing gaps and suggests future
+      research directions, demonstrating novelty in its synthesis of existing literature
+      and its advocacy for a new direction in APS.'
+    review_only_prompt: 'Disqualified: review paper. Reason: The title contains the
+      word "survey" and the main body primarily summarizes existing work without introducing
+      new methods, datasets, experiments, or frameworks.'
+  token_usage: 56359
+  time_usage: 16.85
+- title: 'Training and Serving System of Foundation Models: A Comprehensive Survey'
+  id: training_and_serving_system_of_foundation_models_a_comprehensive_survey_school_of_systems_science_and_engineering_sun_yat_sen_university_guangzhou_528406_china_school_of_software_engineering_sun_yat_sen_university_guangzhou_510275_china_department_of_computing_in_the_hong_kong_polytechnic_university_hong_kong_999077_china_peng_cheng_laboratory_shenzhen_518000_china
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The paper contains structured evaluation
+      elements, including tables presenting quantifiable outcomes of methods or systems,
+      and sections discussing various optimization strategies with references to empirical
+      studies and techniques.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction mention
+      prior work by referencing specific foundation models like GPT-3, LLaMA, PanGu-Σ,
+      and PengCheng Mind. They also discuss existing surveys on foundation models
+      and highlight their shortcomings, indicating engagement with prior research.
+      Additionally, the paper references other surveys and methods, demonstrating
+      a comparison with existing work.'
+    novelty_prompt: '- Disqualified: no novelty. Reason: The paper is a comprehensive
+      survey of existing methods and techniques for training and serving foundation
+      models. It does not propose any new methods, algorithms, architectures, datasets,
+      or insights, nor does it apply known techniques in a novel context or domain.
+      The paper primarily categorizes and summarizes existing state-of-the-art methods
+      without making any clear claims of novel contributions.'
+    review_only_prompt: 'Disqualified: review paper. Reason: The title contains the
+      word "survey," and the main body primarily summarizes existing work without
+      introducing new methods, datasets, experiments, or frameworks.'
+  token_usage: 58067
+  time_usage: 16.06
+- title: "A Survey on Verification and Validation, Testing and Evaluations of\n  Neurosymbolic\
+    \ Artificial Intelligence"
+  id: a_survey_on_verification_and_validation_testing_and_evaluations_of_neurosymbolic_artificial_intelligence_2024_ieee_personal_use_of_this_material_is_permitted_permission_from_ieee_must_be_obtained_for_all_other_uses_in_any_current_or_future_media_including_reprinting_republishing_this_material_for_advertising_or_promotional_purposes_creating_new_collective_works_for_resale_or_redistribution_to_servers_or_lists_or_reuse_of_any_copyrighted_component_of_this_work_in_other_works_doi_10_1109_tai_2024_3351798_https_www_doi_org_10_1109_tai_2024_3351798
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: '- Qualified. Reason: The abstract and introduction mention
+      that the paper evaluates two taxonomies of neurosymbolic AI and assesses the
+      applicability of current testing, evaluation, verification, and validation (T&E
+      and V&V) methods to neurosymbolic applications. This indicates a structured
+      evaluation of the methods and taxonomies discussed.'
+    related_work_prompt: '- Qualified. Reason: The abstract and introduction contain
+      multiple references to prior work, including citations [\[1\]](#page-11-0) through
+      [\[13\]](#page-12-4). The paper discusses existing taxonomies and frameworks,
+      compares them, and evaluates their applicability to neurosymbolic AI. It also
+      mentions previous methods and approaches in the context of testing, evaluation,
+      validation, and verification processes.'
+    novelty_prompt: 'Qualified. Reason: The paper demonstrates novelty by providing
+      a comprehensive survey on the verification and validation (V&V), testing, and
+      evaluation (T&E) of neurosymbolic AI, a relatively new and emerging field. It
+      presents and compares two current taxonomies of neurosymbolic AI, maps V&V concepts
+      to symbolic and sub-symbolic AI, and analyzes the applicability of current V&V
+      methods to neurosymbolic applications. The paper also discusses opportunities
+      and challenges in the domain, highlighting the potential of neurosymbolic AI
+      to improve safety and trustworthiness in AI systems. These elements contribute
+      new insights and applications in the context of neurosymbolic AI, fulfilling
+      the criteria for novelty.'
+    review_only_prompt: 'Disqualified: review paper. Reason: The title contains the
+      word "survey," and the main body primarily summarizes existing work on verification
+      and validation, testing, and evaluations of neurosymbolic AI without introducing
+      new methods, datasets, experiments, or frameworks.'
+  token_usage: 62797
+  time_usage: 16.76
+- title: 'Computational Argumentation-based Chatbots: a Survey'
+  id: computational_argumentation_based_chatbots_a_survey_brunel_university_london_kingston_lane_london_ub8_3ph_united_kingdom
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Disqualified: no evaluation. Reason: The paper is a survey
+      and does not contain any empirical, experimental, or quantitative evaluation
+      of its own. It reviews existing literature on computational argumentation-based
+      chatbots but does not provide structured evaluation or testing of methods or
+      systems.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction of the
+      paper contain multiple references to prior work, including citations of previous
+      research on chatbots and computational argumentation (e.g., Caldarini et al.,
+      2022; Sojasingarayar, 2020; Bala et al., 2017; Cahn, 2017; Sansonnet et al.,
+      2006; Dale, 2016; Kar & Haldar, 2016; Vaswani et al., 2017; Weizenbaum, 1966;
+      Rahwan & Simari, 2009). The paper also discusses the relationship between computational
+      argumentation and chatbots, compares current technologies, and identifies gaps
+      that the research aims to address.'
+    novelty_prompt: 'Qualified. Reason: The paper claims novelty by stating, "To the
+      best of our knowledge, this is the first survey that combines computational
+      argumentation and chatbots." This indicates a novel contribution in the form
+      of a survey that extensively examines the integration of computational argumentation
+      with chatbots.'
+    review_only_prompt: 'Disqualified: review paper. Reason: The title contains the
+      word "survey," and the main body primarily summarizes existing work on computational
+      argumentation-based chatbots without introducing new methods, datasets, experiments,
+      or frameworks.'
+  token_usage: 59228
+  time_usage: 11.46
+- title: Semantic Web Technology for Agent Communication Protocols
+  id: semantic_web_technology_for_agent_communication_protocols_idoia_berges_jes_us_berm_udez_alfredo_go_ni_and_arantza_illarramendi
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Disqualified: no evaluation. Reason: The paper lacks any form
+      of empirical, experimental, or quantitative evaluation. It focuses on conceptual
+      proposals and design discussions without providing structured or reproducible
+      testing or evaluation.'
+    related_work_prompt: '- Qualified. Reason: The abstract and introduction of the
+      paper reference prior work by discussing the integration of FIPA compliant agent
+      systems with W3C compliant Web Services, and mention existing approaches to
+      inter-agent communication. Additionally, the introduction cites several references,
+      indicating engagement with previous research.'
+    novelty_prompt: 'Qualified. Reason: The paper claims novelty by proposing a new
+      approach to describe standard communication protocols using Semantic Web technology,
+      specifically OWL-DL and SWRL. It introduces a communication acts ontology called
+      CommOnt and outlines several contributions, such as facilitating flexible interoperation
+      among agents, customizing standard communication protocols, and providing a
+      basis for reasoning about protocol relationships. These claims indicate new
+      contributions to the field.'
+    review_only_prompt: '- Qualified. Reason: The paper proposes a new method for
+      describing standard communication protocols using Semantic Web technology, specifically
+      OWL-DL and SWRL. It introduces a communication acts ontology called CommOnt
+      and discusses how this approach facilitates flexible interoperation among agents,
+      customization of protocols, and reasoning about protocol relationships. These
+      elements indicate new contributions rather than just a summary of existing work.'
+  token_usage: 16818
+  time_usage: 7.39
+- title: Automated Test Production -- Systematic Literature Mapping
+  id: automated_test_production_systematic_literature_mapping_automated_test_production_systematic_literature_mapping
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Disqualified: no evaluation. Reason: The paper is a systematic
+      literature mapping study and does not include any empirical, experimental, or
+      quantitative evaluation of its own. It focuses on categorizing and analyzing
+      existing literature rather than conducting new experiments or evaluations.'
+    related_work_prompt: 'Qualified. Reason: The paper contains a "Literature Systematic
+      Mapping" section that discusses the methodology and sources used for the systematic
+      literature mapping. It includes meaningful citations to academic papers and
+      research reports, such as those by Petersen et al., Keele et al., and others.
+      The paper also compares and categorizes prior studies, demonstrating engagement
+      with existing literature and framing the paper''s contributions within the context
+      of previous research.'
+    novelty_prompt: 'Disqualified: no novelty. Reason: The paper is a systematic literature
+      mapping study that aims to categorize existing research on Automated Test Production
+      (ATP). It does not propose any new methods, algorithms, architectures, datasets,
+      or insights, nor does it apply known techniques in a novel context or domain.
+      The paper primarily focuses on reviewing and categorizing existing literature
+      rather than contributing new ideas or findings.'
+    review_only_prompt: 'Disqualified: review paper. Reason: The title contains the
+      word "survey" and the main body primarily summarizes existing work through a
+      systematic literature mapping without introducing new methods, datasets, experiments,
+      or frameworks.'
+  token_usage: 35035
+  time_usage: 26.42
+- title: "Practical Guidelines for the Selection and Evaluation of Natural\n  Language\
+    \ Processing Techniques in Requirements Engineering"
+  id: practical_guidelines_for_the_selection_and_evaluation_of_natural_language_processing_techniques_in_requirements_engineering_15_practical_guidelines_for_the_selection_and_evaluation_of_natural_language_processing_techniques_in_requirements_engineering
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Disqualified: no evaluation. Reason: The paper lacks any form
+      of empirical, experimental, or quantitative evaluation. It primarily provides
+      guidelines and discussions on NLP techniques in requirements engineering without
+      presenting structured evaluation, benchmarks, metrics, or empirical results.'
+    related_work_prompt: 'Qualified. Reason: The introduction references prior work
+      by mentioning specific studies and problems they have addressed, such as checking
+      compliance with requirements templates, glossary construction, model extraction,
+      requirements demarcation, ambiguity handling, and question answering. Additionally,
+      the paper includes citations to previous research, indicating engagement with
+      existing literature.'
+    novelty_prompt: '- Qualified. Reason: The paper provides practical guidelines
+      for selecting and evaluating NLP techniques in the context of requirements engineering,
+      which can be considered a novel application of known NLP methods. It also makes
+      clear claims of contribution, such as offering insights into the selection process
+      and evaluation of NLP techniques specific to requirements engineering, which
+      may not have been extensively covered in existing literature.'
+    review_only_prompt: 'Disqualified: review paper. Reason: The title contains the
+      word "Guidelines," which suggests a survey or review nature, and the main body
+      primarily summarizes existing NLP techniques and their applications in requirements
+      engineering without introducing new methods, datasets, experiments, or frameworks.'
+  token_usage: 58015
+  time_usage: 13.37
+- title: Automated Test Production -- Systematic Literature Review
+  id: automated_test_production_systematic_literature_review_automated_test_production_systematic_literature_review
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The paper includes structured evaluation
+      elements such as tables, figures, and sections dedicated to analysis and results.
+      It discusses the types of studies or evaluations conducted (QP1.5), presents
+      quantifiable outcomes, and uses metrics and comparisons, fulfilling the criteria
+      for structured evaluation.'
+    related_work_prompt: 'Qualified. Reason: The paper contains a comprehensive "Related
+      Work" section, meaningful citations to academic papers and research reports,
+      and provides comparisons, critiques, and summaries of prior methods that frame
+      the paper''s contributions.'
+    novelty_prompt: '- Disqualified: no novelty. Reason: The paper is a systematic
+      literature review (SLR) that aims to provide an overview of existing models,
+      methodologies, and tools related to Automated Test Production (ATP). It does
+      not propose any new methods, algorithms, architectures, datasets, or insights,
+      nor does it apply known techniques in a novel context or domain. The paper primarily
+      summarizes and categorizes existing research without making any claims of novel
+      contributions.'
+    review_only_prompt: 'Disqualified: review paper. Reason: The title contains the
+      word "review," and the main body primarily summarizes existing work without
+      introducing new methods, datasets, experiments, or frameworks.'
+  token_usage: 44553
+  time_usage: 12.87
+- title: Automated Test Production -- Complement to "Ad-hoc" Testing
+  id: automated_test_production_complement_to_ad_hoc_testing_automated_test_production_complement_to_ad_hoc_testing
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Disqualified: no evaluation. Reason: The paper lacks any form
+      of empirical, experimental, or quantitative evaluation. It consists primarily
+      of discussions on software testing methods, industry trends, and conceptual
+      proposals without presenting any structured or reproducible testing, benchmarks,
+      metrics, or performance measurements.'
+    related_work_prompt: '- Qualified. Reason: The abstract and introduction contain
+      multiple references to prior work, including the Agile Manifesto and various
+      reports and studies on agile software development and continuous integration/delivery
+      processes. These references indicate engagement with existing research and industry
+      trends.'
+    novelty_prompt: 'Disqualified: no novelty. Reason: The paper provides a comprehensive
+      review of existing software testing methods and discusses the gap between industry
+      practices and academic advances. However, it does not propose any new methods,
+      algorithms, architectures, datasets, or insights. It also does not apply known
+      techniques in a novel context or domain, nor does it make clear claims of contribution
+      or novelty. The paper primarily discusses existing concepts and the challenges
+      of adopting formal methods in industry without introducing new ideas or solutions.'
+    review_only_prompt: '- Qualified. Reason: The abstract and introduction discuss
+      existing methods and challenges in software testing but also mention the intention
+      to follow a specific approach in search of a solution, suggesting potential
+      new contributions or perspectives beyond a mere summary of existing work.'
+  token_usage: 30236
+  time_usage: 13.38
+- title: "Lazarus Group Targets Crypto-Wallets and Financial Data while employing\n\
+    \  new Tradecrafts"
+  id: lazarus_group_targets_crypto_wallets_and_financial_data_while_employing_new_tradecrafts_lazarus_group_targets_crypto_wallets_and_financial_data_while_employing_new_tradecrafts
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The paper contains a comprehensive analysis
+      with sections dedicated to "Analysis Results," "Code Analysis," and "Dynamic
+      Analysis," among others. It includes detailed evaluations of malware behavior,
+      code snippets, and figures illustrating findings, which demonstrate structured
+      evaluation and empirical analysis.'
+    related_work_prompt: 'Disqualified: no related work. Reason: The paper does not
+      contain a "Related Work" section or any substitute section that discusses prior
+      research. Additionally, it lacks meaningful citations to academic papers, research
+      reports, or other scholarly publications, and it does not explain how the work
+      differs from or builds upon previous studies.'
+    novelty_prompt: 'Qualified. Reason: The paper demonstrates novelty by providing
+      a detailed analysis of a sophisticated multi-stage malware campaign attributed
+      to the Lazarus Group. It introduces new insights into the malware''s architecture,
+      obfuscation techniques, and operational strategies, including the use of Tor
+      for inter-process communication and the integration of open-source components.
+      The paper also offers a comprehensive examination of the attacker''s infrastructure
+      and mitigation strategies, contributing valuable knowledge to the field of cybersecurity.'
+    review_only_prompt: '- Qualified. Reason: The abstract describes a detailed analysis
+      of a specific malware sample and its implications for threat intelligence and
+      defense strategies. It does not indicate that the paper is a survey or review
+      of existing literature, nor does it primarily summarize existing work. Instead,
+      it focuses on providing new insights and actionable intelligence based on the
+      analysis conducted.'
+  token_usage: 213370
+  time_usage: 25.58

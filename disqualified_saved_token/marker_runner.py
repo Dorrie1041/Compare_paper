@@ -16,7 +16,6 @@ import argparse
 # === Configuration ===
 pdf_link_file = "pdf_link.txt"
 output_yaml = "papers.yaml"
-download_dir = "downloads"
 
 
 # === Marker configuration ===
@@ -29,9 +28,6 @@ converter = PdfConverter(
     renderer=config_parser.get_renderer(),
     llm_service=config_parser.get_llm_service()
 )
-
-# === Ensure directories exist ===
-os.makedirs(download_dir, exist_ok=True)
 
 # === Utility functions ===
 def extract_id_from_url(url):
@@ -76,13 +72,11 @@ def split_sections(markdown_text):
 def extract_metadata(sections, markdown_text=None):
     keywords = ""
 
-    # 1. First, try normal section headings
     for key in sections:
         lowered = key.lower().replace('*', '').replace('_', ' ').strip()
         if not keywords and any(kw in lowered for kw in ["keywords", "key words", "index terms", "index term"]):
             keywords = re.sub(r'[_\n]+', ' ', sections[key]).strip()
 
-    # 2. If still not found, scan full markdown for "*Index Terms*" or "*Keywords*"
     if not keywords and markdown_text:
         pattern = re.compile(
             r'\*(?:index terms|keywords|key words|index term)\*\s*[—\-–]?\s*(.+?)(?:\n|\#|\Z)', 
@@ -91,37 +85,10 @@ def extract_metadata(sections, markdown_text=None):
         match = pattern.search(markdown_text)
         if match:
             keywords = match.group(1).strip()
-            # Post-clean: stop if there’s a heading or big paragraph start
             keywords = keywords.split('\n')[0].strip()
-            keywords = re.sub(r'\s+', ' ', keywords)  # Fix multiple spaces
+            keywords = re.sub(r'\s+', ' ', keywords)  
 
     return keywords
-
-def trim_document(markdown_text):
-    # Match various Introduction styles
-    intro_pattern = re.compile(
-        r"(?m)^(?:#+\s*)?(?:\d+\.\d*\s*)?(?:[IVXLCDM]+\.\s*)?(?:Introduction|INTRODUCTION)\b"
-    )
-    
-    match = intro_pattern.search(markdown_text)
-    if match:
-        return markdown_text[match.start():].strip()
-    
-    return markdown_text.strip()
-
-# === Detect is EN ===
-def is_english(text):
-    ascii_letters = sum(c.isascii() and c.isalpha() for c in text)
-    total_letters = sum(c.isalpha() for c in text)
-
-    # Avoid division by zero
-    if total_letters == 0:
-        return False
-
-    ratio = ascii_letters / total_letters
-
-    # If more than 80% of letters are ASCII, treat as English
-    return ratio >= 0.8
 
 def extract_title_abstract(markdown_text, sections, paper_id):
     lines = markdown_text.splitlines()
@@ -147,6 +114,29 @@ def extract_title_abstract(markdown_text, sections, paper_id):
                 break
 
     return title, abstract
+
+def extract_authors(text, title_line=None):
+    lines = text.splitlines()
+    clean_lines = [re.sub(r'<[^>]+>', '', l).strip() for l in lines if l.strip()]
+    
+    start_idx = 0
+    if title_line:
+        for i, line in enumerate(clean_lines):
+            if title_line.lower() in line.lower():
+                start_idx = i + 1
+                break
+
+    for i in range(start_idx, min(start_idx + 10, len(clean_lines))):
+        line = clean_lines[i]
+        if len(re.findall(r'\b[A-Z][a-z]+\b', line)) >= 2 or '@' in line:
+            return line
+    return ""
+
+def normalize(text):
+    return re.sub(r'\W+', '_', text.strip().lower()).strip('_')
+
+def make_unique_id(title, authors):
+    return f"{normalize(title)}_{normalize(authors)}"
 
 def main(input_path, output_yaml):
     papers = []
@@ -193,24 +183,22 @@ def main(input_path, output_yaml):
                 rendered = converter(local_pdf_path)
                 markdown_text, _, _ = text_from_rendered(rendered)
 
-                if not is_english(markdown_text):
-                    print(f"[SKIP] {paper_id} → Not English")
-                    continue
-
                 keywords = extract_metadata({}, markdown_text)
-                document = trim_document(markdown_text)
 
                 metadata = id_to_metadata.get(paper_id_base, {})
                 title = metadata.get("title", paper_id)
                 abstract = metadata.get("abstract", "")
                 arxiv_url = metadata.get("url", url)
-
+                author_line = extract_authors(markdown_text, title)
+                unique_id = make_unique_id(title, author_line)
+                
                 papers.append({
+                    "id": unique_id,
                     "title": title,
                     "abstract": abstract,
                     "url": arxiv_url,
                     "keywords": keywords,
-                    "document": document
+                    "document": markdown_text
                 })
 
                 print(f"[✓] Added: {paper_id}")
@@ -232,13 +220,8 @@ def main(input_path, output_yaml):
                 rendered = converter(local_pdf_path)
                 markdown_text, _, _ = text_from_rendered(rendered)
 
-                if not is_english(markdown_text):
-                    print(f"[SKIP] {paper_id} → Not English")
-                    continue
-
                 sections = split_sections(markdown_text)
                 keywords = extract_metadata(sections, markdown_text)
-                document = trim_document(markdown_text)
                 title, abstract = extract_title_abstract(markdown_text, sections, paper_id)
 
                 papers.append({

@@ -16,7 +16,6 @@ import argparse
 # === Configuration ===
 pdf_link_file = "pdf_link.txt"
 output_yaml = "papers.yaml"
-download_dir = "downloads"
 
 
 # === Marker configuration ===
@@ -29,9 +28,6 @@ converter = PdfConverter(
     renderer=config_parser.get_renderer(),
     llm_service=config_parser.get_llm_service()
 )
-
-# === Ensure directories exist ===
-os.makedirs(download_dir, exist_ok=True)
 
 # === Utility functions ===
 def extract_id_from_url(url):
@@ -200,7 +196,7 @@ def main(input_path, output_yaml):
                     "abstract": abstract,
                     "url": arxiv_url,
                     "keywords": keywords,
-                    "document": document
+                    "document": markdown_text
                 })
 
                 print(f"[✓] Added: {paper_id}")

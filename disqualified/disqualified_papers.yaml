@@ -1,0 +1,1595 @@
+papers:
+- title: Floating Point HUB Adder for RISC-V Sargantana Processor
+  abstract: 'HUB format is an emerging technique to improve the hardware and time
+
+    requirement when round to nearest is needed. On the other hand, RISC-V is an
+
+    open-source ISA that many companies currently use in their designs. This paper
+
+    presents a tailored floating point HUB adder implemented in the Sargantana
+
+    RISC-V processor.'
+  url: http://arxiv.org/abs/2401.09464v1
+  keywords: ''
+  document: '# Floating Point HUB Adder for RISC-V Sargantana Processor
+
+
+    Gerardo Bandera1∗ , Javier Salamero<sup>2</sup> , Miquel Moreto2,3 and Julio Villalba<sup>1</sup>
+
+
+    <sup>1</sup>Computer Architecture Dept., University of Málaga
+
+
+    <sup>2</sup>BSC-CNS - Barcelona Supercomputing Center, <sup>3</sup>Computer Architecture
+    Dept, UPC
+
+
+    #### Abstract
+
+
+    HUB format is an emerging technique to improve the hardware and time requirement
+    when round to nearest is needed. On the other hand, RISC-V is a open source ISA
+    that an important number of companies are using in their designs currently. In
+    this paper we present a tailored floating point HUB adder that has been implemented
+    in the Sargantana RISC-V processor.
+
+
+    ## HUB format background
+
+
+    In this section we present a basic description of the HUB format, although the
+    mathematical foundations and an in-depth analysis of the format can be found in
+    [\[1\]](#page-1-0). Now we briefly summarize this new real number representation
+    format defined in [\[1\]](#page-1-0) and particularize it for the floating-point
+    normalized numbers.
+
+
+    HUB format is based on shifting the numbers that can be exactly represented under
+    conventional formats by adding a bias which equals half unit in the lastplace
+    (ULP). This shifting could be also interpreted as appending a hidden least significant
+    bit set to one to the conventional number stream (which represents the bias).
+    A floating-point HUB number is similar to a regular one but its significand follows
+    the HUB format. Thus, the exponent and the sign is the same as convetional. Let
+    us define x as a floating-point HUB number, which is represented by the triple
+    (Sx, Mx, Ex) such that x = (−1)SxMx2 <sup>E</sup><sup>x</sup> , where the significand
+    M<sup>x</sup> is a HUB magnitude. A normalized HUB significand fulfills that 1
+    < M<sup>x</sup> < 2. Thus, the normalized HUB significand M<sup>x</sup> is
+
+
+    <span id="page-0-0"></span>
+
+    $$M\_x = 1 + \left[\sum\_{i=1}^f M\_{x\_i} \cdot 2^{-i}\right] + 2^{-f-1} \qquad
+    (1)$$
+
+
+    where 2 −f−1 is the bias. In this expression we define the representative form
+    of the normalized HUB significand as the set of M<sup>x</sup><sup>i</sup> in expression
+    [\(1\)](#page-0-0), that is M<sup>x</sup> = (M<sup>x</sup><sup>1</sup> , M<sup>x</sup>−<sup>1</sup>
+    , M<sup>x</sup>−<sup>2</sup> , · · ·, M<sup>x</sup>−<sup>f</sup> ) (composed by
+    f bits). Taking into account that both the MSB and the LSB are 1 (see expression
+    [\(1\)](#page-0-0)), we define the operational form of a normalized HUB significand
+    as the following f + 2 bits:
+
+
+    $$M\_x = 1.M\_{x-1}M\_{x-2} \cdot \cdots \cdot M\_{x-f}1\tag{2}$$
+
+
+    The representative version is used for storage whereas the operational version
+    is required to operate with HUB numbers. We can see that the least significant
+    bit (LSB) of the operational form of a nonzero HUB number is always equal to 1,
+    and it is implicit in the format (similar situation takes place for the most significant
+    bit (MSB) of the significand in the IEEE normalized floating-point numbers). Let
+    ILSB denote the implicit LSB of a the operational HUB significand.
+
+
+    Given a standard floating-point system with a normalized significand, the counterpart
+    HUB floating point system has the same precision and accuracy [\[1\]](#page-1-0).
+
+
+    The most outstanding feature of the HUB format is that round to nearest is performed
+    by truncation. In the conventional format round to nearest is carried out by adding
+    one to the position of the rounding bit of the final normalized result. Moreover,
+    after this operation an overflow can also be produced, which involves a shift
+    operation of one bit and an update of the exponent. Thus, a specific hardware
+    module is used in conventional. In HUB, this module is not required any more.
+
+
+    ## FP HUB adder for Sargantana
+
+
+    The processor used in this work is Sargantana [\[2\]](#page-1-1), a 64 bit in-order
+    Linux-capable RISC-V CPU that implements the RV64G ISA (see figure [1\)](#page-1-2).
+    For accelerating domain-specific applications, Sargantana uses a Single Instruction
+    Multiple Data (SIMD) unit and supports the vector instructions defined in the
+    vector extension RVV 0.7.1. In addition, it implements custom application specific
+    instructions. The CPU has a 7-stage pipeline that implements register renaming,
+    out-oforder write-back, and a non-blocking memory pipeline. It has two first level
+    caches: an instruction cache of 16KB, and a non-blocking data cache of 32KB. The
+    system also has a 512KB L2 cache outside the CPU.
+
+
+    Figure [2](#page-1-3) shows the main modules required to carry out the floating
+    point addition for conventional and for HUB. Since round to nearest operation
+    is carried
+
+
+    <sup>∗</sup>Corresponding author: <mailto:gbandera@uma.es>
+
+
+    <span id="page-1-2"></span>![](_page_1_Figure_0.jpeg)
+
+
+    Figure 1: Architecture of the Sargantana processor
+
+
+    out by truncation in HUB, the result obtained after normalization module in figure
+    [2](#page-1-3) is the final result and not any other operation is required. Thus,
+    the module Rounding (crossed out in the figure [2\)](#page-1-3) is not required
+    for the HUB implementation in Sargantana.
+
+
+    <span id="page-1-3"></span>![](_page_1_Figure_3.jpeg)
+
+
+    Figure 2: Main modules in conventional and HUB FP adders (X-> prevented in HUB)
+
+
+    For applications requiring conventional addition with round-to-nearest, three
+    extra fractional bits are needed: a guard bit, a rounding bit and a sticky bit
+    [\[3\]](#page-1-4). Since the round-to-nearest for HUB format is carried out by
+    truncation, the rounding bit is not required anymore. Moreover, in conventional
+    it is necessary calculate the sticky bit (this bit represents, in some way, the
+    bits beyond the rounding bit and is needed for effective subtraction when the
+    operands are not aligned). For HUB number, because we know that the LSB of the
+    shifted operand is always 1 (that is the ILSB), the sticky bit is always 1 and
+    it is not necessary a module to calculate it, as shown in figure [2.](#page-1-3)
+
+
+    Thus, in spite of having an extra bit in the operational form (the ILSB), this
+    extra bit of a HUB number is compensated by the lack of a specific rounding bit..
+    Moreover, a guard bit is not necessary and the sticky bit, when required, is always
+    1. As consequence, for applications where round to nearest is required, the
+
+
+    data path of the HUB version has one bit less than that its conventional counterpart
+
+
+    Our starting point is the FPU adder of the RISC-V Sargantana processor which has
+    been modified to meet the HUB format specifications. Unlike the 6 stage original
+    FPU adder, our floating point HUB adder has 5 stages. This feature together with
+    the absence of denormals and sticky calculation leads to an area reduction of
+    25% (3110µm<sup>2</sup> vs. 2332µm<sup>2</sup> ). In the first stage, the smallest
+    operand is identified and the difference of exponents is calculated. In the second
+    stage the significand of the smallest operand is shifted and the 2-complement
+    of the smallest operand is calculated if required. The third state carries out
+    the addition of the aligned operands and a possible overflow is detected and corrected.
+    In the forth stage the number of leading zeros are calculated for normalization,
+    which is carried out in the fifth stage. Notice that, unlike the conventional
+    one, a sixth rounding stage is not necessary in HUB since the result of the fifth
+    stage is already normalized and rounded to the nearest HUB number.
+
+
+    In summary, we have integrated a HUB adder in the Sargantana processor, reducing
+    the number of stages and allowing the use of this new format in a RISC-V processor.
+    As future work, we plan to extend the HUB format to all FP RISC-V arithmetic operations.
+
+
+    ## References
+
+
+    - <span id="page-1-0"></span>[1] J. Hormigo and J. Villalba. "New formats for
+    computing with real-numbers under round-to-nearest". In: IEEE Transactions on
+    Computers 65.7 (July 2016), pp. 2158– 2168. doi: [10.1109/TC.2015.2479623](https://doi.org/10.1109/TC.2015.2479623).
+
+    - <span id="page-1-1"></span>[2] Vıctor Soria-Pardos et al. "Sargantana: A 1 GHz+
+    In-Order RISC-V Processor with SIMD Vector Extensions in 22nm FD-SOI". In: 2022
+    25th Euromicro Conference on Digital System Design (DSD). IEEE. 2022, pp. 254–261.
+
+    - <span id="page-1-4"></span>[3] M. Ercegovac and T. Lang. Digital Arithmetic.
+    1st. Morgan Kaufmann, 2004.'
+  decisions:
+    evaluation_prompt: 'Disqualified: no evaluation. Reason: The paper lacks any form
+      of empirical, experimental, or quantitative evaluation. It only discusses the
+      design and conceptual aspects of the floating point HUB adder without presenting
+      any structured or reproducible testing, benchmarks, or performance measurements.'
+    related_work_prompt: '- Qualified. Reason: The paper includes meaningful engagement
+      with prior research, as evidenced by the citations and discussions of previous
+      work in the sections on HUB format background and FP HUB adder for Sargantana.
+      It references specific prior works, such as those by J. Hormigo and J. Villalba,
+      and discusses how the current work builds upon and differs from these existing
+      methodologies.'
+    novelty_prompt: '- Qualified. Reason: The paper proposes a novel integration of
+      a floating point HUB adder into the Sargantana RISC-V processor, which reduces
+      the number of stages in the adder and eliminates the need for certain bits and
+      modules required in conventional floating-point addition. This represents a
+      new application of the HUB format in a RISC-V processor, demonstrating novelty
+      in both method and application.'
+    review_only_prompt: 'Qualified. Reason: The paper introduces a novel floating
+      point HUB adder specifically implemented for the Sargantana RISC-V processor.
+      It details the modifications made to the existing FPU adder to accommodate the
+      HUB format, including reducing the number of stages and achieving area reduction.
+      These contributions indicate original work beyond a mere survey or review.'
+  token_usage: 9843
+  time_usage: 7.77870512008667
+- title: 'The Silent Scientist: When Software Research Fails to Reach Its Audience'
+  abstract: 'If software research were a performance, it would be a thoughtful theater
+
+    play -- full of rich content but confined to the traditional stage of academic
+
+    publishing. Meanwhile, its potential audience is immersed in engaging on-demand
+
+    experiences, leaving the theater half-empty, and the research findings lost in
+
+    the wings. As long as this remains the case, discussions about research
+
+    relevance and impact lack meaningful context.'
+  url: http://arxiv.org/abs/2505.09541v1
+  keywords: ''
+  document: "# The Silent Scientist When Software Research Fails to Reach Its Audience\n\
+    \nMarvin Wyrich<sup>1</sup> , Christof Tinnes1,<sup>2</sup> , Sebastian Baltes<sup>3</sup>\
+    \ , and Sven Apel<sup>1</sup>\n\n Saarland University, Saarland Informatics Campus,\
+    \ Germany wyrich@cs.uni-saarland.de Siemens AG, Germany University of Bayreuth,\
+    \ Germany\n\nIf software research were a performance, it would be a thoughtful\
+    \ theater play full of rich content but confined to the traditional stage of academic\
+    \ publishing. Meanwhile, its potential audience is immersed in engaging on-demand\
+    \ experiences, leaving the theater half-empty, and the research findings lost\
+    \ in the wings. As long as this remains the case, discussions about research relevance\
+    \ and impact lack meaningful context.\n\n## An identity crisis\n\nFor researchers,\
+    \ reflecting on their own work is part of good scientific practice. This is common\
+    \ across all scientific disciplines, including software research.[4](#page-0-0)\
+    \ Though critical self-reflection is a staple in research, the software research\
+    \ community seems to take it further, grappling almost yearly with feelings of\
+    \ insignificance and entirely questioning the relevance of their work. In the\
+    \ past two years, such discussions have been nearly impossible to track. Two prominent\
+    \ examples illustrate this: In 2022, Lionel Briand delivered a keynote at ICSE,\
+    \ the largest software engineering conference, critically discussing the impact\
+    \ we can expect from software research.[5](#page-0-1) Two years later, one of\
+    \ the leading software journals, the Journal of Systems and Software, launched\
+    \ a new column inviting software practitioners to share their perspective on making\
+    \ software research more relevant [\\[1\\]](#page-5-0). Apparently, the software\
+    \ research community has reached a new peak in its ongoing quest to doubt its\
+    \ own relevance and impact.\n\nTo some extent, we understand the sentiment. Significant\
+    \ resources go into software research, to improve collaboration or drive innovation.\
+    \ It is reasonable to critically question how many of these research findings\
+    \ will be implemented\n\n<span id=\"page-0-0\"></span><sup>4</sup> By \"software\
+    \ research,\" we refer to the broader research field that includes software engineering\
+    \ and related disciplines focused on the theory and practice of building and maintaining\
+    \ software systems. We consider this field as a case study within computer science,\
+    \ where much of the research is application-oriented and should therefore have\
+    \ a relatively receptive target audience. Similar calls to improve research communication\
+    \ can be found in related fields, such as in information systems, where recent\
+    \ discussions have highlighted the potential of citizen science [\\[12\\]](#page-5-1).\n\
+    \n<span id=\"page-0-1\"></span><sup>5</sup> Lionel C. Briand's ICSE 2022 keynote\
+    \ on [the split minds of software engineering](https://conf.researchr.org/details/icse-2022/icse-2022-keynotes/4/Mathematicians-Social-Scientists-or-Engineers-The-Split-Minds-of-Software-Engineer)\
+    \ [researchers](https://conf.researchr.org/details/icse-2022/icse-2022-keynotes/4/Mathematicians-Social-Scientists-or-Engineers-The-Split-Minds-of-Software-Engineer).\n\
+    \n2 Wyrich et al.\n\nin the near or distant future. In fact, considerable resources\
+    \ have already been devoted to addressing this very question, and analyses have\
+    \ identified concrete examples showing how software research contributed to advancements\
+    \ in development tools and methods, such as configuration management and programming\
+    \ languages.[6](#page-1-0)\n\nHowever, in the ongoing discussions surrounding\
+    \ the relevance and impact of software research, there is a notable oversight:\
+    \ the crucial role of science communication. It is surprising how often this aspect\
+    \ is disregarded. Like a silent scientist, quietly publishing papers and expecting\
+    \ their work to speak for itself, many researchers assume their findings will\
+    \ naturally find their audience. This assumption can lead to an overly self-critical\
+    \ misconception: that if research lacks impact, it must be irrelevant. In this\
+    \ essay, we set out to challenge this view. Research can only have impact if it\
+    \ reaches its target audience in the first place, which requires making findings\
+    \ accessible through various communication channels [\\[8,](#page-5-2)[15\\]](#page-5-3).\
+    \ The tricky thing about this situation is that, so far, active science communication\
+    \ has been sparse in the area of software research, and those who have tried often\
+    \ find their efforts unrewarded or unsuccessful [\\[13\\]](#page-5-4).\n\n###\
+    \ Understanding the relevance of software research\n\nTo appreciate the relevance\
+    \ of software research, we need to consider how different topics resonate with\
+    \ different stakeholder groups—what's impactful to one may be irrelevant to another.\n\
+    \nFirst, software research covers diverse content, which can be roughly divided\
+    \ into technical advancement and (human-centered) empirical understanding. It\
+    \ seeks technical improvements, such as methods to automatically find and fix\
+    \ bugs, and empirical insights, such as understanding what factors influence the\
+    \ productivity of software developers. Corresponding studies of the two types\
+    \ of research use entirely different research methodologies, with some focusing\
+    \ on technical evaluations without involving humans, while others include human\
+    \ participants as primary subjects. This alone can create varied perceptions of\
+    \ relevance, as some studies directly involve the people they aim to help. Additionally,\
+    \ measuring impact and implementing findings differ significantly. For technological\
+    \ progress, impact is measured through adoption or metrics on quality and performance.\
+    \ Findings on practitioner collaboration require integration into sociotechnical\
+    \ processes, with impact measured through changes in behavior or improved satisfaction.\n\
+    \nSecond, different phases of the research process are of interest to different\
+    \ stakeholders. A research project can span several years and progress through\
+    \ various phases, at the end of which one or more publications may appear. Judging\
+    \ the relevance of research based on a single publication inevitably leads to\
+    \ a large proportion of the readership not (yet) feeling addressed. Let us assume\n\
+    \n<span id=\"page-1-0\"></span><sup>6</sup> See, for example, [The Impact Project:\
+    \ Determining the Impact of Software Engineer](https://www.nsf.gov/awardsearch/showAward?AWD_ID=0137766)[ing\
+    \ Research Upon Practice](https://www.nsf.gov/awardsearch/showAward?AWD_ID=0137766),\
+    \ as well as international workshops on [adoption-centric](https://insights.sei.cmu.edu/library/third-international-workshop-on-adoption-centric-software-engineering/)\
+    \ [software engineering](https://insights.sei.cmu.edu/library/third-international-workshop-on-adoption-centric-software-engineering/).\n\
+    \nthat we are looking for a source code quality metric that indicates the comprehensibility\
+    \ of source code. Thanks to software research, we know that most code comprehensibility\
+    \ metrics do not, in practice, reflect what they are supposed to measure [\\[9](#page-5-5)[,10\\\
+    ]](#page-5-6). So, we are well advised not to repeat the mistake and simply design\
+    \ another metric based on our gut feeling. We start a little earlier, define the\
+    \ notion of code comprehension, conduct basic research, and understand the neuropsychological\
+    \ correlates of code comprehension in the brain of developers to develop a meaningful\
+    \ metric in a subsequent step [\\[11\\]](#page-5-7). Will that conceptual definition\
+    \ of code comprehension or neurophysiological lab studies with small code snippets\
+    \ hold actionable insights for practice? Probably not. Are these studies relevant\
+    \ at all? Absolutely, because software research has more than just the target\
+    \ group of software practitioners. In this case, these early findings may help\
+    \ educators better support novice programmers with code comprehension difficulties,\
+    \ guide experimenters to design better studies and ask more targeted questions,\
+    \ and they eventually aid other researchers build their application-oriented research\
+    \ on a solid theoretical foundation.\n\nThe point is that relevance is much more\
+    \ complex than is often portrayed. What is irrelevant to one person today may\
+    \ be very relevant for another tomorrow. We assure the reader that this is not\
+    \ just a convenient excuse that allows researchers to retreat into an ivory tower.\
+    \ We ourselves see systemic difficulties that reinforce the impression of a lack\
+    \ of relevance of software research. For example, the very people we want to help\
+    \ with our research at any given time are often involved too late in the research\
+    \ process. Researchers who have not spoken and, in particular, listened to their\
+    \ target group risk creating an artificially constructed problem space. Listening\
+    \ can take many forms, such as attending industry meetups, conducting targeted\
+    \ surveys, or monitoring developer forums and social media. Without these insights,\
+    \ it becomes difficult to argue for the relevance of one's research, and even\
+    \ harder to attract anyone as an audience for science communication. Another challenge\
+    \ is certainly that software researchers are incentivized by the scientific review\
+    \ and funding process to present solutions to be as generalizable as possible.\
+    \ As a result, we hear of software practitioners who fail to adapt published research\
+    \ findings because research has raised false expectations of applicability.\n\n\
+    Note that, taking this viewpoint, we will neither succeed in fundamentally rethinking\
+    \ the academic system nor in convincing every reader of the relevance of every\
+    \ single research paper. We do not even want to. There are already enough opinions\
+    \ on why some software research is theoretical in nature and why other research\
+    \ should be more application-oriented. There is a multitude of opinions on what\
+    \ role industry–academia collaborations could play for the relevance of research\
+    \ topics. And there are certainly enough opinions on how the impact of software\
+    \ research could be evaluated. Our point is different: As long as the research\
+    \ community does not manage to make its research accessible to the respective\
+    \ target group at all, we do not even need to talk about relevance and impact.\n\
+    \n4 Wyrich et al.\n\n### No impact without science communication\n\nThe feeling\
+    \ of irrelevance and missing impact can often be traced back to a communication\
+    \ problem: The reality is that nobody cares about your research unless you make\
+    \ them care. This does not happen by itself with the publication of a research\
+    \ paper. The notion that software practitioners will dive into the academic world,\
+    \ eagerly browse online libraries for papers, and read them with sparkling eyes\
+    \ is as romantic as it is unlikely. A far more probable scenario for success is\
+    \ when researchers and practitioners build a bridge between these two worlds through\
+    \ actively engaging in dialogue.\n\nThe fact that software practitioners are indeed\
+    \ interested in contemporary software research is shown by a recent study that\
+    \ examines how these research findings are disseminated and discussed on LinkedIn\
+    \ [\\[14\\]](#page-5-8). These data reveal that the majority of individuals who\
+    \ post content and comment on the posts are software practitioners. The authors\
+    \ of that study conclude that researchers are not doing enough themselves. They\
+    \ note that some software research is so engaging that practitioners take on the\
+    \ role of science communicators—a role traditionally reserved for researchers,\
+    \ but inadequately filled by them in the case of software research [\\[14\\]](#page-5-8).\n\
+    \nThe good news is that researchers can do a lot to improve science communication\
+    \ without having to revamp the publication system or redesign research processes.\
+    \ If we follow Burns et al. [\\[4\\]](#page-5-9) in their definition of science\
+    \ communication \"as the use of appropriate skills, media, activities, and dialogue\
+    \ to produce one or more of the following personal responses to science: Awareness,\
+    \ Enjoyment, Interest, Opinion-forming, and Understanding\", it is difficult to\
+    \ find a software research paper that cannot be brought to the target group with,\
+    \ at least, one of these intentions. Therefore, post-publication science communication\
+    \ is something every researcher can and should engage in.\n\nWhy isn't it happening?\
+    \ We see two main reasons. First, publications are the currency of academia. Career\
+    \ advancement largely depends on the number of top-tier publications, while outreach\
+    \ and the practical impact of research are often secondary in university selection\
+    \ processes. Considering such systemic incentives, it is understandable that researchers\
+    \ quickly move on to the next project after publishing.\n\nSecond, there is a\
+    \ lack of evidence on the effectiveness of science communication in software research,\
+    \ so it may be useful to look at other sciences. Bauer et al.'s introduction to\
+    \ implementation science, i.e., \"a science of implementation\", is only 10 years\
+    \ old, but has since been cited over 2000 times, many times by successful field\
+    \ reports [\\[2\\]](#page-5-10). In the context of clinical research, \"the relatively\
+    \ new field of implementation science has developed to enhance the uptake of evidencebased\
+    \ practices and thereby increase their public health impact\" [\\[3\\]](#page-5-11).\
+    \ Software research needs similar initiatives to learn how to bring research findings\
+    \ into software practice. In contrast, empirical insights on how research transfer\
+    \ works in software engineering and how science communication actually affects\
+    \ software engineering practice are still missing. As long as this gap persists,\
+    \ it is challenging to convince researchers that the extra effort is worthwhile.\n\
+    \nIn any case, what is hard to dispute is that research is unlikely to have much\
+    \ impact without any communication. This can take the form of a blog post, a social\
+    \ media discussion, a workshop or Dagstuhl seminar involving the target audience,\
+    \ or any other channel that fits the audience [\\[5](#page-5-12)[,6\\]](#page-5-13).\
+    \ ACM itself offers several channels for this very purpose, such as the CACM blog\
+    \ and the ACM Queue. Even something as simple as submitting a ticket in an open-source\
+    \ project that you have studied in your research can help connect your work to\
+    \ those who would benefit. While the software research community may not yet know\
+    \ whether these efforts will lead to new collaborations, more citations, or industry-wide\
+    \ change, there is reason to assume that effective communication can make a difference.\
+    \ To provide, at least, anecdotal encouragement, we quote software researcher\
+    \ Marcos Kalinowski, who wrote on social media [\\[7\\]](#page-5-14): \"Recently\
+    \ I shared the result of a PhD thesis on LinkedIn and it reached 4,000+ reactions\
+    \ and 270,000+ impressions. 95% of my network is from industry. We are well equipped\
+    \ to burst the academic bubble!\"\n\nLooking ahead, researchers are well advised\
+    \ to ensure their work reaches the right audience by complementing traditional,\
+    \ high-quality academic paper publishing with efforts to make research more accessible\
+    \ to relevant stakeholders. Identify your target audience to tailor your message!\
+    \ Use diverse communication channels beyond papers, and actively engage with practitioners\
+    \ to foster dialogue rather than broadcasting information! This approach can spark\
+    \ feedback, opening doors to new ideas and collaborations that shape future research.\n\
+    \nIf you are in software research, or any other research area for that matter,\
+    \ remember why you began your research journey. The silent scientist may publish\
+    \ papers, but without reaching the right audience, this work risks going unnoticed\
+    \ and unappreciated. We therefore urge researchers to break the silence and actively\
+    \ approach those communities that stand to benefit most from the findings.\n\n\
+    ### Acknowledgments\n\nWe thank two reviewers and the associate editor for their\
+    \ constructive comments, which helped to enrich the article with additional perspectives.\
+    \ This work has been supported by the European Union under ERC Advanced Grant\
+    \ \"Brains On Code\" (101052182).\n\n### Author Information\n\nMarvin Wyrich is\
+    \ a Postdoctoral Researcher at the Saarland University, Saarland Informatics Campus,\
+    \ Germany. Christof Tinnes is a Senior Key Expert at Siemens, Germany, and a PhD\
+    \ student at Saarland University, Germany. Sebastian Baltes is a Professor of\
+    \ Software Engineering at the University of Bayreuth, Germany. Sven Apel is a\
+    \ Professor of Software Engineering at the Saarland University, Saarland Informatics\
+    \ Campus, Germany.\n\n6 Wyrich et al.\n\n### References\n\n- <span id=\"page-5-0\"\
+    ></span>1. Avgeriou, P., Shepherd, D.C.: Dear researchers - a new column sharing\
+    \ the perspective of software practitioners. Journal of Systems and Software 213,\
+    \ 112044 (2024). <https://doi.org/https://doi.org/10.1016/j.jss.2024.112044>\n\
+    - <span id=\"page-5-10\"></span>2. Bauer, M.S., Damschroder, L., Hagedorn, H.,\
+    \ Smith, J., Kilbourne, A.M.: An introduction to implementation science for the\
+    \ non-specialist. BMC psychology 3, 1–12 (2015)\n- <span id=\"page-5-11\"></span>3.\
+    \ Bauer, M.S., Kirchner, J.: Implementation science: What is it and why should\
+    \ i care? Psychiatry Research 283, 112376 (2020). [https://doi.org/https://doi.](https://doi.org/https://doi.org/10.1016/j.psychres.2019.04.025)\
+    \ [org/10.1016/j.psychres.2019.04.025](https://doi.org/https://doi.org/10.1016/j.psychres.2019.04.025),\
+    \ vSI:Implementation Science\n- <span id=\"page-5-9\"></span>4. Burns, T.W., O'Connor,\
+    \ D.J., Stocklmayer, S.M.: Science communication: a contemporary definition. Public\
+    \ understanding of science 12(2), 183–202 (2003)\n- <span id=\"page-5-12\"></span>5.\
+    \ Cooke, S.J., Gallagher, A.J., Sopinka, N.M., Nguyen, V.M., Skubel, R.A., Hammerschlag,\
+    \ N., Boon, S., Young, N., Danylchuk, A.J.: Considerations for effective science\
+    \ communication (2017)\n- <span id=\"page-5-13\"></span>6. Illingworth, S.: Delivering\
+    \ effective science communication: advice from a professional science communicator.\
+    \ Seminars in Cell & Developmental Biology 70, 10– 16 (2017). <https://doi.org/https://doi.org/10.1016/j.semcdb.2017.04.002>,\
+    \ science communication in the field of fundamental biomedical research Biology\
+    \ of aging: new models, new methods\n- <span id=\"page-5-14\"></span>7. Kalinowski,\
+    \ M.: Tweet by Marcos Kalinowski from jun 22, 2023 (2023), [https://web.archive.org/web/20230929100303/https://twitter.com/prof\\\
+    \\_](https://web.archive.org/web/20230929100303/https://twitter.com/prof_kalinowski/status/1671812044146737152)\
+    \ [kalinowski/status/1671812044146737152](https://web.archive.org/web/20230929100303/https://twitter.com/prof_kalinowski/status/1671812044146737152)\n\
+    - <span id=\"page-5-2\"></span>8. Nisbet, M.C., Scheufele, D.A.: What's next for\
+    \ science communication? promising directions and lingering distractions. American\
+    \ journal of botany 96(10), 1767– 1778 (2009)\n- <span id=\"page-5-5\"></span>9.\
+    \ Peitek, N., Apel, S., Parnin, C., Brechmann, A., Siegmund, J.: Program comprehension\
+    \ and code complexity metrics: An fmri study. In: 43rd IEEE/ACM International\
+    \ Conference on Software Engineering, ICSE 2021, Madrid, Spain, 22- 30 May 2021.\
+    \ pp. 524–536. IEEE (2021). [https://doi.org/10.1109/ICSE43902.](https://doi.org/10.1109/ICSE43902.2021.00056)\
+    \ [2021.00056](https://doi.org/10.1109/ICSE43902.2021.00056), <https://doi.org/10.1109/ICSE43902.2021.00056>\n\
+    - <span id=\"page-5-6\"></span>10. Scalabrino, S., Bavota, G., Vendome, C., Linares-Vasquez,\
+    \ M., Poshyvanyk, D., Oliveto, R.: Automatically assessing code understandability.\
+    \ IEEE Transactions on Software Engineering (2019). <https://doi.org/10.1109/TSE.2019.2901468>\n\
+    - <span id=\"page-5-7\"></span>11. Siegmund, J., Peitek, N., Brechmann, A., Parnin,\
+    \ C., Apel, S.: Studying programming in the Neuroage: Just a crazy idea? Commun.\
+    \ ACM 63(6), 30–34 (2020)\n- <span id=\"page-5-1\"></span>12. Weinhardt, C., Kloker,\
+    \ S., Hinz, O., van der Aalst, W.M.: Citizen science in information systems research\
+    \ (2020)\n- <span id=\"page-5-4\"></span>13. Wilson, G., Aranda, J., Hoye, M.,\
+    \ Johnson, B.: Experience report: It will never work in theory. IEEE Software\
+    \ 41(03), 80–82 (may 2024). [https://doi.org/10.](https://doi.org/10.1109/MS.2024.3362649)\
+    \ [1109/MS.2024.3362649](https://doi.org/10.1109/MS.2024.3362649)\n- <span id=\"\
+    page-5-8\"></span>14. Wyrich, M., Bogner, J.: Beyond self-promotion: How software\
+    \ engineering research is discussed on linkedin. In: Proceedings of the 46th International\
+    \ Conference on Software Engineering: Software Engineering in Society. p. 85–95.\
+    \ ICSE-SEIS'24, Association for Computing Machinery, New York, NY, USA (2024).\
+    \ [https://doi.](https://doi.org/10.1145/3639475.3640113) [org/10.1145/3639475.3640113](https://doi.org/10.1145/3639475.3640113)\n\
+    - <span id=\"page-5-3\"></span>15. Wyrich, M., Wagner, S.: Teaching computer science\
+    \ students to communicate scientific findings more effectively. In: 2023 IEEE/ACM\
+    \ 45th International Conference\n\non Software Engineering: Software Engineering\
+    \ Education and Training (ICSE-SEET). IEEE, IEEE (2023). [https://doi.org/10.1109/ICSE-SEET58685.2023.](https://doi.org/10.1109/ICSE-SEET58685.2023.00017)\
+    \ [00017](https://doi.org/10.1109/ICSE-SEET58685.2023.00017)"
+  decisions:
+    evaluation_prompt: 'Disqualified: no evaluation. Reason: The paper lacks any form
+      of empirical, experimental, or quantitative evaluation. It primarily consists
+      of conceptual discussions and reflections on the relevance and communication
+      of software research without presenting structured or reproducible testing or
+      evaluation.'
+    related_work_prompt: 'Qualified. Reason: The paper meaningfully engages with prior
+      research by discussing the relevance and impact of software research, citing
+      various studies, keynotes, and columns that address these issues. It references
+      specific examples of previous work, such as Lionel Briand''s keynote and the
+      Journal of Systems and Software''s new column, and includes a comprehensive
+      list of citations that provide context and support for its arguments.'
+    novelty_prompt: 'Disqualified: no novelty. Reason: The paper primarily discusses
+      the importance of science communication in software research and the challenges
+      faced in making research impactful. It does not propose any new methods, algorithms,
+      architectures, datasets, or insights, nor does it apply known techniques in
+      a novel context or domain. The paper lacks clear claims of contribution or novelty
+      as defined in the criteria.'
+    review_only_prompt: 'Qualified. Reason: Although the paper discusses existing
+      issues in software research communication, it does not merely summarize existing
+      work. It presents a critical analysis of the current state of science communication
+      in software research and suggests the need for improved communication strategies.
+      The paper challenges existing assumptions and proposes a shift in approach,
+      which constitutes a novel contribution to the discourse on research impact and
+      communication.'
+  token_usage: 20035
+  time_usage: 9.416293859481812
+- title: "XiSort: Deterministic Sorting via IEEE-754 Total Ordering and Entropy\n\
+    \  Minimization"
+  abstract: "We introduce XiSort, a deterministic and reproducible sorting algorithm\
+    \ for\nfloating-point sequences based on IEEE-754 total ordering and entropy\n\
+    minimization. XiSort guarantees bit-for-bit stability across runs and platforms\n\
+    by resolving tie-breaking via information-theoretic and symbolic methods. The\n\
+    algorithm supports both in-memory and external (out-of-core) operation,\noffering\
+    \ consistent performance on large datasets. We formalize a curved\nvariant of\
+    \ the sorting metric that integrates into the Alpay Algebra framework,\ntreating\
+    \ XiSort as a recursive operator with provable convergence and symbolic\nidempotence.\
+    \ This model preserves state-space closure while minimizing local\ndisorder, interpretable\
+    \ as symbolic entropy. Empirical benchmarks demonstrate\nthat XiSort achieves\
+    \ competitive throughput (e.g., sorting 10^8 doubles in\napproximately 12 seconds\
+    \ in-memory, and 100 GB at around 100 MB/s on SSDs),\nwith applications in scientific\
+    \ computing, high-frequency finance, and\nreproducible numerical workflows. The\
+    \ results position XiSort as a principled\ntool for stable data alignment, symbolic\
+    \ preprocessing, and cross-platform\nfloat ordering.\n  Keywords: deterministic\
+    \ sorting, IEEE-754, entropy minimization, symbolic\nalgebra, reproducibility,\
+    \ external memory, Alpay Algebra, data pipelines"
+  url: http://arxiv.org/abs/2505.11927v1
+  keywords: ''
+  document: '# XiSort: Deterministic Sorting via IEEE-754 Total Ordering and Entropy
+    Minimization
+
+
+    Faruk Alpay, Independent Researcher ORCID: [0009-0009-2207-6528](https://orcid.org/0009-0009-2207-6528)
+
+
+    May 20, 2025
+
+
+    #### Abstract
+
+
+    XiSort is introduced as a deterministic, reproducible sorting algorithm for floating-point
+    sequences, grounded in rigorous mathematical principles. I formalize the sorting
+    metric minimized by XiSort, including a curved variant, and demonstrate that XiSort
+    can be viewed as minimizing the entropy or disorder of a sequence. Leveraging
+    the IEEE-754 total ordering relation, XiSort imposes a complete order on all floating-point
+    values (including ±0 and NaNs), and uses information-theoretic tie-breaking to
+    guarantee a unique sorted output. I integrate XiSort into the Alpay Algebra symbolic
+    framework, showing that the algorithm''s recursive structure, monotonic convergence,
+    and idempotence (sorting identity) can be encoded and verified symbolically. Within
+    Alpay Algebra, XiSort is represented as a recursive operator that preserves the
+    closure of the state space and exhibits a convergence property under a suitable
+    monotonic potential function. I also detail XiSort''s algorithmic design and performance.
+    Empirical results on both real-world datasets and large-scale Gaussian random
+    data confirm that XiSort achieves competitive throughput inmemory and in external
+    memory (out-of-core) contexts while providing bit-for-bit reproducibility. I report
+    timing results (e.g. sorting 10<sup>8</sup> doubleprecision values in about 12
+    seconds in-memory, and 100 GB of data at ∼100 MB/s on SSD storage) alongside use
+    cases in scientific computing and high-frequency finance. The results highlight
+    XiSort''s practical value for reproducible numerical workflows and large-scale
+    data pipelines, ensuring consistent ordering and stable behavior across platforms
+    and runs.
+
+
+    Keywords: deterministic sorting, IEEE-754, floating-point, entropy minimization,
+    reproducibility, Alpay Algebra, stable sorting, external memory, scientific computing
+
+
+    ### 1 Introduction
+
+
+    Sorting is one of the most fundamental operations in computer science, with applications
+    ranging from database query processing to scientific simulations. Traditional
+    sorting algorithms focus on efficiency, but reproducibility and determinism are
+    increasingly critical in modern computing contexts. In parallel and high-performance
+    environments, even identical inputs can yield run-to-run variations in output
+    ordering when nondeterministic algorithms or floating-point inconsistencies are
+    present. This variability complicates debugging, verification, and trust in computational
+    results. XiSort directly addresses this challenge by providing a deterministic
+    sorting algorithm tailored for floating-point data, guaranteeing the same output
+    ordering every time for a given input.
+
+
+    A core difficulty in floating-point sorting is handling special values and ensuring
+    a total order. The IEEE-754 floating-point standard defines an ordering for all
+    representable values, including special cases like Not-a-Number (NaN) and signed
+    zeros. I leverage the IEEE-754 totalOrder predicate to compare values so that
+    every pair of values is orderable in a transitive, antisymmetric way. Notably,
+    this means −0 is considered smaller than +0, and all real numbers compare less
+    than any NaN (with specific rules for signaling vs quiet NaNs and their payloads).
+    By adhering to this total ordering, XiSort avoids the undefined behavior or inconsistent
+    comparisons that can arise in typical sorting routines when confronted with NaNs
+    or differing zero representations. The result is a well-defined sorted sequence
+    for any collection of IEEE-754 numbers.
+
+
+    Beyond numeric ordering, XiSort emphasizes deterministic tie-breaking. In many
+    scenarios, multiple distinct input permutations can yield the same sorted order
+    in terms of values, especially when there are duplicate values. An unstable sorting
+    algorithm may produce any permutation of equal-valued records as output, effectively
+    leaving their relative order unspecified. Stable sorting algorithms preserve the
+    original input order of equal keys, selecting one particular permutation, but
+    even stability alone does not guarantee cross-platform reproducibility unless
+    the comparison logic is fully specified (for example, handling of NaN payloads
+    or bitwise-identical duplicates). XiSort''s design eliminates this ambiguity by
+    treating the sorting process as an entropy minimization problem: it finds the
+    unique output order that minimizes disorder while incorporating all available
+    information (including original indices or bit patterns) to break ties. From an
+    information-theoretic perspective, leaving ties unresolved corresponds to a set
+    of possible outputs (permutations of identical keys) and thus residual entropy
+    in the sorting outcome. XiSort injects just enough additional information (such
+    as an implicit secondary key based on original position or object identity) to
+    collapse these possibilities to a single outcome, effectively driving the output
+    entropy to zero for a given input. This paper formalizes this concept, showing
+    that XiSort''s deterministic tie-breaking can be justified as selecting the lexicographically
+    minimal permutation (with respect to some fixed secondary key) among those that
+    are value-sorted, thereby minimizing the uncertainty in the sorted result.
+
+
+    The rest of this article is organized as follows. In Theoretical Foundations,
+    I define the sorting metric that XiSort optimizes and detail the mathematical
+    justification for viewing sorting as an entropy-minimizing transformation. I present
+    both the standard metric of disorder (e.g. inversion count) and a curved metric
+    variant that weights disparities in a nonlinear fashion. I then describe the XiSort
+    Algorithmic Design, including its recursive divide-and-conquer structure and how
+    it implements IEEE-754 comparisons and deterministic tie-breaking in practice.
+    In Symbolic Integration with Alpay Algebra, I reframe XiSort in the symbolic meta-framework
+    of Alpay Algebra, a system of recursive operators and states. I demonstrate that
+    XiSort''s properties – such as monotonic improvement of a sorting measure, idempotence
+    (sorting a sorted list leaves it unchanged), and closure in the space of sequences
+    – can be naturally expressed and proven within this algebraic framework. Finally,
+    in Experimental Evaluation, I report performance results of XiSort on large datasets,
+    including external-memory sorting scenarios. I discuss use cases where reproducibility
+    is paramount: for example, in scientific computing pipelines that require bitwise
+    identical outputs, in high-frequency trading systems that demand consistent ordering
+    of events, and in numerical simulations where sorting order can affect floating-point
+    rounding accumulation. I conclude that XiSort provides a robust solution marrying
+    mathematical rigor with practical determinism, making it well-suited for applications
+    demanding both high performance and exact reproducibility.
+
+
+    ### 2 Theoretical Foundations of XiSort
+
+
+    ### 2.1 Sorting as an Entropy-Minimization Process
+
+
+    At its heart, sorting can be seen as a process of imposing order (reducing randomness
+    or disorder) on a sequence. I formalize a sorting metric D(S) that quantifies
+    the disorder in a sequence S. A classical choice for such a metric is the inversion
+    count: the number of pairs of elements (x<sup>i</sup> , x<sup>j</sup> ) with i
+    < j but x<sup>i</sup> > x<sup>j</sup> . If Dinv(S) denotes the inversion count
+    of sequence S, then a sorted (non-decreasing) sequence has Dinv = 0, the minimal
+    possible value. More generally, one could define a normalized disorder measure
+    (a kind of "entropy" of the permutation) as:
+
+
+    > Hperm(S) = log<sup>2</sup> (number of linear extensions of S),
+
+
+    where the "number of linear extensions" refers to the count of permutations of
+    the multiset of values in S that are considered equally sorted as S (intuitively,
+    the set of permutations that have the same multiset of values as S and would all
+    be considered sorted if value-equality is not distinguished). For a sequence with
+    all distinct values, any particular ordering is unique to those values, so one
+    might instead consider the total permutation entropy log<sup>2</sup> (n!) for
+    n items as the baseline disorder (which is maximal if all orders are equally likely).
+    Sorting imposes structure: the sorted order is just one permutation out of n!,
+    drastically reducing the "permutation entropy" from log<sup>2</sup> (n!) to 0
+    (since one single order is chosen). In practice, when values can repeat, there
+    are fewer than n! distinct sorted orders – specifically, if there are groups of
+    equal values, any permutation of those among themselves yields the same non-decreasing
+    sequence. An unstable sort that does not fix an order among equals would effectively
+    allow multiple output states, corresponding to a residual entropy of log<sup>2</sup>
+    (k!) for each group of k equal items. By contrast, XiSort defines a deterministic
+    rule to order even identical values, treating each element as unique by augmenting
+    it with a secondary key (such as its original index). This removes the degeneracy:
+    among equal values, XiSort''s tie-breaker picks one ordering (for example, preserving
+    input order, as in stable sorting, or using index as an implicit secondary key)
+    and rejects all others, thereby eliminating the log<sup>2</sup> (k!) uncertainty
+    for that group. In information-theoretic terms, XiSort''s tie-breaking injects
+    information to remove entropy from the output. It ensures that the sorting transformation
+    is a well-defined function from the space of input sequences to a single output
+    sequence, rather than a one-to-many relation.
+
+
+    I can formalize the effect of deterministic sorting as an entropy minimizer. Consider
+    the random variable O which represents the output ordering produced by a sorting
+    algorithm given an input multiset X. A nondeterministic or unstable algorithm
+    (or one run in a parallel environment without enforced order) could make O not
+    fully determined by X alone – e.g., if X has duplicates, O could be any of the
+    k! permutations of those duplicates with equal probability, yielding H(O | X)
+    > 0 bits of conditional entropy. XiSort''s strategy is to design the algorithm
+    such that H(O | X) = 0, i.e. the output is a delta-function distribution given
+    the input (perfect determinism). This is achieved by defining an ordering criterion
+    that totally orders all items, often by extending the key. One simple implementation
+    is: if two elements compare equal by value, break ties by their original index
+    (or another unique identifier). This lexicographic extension – (value, index)
+    – produces a strict weak ordering that is total over all elements. The cost of
+    adding this information is negligible (an O(n) space overhead to store indices,
+    or built into the sorting logic), but the benefit is that the sequence''s disorder
+    metric now has a unique global minimum. In fact, using inversion count as disorder,
+    all stable sorted permutations of the input share the same minimal inversion count
+    (zero). XiSort selects one of them deterministically. One can think of this as
+    adding an infinitesimal perturbation to each equal element to break ties consistently
+    (akin to symbolic noise that does not affect numeric comparisons except to break
+    symmetry).
+
+
+    To further elucidate the information-theoretic aspect, I note that a sorted sequence
+    is often more compressible than an unsorted one. Stated differently, sorting tends
+    to lower the algorithmic entropy of data. Stiffelman (2014) demonstrates that
+    encoding the decisions of quicksort can serve as a compression scheme approaching
+    the entropy bound of the data distribution. In that scheme, the sorted data plus
+    a record of how the sort was performed effectively constitute an encoding of the
+    original sequence. The fact that sorted data is easier to compress is a direct
+    consequence of its lower entropy: adjacent elements in a sorted list are likely
+    to have small differences or follow a predictable pattern, which can be exploited
+    by entropy coders. XiSort''s view of sorting aligns with this: by transforming
+    X into a sorted sequence, I am moving to an ordered state that is in a sense the
+    "minimum entropy" arrangement consistent with the multiset of values in X. XiSort''s
+    deterministic nature ensures this transformation is unique and hence can be treated
+    as purging all unnecessary randomness from the ordering.
+
+
+    ### 2.2 Sorting Metric and its "Curved" Variant
+
+
+    I now rigorously define the sorting metric optimized by XiSort. The primary metric
+    D(S) I consider for a sequence S = [x1, x2, . . . , xn] is based on pairwise order
+    violations:
+
+
+    $$\mathcal{D}(S) = \sum\_{1 \le i < j \le n} \mathbf{1}\{x\_i > x\_j\},$$
+
+
+    where 1{·} is the indicator function. This is exactly the inversion count Dinv
+    discussed above. D(S) measures how far S is from being sorted: it counts each
+    out-of-order pair as one unit of disorder. Clearly, D(S) ≥ 0 always, and D(S)
+    = 0 if and only if S is sorted in non-decreasing order. In any sequence that is
+    not sorted, there exists at least one inversion, so D(S) > 0. Among all permutations
+    of a given multiset of values, those that are sorted (in the nondecreasing sense)
+    minimize D. In fact, if values are distinct, the sorted order is unique (yielding
+    D = 0), and any other order yields a positive D. If values are not distinct, any
+    stable sorted order (which only permutes equal-value items) will also have D =
+    0, so the minimum is achieved by a set of orders. XiSort''s tie-breaking picks
+    a particular one of these orders, but note that even before tie-breaking, all
+    these orders share the same optimal score D = 0. Thus, D alone is not sufficient
+    to distinguish among them – this is why supplemental criteria are needed.
+
+
+    I introduce a curved metric variant, denoted Dc(S), which modifies the contribution
+    of each inversion based on the "distance" or severity of the disorder. The goal
+    is to weigh large deviations more heavily than small ones, introducing a non-linear
+    penalty. For example, one might define:
+
+
+    $$\mathcal{D}\_c(S) = \sum\_{1 \le i < j \le n} f(j - i) \cdot \mathbf{1}\{x\_i
+    > x\_j\},$$
+
+
+    where f(d) is an increasing function of the index distance d = j − i. If I choose
+    f(d) = 1 for all d, I recover the standard inversion count. But a "curved" choice,
+    say f(d) = d <sup>2</sup> or f(d) = log(1 + d), biases the metric to penalize
+    inversions between far-apart elements more (or less) strongly. Another variant
+    is to weight by the magnitude of the value difference: e.g.,
+
+
+    $$\mathcal{D}''\_c(S) = \sum\_{ix\_j} \Phi(|x\_i - x\_j|),$$
+
+
+    for some convex increasing Φ. A possible Φ might be quadratic, so a pair that
+    is out of order by a large numeric gap contributes more disorder than a pair that
+    is nearly equal in value. These curved metrics come from a perspective of viewing
+    the set of sequences as a metric space where the "distance" to sortedness is measured
+    in a non-linear way. The curvature can be tuned to emphasize certain aspects (index
+    displacement, value disparity, etc.) of disorder.
+
+
+    XiSort in its basic form seeks to minimize D(S) – which it does by producing a
+    sequence with D = 0. Notably, any correct sorting algorithm achieves D = 0 at
+    completion. However, considering D<sup>c</sup> can provide additional insight
+    into algorithm behavior. A well-designed algorithm should not only aim for D =
+    0 in the end, but should also reduce D<sup>c</sup> monotonically if possible,
+    meaning it addresses the largest disorder first if f emphasizes that. For instance,
+    an algorithm like heap sort or quicksort doesn''t explicitly minimize inversions
+    at each step, but something like bubble sort, which swaps adjacent out-of-order
+    pairs, systematically reduces the inversion count in small increments (and indeed
+    bubble sort can be seen as gradually bubbling out inversions). One could imagine
+    a variant of XiSort that uses a "curved" approach internally: for example, always
+    correct the most severely out-of-order element first (this might resemble selection
+    sort, which places the smallest element first, removing many inversions involving
+    that element at once). While XiSort as implemented in this paper is a standard
+    full sort (achieving global optimum of D), the concept of a curved metric is useful
+    in analyzing stability and convergence of the sorting process. In particular,
+    when I discuss the symbolic framework, having a well-behaved measure function
+    φ(S) that decreases (or increases) monotonically with each recursive step is important
+    for proving convergence. A convex or curved metric can serve as such a measure
+    to ensure each operation brings the sequence closer (in a strong sense) to sortedness.
+
+
+    ### 2.3 IEEE-754 Total Order and Value Comparison
+
+
+    A critical aspect of XiSort is its use of the IEEE-754 total order for floating-point
+    comparison. In IEEE-754 (2008 and later revisions), a predicate totalOrder is
+    defined which totally orders all canonical floating-point representations. The
+    ordering is consistent with numerical comparison for normal values, and extends
+    it to special cases as follows:
+
+
+    - Negative vs Positive: Negative numbers are considered "less" than positive numbers.
+    Also −0 < +0 under totalOrder (although −0 = +0 for arithmetic comparison, the
+    total order distinguishes them by sign).
+
+    - Infinity: −∞ is the smallest value, and +∞ is larger than any finite number
+    (but below NaNs). So in increasing order: −∞ < (all finite) < +∞.
+
+    - NaNs: NaN (Not-a-Number) values are considered greater than all finite numbers.
+    Moreover, totalOrder specifies that signaling NaNs (sNaN) are treated as less
+    than quiet NaNs (qNaN), and NaNs are ordered by their payload bits in implementations
+    that choose to do so. For instance, −NaN < −sNaN < +∞ < +sNaN < +NaN in one interpretation,
+    with further ordering by payload if needed. The 2019 revision of IEEE-754 allows
+    some flexibility in NaN ordering (payload-dependent or otherwise), but the key
+    is that each implementation should have a consistent rule. XiSort adopts a simple
+    rule consistent with the 2008 standard: treat the bit-pattern of the float as
+    a sign-magnitude integer for comparison (this effectively orders all values by
+    sign, exponent, and significand fields, placing −0 before +0, and ordering NaNs
+    by bits as well).
+
+
+    By using this total order, XiSort ensures that every element is comparable. This
+    is crucial for determinism: any pair of floats x, y will satisfy exactly one of
+    x < y, x = y, or x > y in the totalOrder sense (note that x = y here means either
+    bitwise identical or both zeros of opposite sign, etc., which in totalOrder are
+    actually not treated as equal if I consider sign bit, but as equal in value).
+    In practice, my implementation defines a comparator cmp(x,y) that returns -1,
+    0, or 1 according to the IEEE total ordering of x and y. This comparator gives
+    a strict weak ordering that is total. As a result, when I sort using this comparator,
+    I obtain a sequence sorted in increasing order of that predicate. Traditional
+    comparison-sorts might treat NaN as "unordered" (for example, returning false
+    for both x < NaN and x > NaN). If one naively uses such a comparator, the sort
+    routine might not handle NaNs consistently, or could even violate transitivity.
+    By contrast, my approach maps the floats to a totally ordered domain. It is effectively
+    similar to sorting by the bitwise representation interpreted as an unsigned 64-bit
+    integer (for doubles), after a suitable transformation to account for the sign-bit''s
+    ordering (one can do this by inverting the sign bit for negative values to get
+    a lexicographically correct ordering). This technique is known to allow fast comparisons
+    and is utilized in certain high-performance databases and languages for ordering
+    floating-point keys. The net effect for XiSort is that the resulting order respects
+    all the subtleties of IEEE arithmetic: for instance, if a dataset contains the
+    values [+0, −0, NaN, 5.0], XiSort will output −0 first, then +0, then 5.0, then
+    NaN (assuming I choose to treat all NaNs as a single group for now; if payloads
+    differ, those would be ordered next). This is a well-defined, reproducible outcome,
+    whereas many library sorts might place NaNs arbitrarily (sometimes at end, sometimes
+    beginning, or even leave them in place, depending on implementation-defined behavior).
+
+
+    From a mathematical perspective, the total order relation ⪯<sup>754</sup> that
+    I use is a linear extension of the normal numerical order with some additional
+    rules. It can be proven that this relation is a total order (i.e., any two floats
+    a, b satisfy exactly one of a ≺ b, a = b, a ≻ b in this ordering, with transitivity
+    and antisymmetry holding). It''s important to note that ⪯<sup>754</sup> refines
+    the usual order: if a < b in the usual sense (both not NaN), then a ≺ b under
+    IEEE totalOrder as well. The differences arise only in edge cases. XiSort''s correctness
+    in terms of sorting means that if x<sup>i</sup> and x<sup>j</sup> are two elements
+    of the output (with i < j), then x<sup>i</sup> ⪯<sup>754</sup> x<sup>j</sup> .
+    That is the definition of being sorted according to this order. Traditional sortedness
+    (non-decreasing numerical value) is a subset of this condition; I''ve just extended
+    the definition to cover cases that were previously incomparable. In doing so,
+    I''ve also achieved determinism for those cases.
+
+
+    In summary, the theoretical foundations of XiSort rest on three pillars: (1) a
+    metric of disorder (and its curved variants) that formalizes what it means to
+    "sort" as minimizing entropy or inversions; (2) a complete comparison relation
+    (IEEE-754 total order) that leaves no pair of elements unordered; and (3) an information-theoretic
+    principle that any ties or ambiguities in ordering must be resolved by introducing
+    additional information, thereby making the sort a deterministic function. Equipped
+    with this foundation, I now proceed to describe the algorithmic structure of XiSort
+    and how these principles are implemented in practice.
+
+
+    ## 3 XiSort Algorithm Description and Deterministic Design
+
+
+    XiSort is implemented as a deterministic, stable comparison sort. In terms of
+    algorithmic paradigm, XiSort follows a recursive divide-and-conquer strategy analogous
+    to merge sort. This choice is motivated by merge sort''s stability and its well-defined
+    data flow, which are advantageous for reproducibility and external memory usage.
+    However, the principles of XiSort (total ordering and tie-break determinism) could
+    equally well be applied to other sorting paradigms (e.g. a deterministic quicksort).
+    I describe XiSort in a top-down recursive manner:
+
+
+    - 1. Divide: If the input sequence S has length n ≤ 1, it is already sorted (trivially).
+    Otherwise, partition S into two halves (for simplicity, a front half and a back
+    half, each of size ≈ n/2). This partition is done in a fixed manner – e.g., split
+    at ⌊n/2⌋ – to ensure determinism. (In an in-memory context, I simply take subarrays.
+    In an external-memory context, I can create two runs on disk.)
+
+    - 2. Recursively Sort: Recursively apply XiSort to each half. Because the recursion
+    follows a deterministic structure (no random pivots or datadependent varying recursion
+    shapes), the recursion tree is fixed given n. Each recursive call thus produces
+    a sorted subsequence of S. By induction, I can assume the recursive calls themselves
+    are deterministic and stable: equal values in each half remain in their input
+    order, and the output of each call is sorted by the IEEE comparator.
+
+    - 3. Merge: Merge the two sorted halves into a single sorted sequence. The merge
+    procedure is where stability and tie-breaking are enforced. I traverse the two
+    sorted lists, always picking the lesser element (according to the IEEE-754 comparator)
+    to place next in the output. In case of a tie (the two elements are equal in value
+    under the comparator), I break ties by taking the element from the left (first)
+    half before the right (second) half. This ensures that if two equal-valued elements
+    were in the left and right subarrays, the one originating from the left side (which
+    comes earlier in the original array) is output first. This effectively propagates
+    the stability (preservation of original order) through the merge: since each half
+    was sorted stably internally, and I merge by preferring earlier elements on ties,
+    the final output is stable with respect to the original input. It''s important
+    to note that this tie-break rule (left before right) is deterministic and consistent.
+    It could be equivalently implemented by tagging each element with its original
+    index and comparing indices when values are equal. Because I always split the
+    array in the same way, original indices correlate with left/right halves consistently.
+
+
+    4. Output: The merged sequence is the sorted output for S. By construction, it
+    is sorted in non-decreasing order of values, with ties broken by original position.
+    It therefore respects the total order comparator as well (if the comparator distinguishes
+    −0 vs +0, those are considered "different" values and will be ordered accordingly
+    during merge; if it distinguishes NaN payloads, those will be compared as greater/less
+    even if numeric value is "NaN" for both). The output length is n (a permutation
+    of the input elements).
+
+
+    Complexity: XiSort runs in O(n log n) time in the average and worst case, as it
+    essentially performs the same comparisons and merges as a standard merge sort.
+    The added cost of the IEEE-754 comparator is negligible – it''s a couple of bitwise
+    operations and comparisons, which is similar to or cheaper than a typical floating-point
+    comparison that has to check for NaNs, etc. The space complexity is O(n) auxiliary
+    space for the merge operation (typical for merge sort). In external memory scenarios,
+    XiSort''s merging is amenable to k-way merges across runs, similar to how merge
+    sort is externalized by reading and writing runs of sorted data.
+
+
+    Deterministic Memory Layout: I mention an implementation detail important for
+    reproducibility: When merging, if equal elements come from the same half (meaning
+    the identical values were in one recursion branch), their relative order is already
+    preserved by the recursive call. If equal elements come one from left and one
+    from right, my rule puts the left one first. Thus, the outcome does not depend
+    on any arbitrary tie-break decisions by the underlying system – it''s fully specified.
+    I avoid any usage of threads or concurrency that could race in writing outputs;
+    however, XiSort can be parallelized by processing independent halves concurrently
+    as long as the merge step is done carefully. A parallel XiSort would sort the
+    two halves in parallel threads and then perform the merge serially (or in a controlled
+    parallel manner) with the guarantee that the merge process itself follows the
+    same left-before-right logic deterministically. If multiple threads were used
+    in merging, one must enforce that they produce identical results to the single-threaded
+    merge – which typically means coordinating such that the outcome is as if one
+    fixed strategy was used (e.g., divide the output range and let threads fill portions,
+    after partitioning by a selected split value – but that introduces complexity).
+    In practice, a simpler approach for parallelism is to use a multi-way merge: sort
+    many small chunks in parallel and then merge them pairwise in a fixed binary tree
+    structure. As long as the tree structure (the pairing order of runs) is predetermined
+    (e.g., always merge runs in increasing index order), the final result will be
+    the same regardless of how merging is scheduled. XiSort can thus be extended to
+    multi-core environments while maintaining bitwise reproducibility.
+
+
+    External Memory Behavior: In external or out-of-core sorting, XiSort''s deterministic
+    approach continues to hold. The typical external merge sort works by: (a) reading
+    chunks of the input that fit in RAM, sorting each chunk (producing sorted runs),
+    (b) writing those runs to disk, and (c) performing multi-way merges of runs until
+    a single sorted run remains. I apply the same strategy: in step (a), I use XiSort
+    (in-memory) on each chunk, so each run is internally reproducibly sorted. In step
+    (c), I merge runs two or more at a time. I must decide a deterministic merging
+    order if more than two runs are to be merged in one pass. A simple method is to
+    always merge runs in a left-to-right sequence (the specific order can be fixed
+    by their initial positions on disk or in the file). This yields the same tie-break
+    behavior as earlier: if an equal key appears in two runs, the run that originated
+    earlier in the file is treated as "left" and its records come first. The result
+    is that whether I merge runs pairwise in multiple passes, or all at once, as long
+    as the pairing order is fixed, the output will be deterministic. Modern external
+    sorting libraries like STXXL support deterministic merging and achieve throughput
+    on the order of 100 MB/s on HDD/SSD for large data. XiSort''s implementation in
+    external memory achieves similar performance: essentially bounded by disk bandwidth
+    and overhead of comparisons. By using sequential I/O access patterns (reading
+    and writing runs sequentially), XiSort attains near-maximum throughput of the
+    storage medium. For instance, in my tests (see Experimental Evaluation), XiSort
+    sorted a 100 GB dataset (roughly 1.25 × 10<sup>10</sup> double values) in approximately
+    17 minutes using an SSD, corresponding to about 100 MB/s sustained sorting speed,
+    which is on par with well-optimized external merge sorts. Importantly, this external
+    sort was reproducible: multiple runs yielded byte-for-byte identical output, and
+    even splitting the job across two machines (each sorting a portion and then merging
+    results) gave the same final sequence as a single-machine sort, thanks to the
+    deterministic merge rules.
+
+
+    Avoiding Nondeterministic Quicksort Pitfalls: One might ask why not simply use
+    a typical library sort with stable option. Many libraries (like C++''s std::stable
+    sort or Python''s TimSort) are stable and deterministic for a given input in a
+    single-threaded scenario. However, default quicksort implementations (in C library
+    qsort or some languages) often use either random pivots or are unstable – leading
+    to nondeterministic ordering of equal elements. For example, the typical quicksort
+    can be made deterministic by fixing a pivot selection strategy (like "always pick
+    median-of-three" or "always pick the middle element as pivot"). Pandas'' documentation
+    notes that its default sort (which dispatches to NumPy''s introsort) is deterministic
+    in output even if unstable, because NumPy''s quicksort chooses a fixed pivot strategy
+    (e.g., middle element) rather than random. XiSort''s approach ensures determinism
+    by design—there is no randomization in pivot selection (merge sort uses none),
+    and every tiebreak is explicitly resolved. Thus XiSort avoids the need for external
+    seeding or special modes; it is inherently reproducible.
+
+
+    ### 3.1 Correctness and Idempotence
+
+
+    XiSort produces a sorted sequence in the sense of the IEEE total order. I argue
+    informally for correctness (a formal proof would proceed by induction on n): For
+    n = 1, trivial. Assume true for sequences smaller than n. XiSort splits an nlength
+    sequence into S<sup>1</sup> and S<sup>2</sup> of size n<sup>1</sup> and n<sup>2</sup>
+    with n1+n<sup>2</sup> = n. By inductive hypothesis, after recursion, S<sup>1</sup>
+    and S<sup>2</sup> are sorted (each in nondecreasing order under ⪯754). Now the
+    merge step takes the smallest remaining head element among S<sup>1</sup> and S<sup>2</sup>
+    at each comparison. This is the standard merge correctness argument: at each step,
+    the algorithm places the correct next smallest element into the output. Therefore,
+    the merged output is globally sorted. The tiebreaking rule does not affect the
+    sorted property (since a tie means the two candidates are equal in value, either
+    order keeps sequence sorted) but it does affect stability. My tie-break ensures
+    that if an element x comes from S<sup>1</sup> and y from S<sup>2</sup> and x =
+    y, then x (which came from the left side, hence earlier in original) is output
+    before y. This preserves the input order for equal values across the split. By
+    induction, within S<sup>1</sup> and S<sup>2</sup> original order was preserved,
+    so overall original order among equals is preserved. Hence XiSort is stable. Stability
+    combined with sortedness implies idempotence: If you take an output of XiSort
+    and sort it again with XiSort, it will remain unchanged. This is because once
+    sorted (monotonic nondecreasing), D(S) = 0 and there are no inversions to fix;
+    XiSort will split and merge, but since the halves are already sorted and all comparisons
+    will find the left element ≤ right element at merge, the sequence will come out
+    identical. Moreover, stability ensures that even sequences that are already sorted
+    with duplicate values remain in the same order (this is a subtle point – an unstable
+    algorithm could potentially rearrange equal values even if the list was "sorted"
+    by value, thus violating idempotence. XiSort does not). Idempotence is a crucial
+    property for any sorting operator from an algebraic perspective: it means sort(sort(S))
+    = sort(S), which qualifies sorting as a projection or an idempotent transformation
+    on the space of sequences. I will leverage this in the symbolic discussion next.
+
+
+    ### 4 Symbolic Integration with Alpay Algebra
+
+
+    Alpay Algebra is a symbolic meta-framework designed to reason about recursive
+    processes and transformations in a principled way. It encodes systems in terms
+    of states and recursive operators that evolve those states, emphasizing properties
+    like self-reference, convergence, and closure. In this section, I cast the XiSort
+    algorithm into the language of Alpay Algebra and show how the framework helps
+    to formally verify the algorithm''s key properties: monotonicity of progress,
+    sorting identity (idempotence), and closure (the output is in the same space as
+    input, suitable for further processing).
+
+
+    ### 4.1 Alpay Algebra Basics
+
+
+    In Alpay Algebra, a system is described by a state space S and a set of symbolic
+    operators that act on states. Faruk Alpay defines several core symbols and axioms.
+    For my purposes, the relevant ones are:
+
+
+    - χ (chi): represents the state at a certain iteration or recursion level. I might
+    annotate it as χ<sup>λ</sup> to indicate the state at step λ. In sorting context,
+    χ could represent the sequence of data at a given stage of sorting.
+
+    - ∆ (delta): denotes a change or update applied to the state. In an iterative
+    algorithm, ∆<sup>λ</sup> would be the change applied at step λ to go from χ<sup>λ</sup>
+    to χλ+1. For sorting, ∆ could be a local operation like swapping two out-oforder
+    elements (in a bubble sort interpretation), or merging sorted sublists (in a merge
+    sort interpretation).
+
+    - λ (lambda): signifies the iteration index or recursion depth. It can index the
+    steps in an adaptation or sorting process.
+
+    - Ψ, ϕ, etc.: ϕ typically represents an evaluation or objective function mapping
+    states to real numbers (for example, a measure of sortedness), and Ψ might denote
+    an overall transformation or complex operator (like a composition of others).
+    In some Alpay Algebra contexts, Ψ could represent the recursive operator as a
+    whole.
+
+    - Ξ<sup>∞</sup> (Xi-infinity): this symbol, as introduced by Alpay, intuitively
+    captures the concept of applying an operation until convergence or to an infinite
+    depth. It embodies the idea of a fixed-point or limit of recursive self-application.
+    In the adaptive systems context, Ξ<sup>∞</sup> might mean an operation has been
+    applied recursively infinitely many times, resulting in an equilibrium or final
+    state.
+
+
+    The axioms of Alpay Algebra include Recursive Validity (applying a recursive operator
+    to a valid state yields a valid state), and the existence of a convergence measure
+    Φ : S → R that indicates progress. Let me interpret these for XiSort:
+
+
+    • State Space S: Here, S is the set of all finite sequences of floating-point
+    numbers (or more abstractly, a multiset or list of comparable items). A state
+    χ ∈ S is a specific sequence. Alpay Algebra''s closure axiom demands that if χ
+    is a valid state, then R(χ) is also a valid state, where R is my recursive sorting
+    operator. For XiSort, this is clear: taking a sequence of floats and sorting it
+    yields another sequence of floats (just permuted), which is still an element of
+    S. No new type of object is created; I don''t leave the state space. Thus XiSort
+    satisfies closure: R : S → S.
+
+
+    • Recursive Operator Structure: XiSort can be considered a recursive operator
+    R composed of simpler operations. I can symbolically write something akin to:
+
+
+    $$R(\chi) = \begin{cases} \chi, & |\chi| \le 1; \\ R(\chi\_{\text{left}}) |R(\chi\_{\text{right}})
+    \text{ merged}, & |\chi| > 1, \end{cases}$$
+
+
+    where ∥ denotes the merge operation merging two sorted sequences. In a more Alpay-algebraic
+    notation, one might express the merge as an operator µ and the splitting as, say,
+    σ. Then R = µ◦(R⊕R)◦σ, meaning: split the state (σ) into two, apply R recursively
+    to each part (R ⊕ R indicates two independent recursive applications), then merge
+    the results (µ). This recursive definition is well-founded (it terminates at length
+    1 sequences). I can attach the iteration symbol λ to track recursion depth: at
+    depth 0 I have the final sorted sequence χ0; at depth d I am merging sequences
+    of size about n/2 d . Alternatively, I can think iteratively: each merge pass
+    in an iterative mergesort is an iteration λ. Both views are valid; Alpay Algebra
+    tends to consider iterative refinement, so perhaps consider an iterative version
+    of mergesort: start with n singletons and iteratively merge adjacent sequences.
+    Then χ<sup>0</sup> would be the initial state (all elements unsorted), χ<sup>1</sup>
+    after merging every pair (sorted subsequences of length 2), etc., until χlog <sup>n</sup>
+    is fully sorted. In each step, χλ+1 = χ<sup>λ</sup> + ∆λ, where ∆<sup>λ</sup>
+    represents the collection of merge operations done in that iteration. This fits
+    the general schema χλ+1 = χ<sup>λ</sup> + ∆<sup>λ</sup> and encapsulates recursion
+    as iterative improvement.
+
+
+    • Convergence Measure Φ: I define a function Φ : S → R that measures sortedness
+    of a state. A natural choice is Φ(χ) = −D(χ) where D is the disorder metric (inversion
+    count). Or I could use a normalized measure like Φ(χ) = 1 − D(χ) Dmax so that
+    Φ(χ) = 1 for a sorted sequence and is less for unsorted sequences. For simplicity,
+    let''s take Φ(χ) = −D(χ), meaning Φ increases as the sequence gets more sorted
+    (fewer inversions). This Φ fulfills the requirements of Alpay''s Convergence Field
+    axiom: it maps states to real numbers that indicate progress. Sorted sequences
+    have the maximal Φ (in fact, −D = 0 is the max since D ≥ 0, I could also invert
+    it to make sorted = max positive number). During XiSort''s execution, Φ never
+    decreases. Each swap or merge operation that corrects an inversion will increase
+    Φ. In the merge sort algorithm, at the moment of final output, Φ has reached its
+    maximum. If one imagines an iterative algorithm like bubble sort, Φ would strictly
+    increase each time an out-of-order pair is swapped (assuming no equal elements
+    or treating equal as not needing swap). In merge sort, Φ jumps in larger increments
+    but still never goes down: splitting doesn''t change Φ, but each merge results
+    in a sorted larger segment, thus reducing inversions compared to leaving those
+    two segments separate unsorted relative to each other. I can formalize monotonicity
+    by induction on the merge tree or by iterative merging argument. Hence XiSort
+    exhibits monotonic convergence with respect to Φ: as recursion depth increases
+    (or iteration count increases), Φ(χλ) is non-decreasing, approaching its optimum
+    when sorting is complete. This satisfies the notion of an algorithm steadily progressing
+    toward a goal (sortedness) as encoded in the Alpay Algebra mindset.
+
+
+    - Sorting Identity (Idempotence): In Alpay Algebra terms, idempotence of sort
+    means R(R(χ)) = R(χ) for all χ ∈ S. This property can be viewed as a projection
+    (some algebras call an idempotent operator a projection onto the set of fixed
+    points). In the symbolic framework, once a state χ ∗ is a fixed point of R (meaning
+    R(χ ∗ ) = χ ∗ ), then applying R again does nothing. The Theorem of Idempotence\*
+    for sorting can be stated: If χ is sorted (i.e. χ = R(χ)), then R(χ) is a fixed
+    point and R(R(χ)) = χ. This is exactly the property I proved earlier for XiSort,
+    and it holds here as well. The Alpay Algebra encourages identifying such fixed
+    points because they often represent converged or optimal states. In my case, the
+    set of fixed points of R is the set of all sorted sequences (for which applying
+    sort again yields the same sequence). I can denote the sorting operator as R or
+    perhaps as Π (to suggest projection onto sorted order). Then the statement is
+    R<sup>2</sup> = R, indicating projection. Alpay Algebra''s recursive framework
+    handles this by noting that when the convergence measure Φ reaches its extremum,
+    further application of the operator yields no change in state or measure.
+
+    - Symbolic Closure: I already touched on closure (the state remains in S). Symbolic
+    closure might also refer to the closure of the algebra under composition of such
+    operators. XiSort (if I call it operator R) composed with itself is itself (due
+    to idempotence). Also, if I consider other operators on sequences (say filtering,
+    mapping, etc.), sorting interacts nicely in the algebra because it doesn''t produce
+    anything exotic, just permutes. One could formalize that the algebra of sequence
+    transformations is closed under sorting operation.
+
+
+    In Alpay Algebra notation, one might write something like: χsorted = Ξ∞(∆, χ0)
+    to denote "apply the ∆ operation iteratively until convergence to get the sorted
+    state." Here Ξ<sup>∞</sup> essentially means I iterate the recursive step to the
+    limit. ∆ in context of sorting could be thought of as a single comparison-and-swap
+    of an inversion (in bubble sort) or the merging of a small portion (in merge sort,
+    a ∆ could be merging a pair of elements or a pair of sublists). Then Ξ∞(∆, χ0)
+    signifies the result of applying all those small changes until no more changes
+    improve Φ. This results in χ<sup>∞</sup> which is sorted. In essence, Ξ<sup>∞</sup>
+    is the sorting operator itself, composed of infinitely many infinitesimal operations
+    (in a limit sense) or a finite recursion to completion. By expressing XiSort as
+    χ<sup>∞</sup> = R(χ0) and knowing R meets the conditions of recursion and convergence,
+    I align with Alpay''s view of recursive self-refinement toward optimality.
+
+
+    ### 4.2 Formal Correctness via Symbolic Recursion
+
+
+    Using the above formalism, one can outline a correctness proof within the algebra.
+    I want to show that for any initial state χinit ∈ S, the final state χfinal =
+    R(χinit) is sorted (monotonic nondecreasing) and is uniquely determined by χinit.
+    In the algebra, I might proceed by induction on the size of χ (a structural induction
+    reflecting the recursion of R):
+
+
+    - Base case: |χ| ≤ 1. Then R(χ) = χ. It is trivially sorted and unique.
+
+    - Inductive step: Assume for all sequences of length < n, R correctly sorts them
+    and yields a unique result. Take χ of length n. I split: χ <sup>σ</sup>−→ (χ 1
+    , χ<sup>2</sup> ) with |χ i | < n. By inductive hypothesis, R(χ 1 ) and R(χ 2
+    ) are sorted subsequences, and each is the unique sorted order of the respective
+    half. Now R(χ) performs µ(R(χ 1 ), R(χ 2 )), i.e., merges the two sorted halves.
+    The merge µ is an operator I can reason about: it takes two sorted lists and outputs
+    one sorted list, as proven in merge algorithm correctness. Within the algebra,
+    µ can be understood as a combination of simpler ∆ operations (each comparison+pick
+    could be a ∆). Because χ <sup>1</sup> and χ <sup>2</sup> are sorted and µ places
+    elements in nondecreasing order, the output is sorted. Uniqueness: any other sequence
+    χ ′ that is sorted and is a permutation of χ would have to have χ 1 ''s elements
+    and χ 2 ''s elements interleaved. The stable merging rule (tie-breaking) ensures
+    that µ chooses one particular interleaving (the one where relative order from
+    χ <sup>1</sup> and χ <sup>2</sup> are preserved). If some other algorithm produced
+    a different interleaving (like swapping two equal elements that originated one
+    in χ 1 , one in χ 2 ), that output would differ from ours but still be sorted.
+    However, my R specifically yields the one with χ 1 ''s relative order preserved
+    vs χ 2 ''s. Since R is a function (no randomness), it will always choose that.
+    So R(χ) is unique. This completes the inductive proof.
+
+
+    The algebraic structure helps to highlight the monotonicity: each ∆ (be it a swap
+    or a small merge) increases Φ. It also provides a language to talk about compositionality:
+    I can consider what happens if sorting is composed with other operations. For
+    example, sorting followed by another sorting (perhaps on a different key) is an
+    interesting composition that, if the second sort is stable, can achieve multi-key
+    sorts (like sorting by secondary key then primary key stably yields sort by primary,
+    tie by secondary). In algebra, one might express two sorts as Rkey2 ◦ Rkey1. If
+    Rkey1 is stable, this composition is equivalent to a lexicographic sort on (key1,
+    key2). XiSort''s determinism and stability mean it composes predictably with itself
+    or other similar operators. Symbolically, since R is idempotent and a projection
+    onto sorted sequences, if you apply any other operation Q and then resort, R ◦
+    Q ◦ R = R ◦ Q (because re-sorting an already sorted output of Q doesn''t change
+    it, unless Q disturbed the order). Such algebraic identities can be proven in
+    Alpay Algebra as well, using the idempotence and closure properties I established.
+
+
+    In summary, integrating XiSort into Alpay Algebra reinforces my understanding
+    that XiSort is a well-behaved recursive operator: it maps states to states (closure),
+    it converges according to a scalar potential Φ (monotonic improvement towards
+    sortedness), it has a clear fixed-point set (sorted sequences) and is idempotent
+    on that set, and it can be composed within larger symbolic expressions while preserving
+    its guarantees. The deterministic, symbolic nature of XiSort''s definition means
+    it is amenable to formal verification. One could, for instance, encode XiSort
+    in a proof assistant and verify that it satisfies the sorting specification –
+    the groundwork I have laid (with Φ as a variant function that always increases,
+    etc.) is exactly what such a proof needs to show termination and correctness.
+
+
+    ### 5 Experimental Evaluation
+
+
+    I implemented XiSort in C++ and Python to evaluate its performance and to validate
+    its deterministic behavior on real data. The test platform for the main results
+    is a 16-core Intel Xeon CPU @ 2.3 GHz with 128 GB RAM and a Samsung 970 EVO NVMe
+    SSD (for external sorting tests). Unless otherwise noted, IEEE-754 double precision
+    (binary64) is the data type sorted, and the comparator implements the total order
+    as described. I compare XiSort''s performance to standard library sorts and measure
+    reproducibility across runs and platforms.
+
+
+    ### 5.1 Performance on In-Memory Sorting
+
+
+    First, I assess XiSort on large in-memory arrays. Dataset 1: Gaussian random data.
+    I generated N = 10<sup>8</sup> (100 million) double-precision floats from a standard
+    normal distribution (using a fixed random seed for consistency across runs). This
+    dataset is representative of a case with no particular order and no duplicate
+    values (practically none, given continuous distribution). I sorted this dataset
+    with XiSort (single-threaded) and with C++''s std::sort (which is typically an
+    introspective sort, usually patterning after quicksort/heapsort, and is not stable).
+    XiSort took approximately 12.4 seconds user time to sort the 10<sup>8</sup> values,
+    whereas std::sort took 11.8 seconds. The times are quite close; XiSort''s slight
+    overhead can be attributed to its stable merging and perhaps less cachelocal partitioning
+    compared to quicksort. I also tried std::stable sort (which uses merge sort, very
+    similar to what XiSort does) – it ran in 12.6 seconds, essentially on par with
+    XiSort, as expected. These results show that XiSort''s determinism and IEEE-754
+    comparisons do not impose a heavy performance penalty. The throughput here is
+    roughly 6.4 million floats per second sorted per core. The algorithm exhibits
+    O(N log N) scaling: for N = 10<sup>7</sup> , XiSort took about 1.5 s, and for
+    N = 3 × 10<sup>8</sup> (300 million), it took about 40 s (all times using one
+    thread).
+
+
+    I also experimented with multi-threading for the in-memory sort. By parallelizing
+    the recursive sorts on 16 cores (each core sorting a portion and then merging),
+    I achieved almost linear speedup for large N. The 100 million Gaussian example
+    came down to about 0.9–1.0 seconds wall-clock time with 16 threads (utilizing
+    around 15–16 cores effectively). The parallel merge was done in two levels (each
+    core sorts 6.25 million elements, then I perform a tree of merges with 16→8→4→2→1
+    runs). The final merge of two runs of 50 million elements each was the longest
+    serial portion, taking 0.5 s. This parallel performance is competitive with highly
+    optimized parallel sort libraries. Crucially, the output of the parallel XiSort
+    was byte-for-byte identical to the single-threaded output. I verified this by
+    hashing the results and doing element-wise comparisons. This confirms that the
+    parallel execution did not introduce any nondeterminism – thanks to the fixed
+    merging scheme.
+
+
+    Next, Dataset 2: real-world data with duplicates. I took a dataset of 10 million
+    records representing stock trades, each with a timestamp and price. I extracted
+    the price field (a float) and sorted by price. This dataset has many duplicate
+    prices (since many trades occur at the same price). XiSort will thus exercise
+    its tie-breaking heavily. I compared to std::sort (which is not stable; in this
+    case I don''t actually care about stability since I only sort by one key, but
+    nondeterminism can creep in for equal keys depending on memory layout or thread
+    interleavings). Both algorithms sorted the data in about 1.2 seconds (since 10<sup>7</sup>
+    elements is not too large). I ran XiSort 10 times and std::sort 10 times, and
+    checked if the outputs differ run to run. XiSort''s outputs were all identical.
+    std::sort''s outputs were also identical in this single-thread scenario (which
+    is expected – even though it''s unstable, the particular pattern of duplicates
+    and QuickSort pivot choices was deterministic given the same input in one thread).
+    However, when I forced parallel sorting using OpenMP for std::sort (splitting
+    data manually and then merging unsafely) I observed different outputs if I didn''t
+    carefully preserve order of equal keys. This underscores that while typical usage
+    may not reveal nondeterminism, only a stable deterministic algorithm like XiSort
+    guarantees it in all conditions. I also injected a few NaN values and ±0 values
+    into the dataset to see how they are handled. XiSort correctly placed −0 before
+    +0, and all NaNs at the end. The NaNs in my test had differing payloads (I crafted
+    them to have payloads 0x01, 0x02, etc.). XiSort ordered them by those payload
+    values (which my comparator treated as part of the bit representation). This ordering
+    was consistent across runs and matched the expected total order. In contrast,
+    Python''s built-in sort (which uses TimSort and a simpler float comparison) left
+    NaNs in arbitrary positions (since in Python, float(''nan'') is not ordered, they
+    actually ended up at the end by implementation detail, but Python does not guarantee
+    order of NaNs).
+
+
+    ### 5.2 External Memory Sorting Tests
+
+
+    For very large data, I tested XiSort in an external memory mode. Dataset 3: 100GB
+    uniform random doubles. I created 100 GB of random double values (about 1.34 ×
+    10<sup>10</sup> numbers) and stored them on disk. XiSort was configured to use
+    at most 16 GB of RAM, forcing it to perform an external merge sort. It read chunks
+    of 16GB, sorted in memory, wrote out runs (there were 7 runs in this case, since
+    100/16 6.25, I made 7 runs of 14.3GB each for simplicity), then merged them in
+    a multi-way merge. The total time was 1020 seconds (17 minutes). The average I/O
+    throughput was about 95–100 MB/s as noted. The CPU was not the bottleneck (utilization
+    was low during I/O). This performance is consistent with disk limits and matches
+    what STXXL or GNU sort might achieve. I again verified determinism: I ran the
+    sort twice on the same data (clearing OS caches between runs to simulate independent
+    runs). The final outputs were identical. I then perturbed the data by shuffling
+    it and sorting again – naturally the output was the sorted version of the data,
+    identical to the previous outputs (since sorting a multiset yields a unique sorted
+    sequence regardless of input order). This is a sanity check, but it emphasizes
+    a point: if one had a nondeterministic method (say, multi-threaded quicksort on
+    each run without stable tie-break), sorting an already sorted file might produce
+    the same sorted file (since no differences), but sorting an already sorted file
+    with duplicates could scramble those duplicates. XiSort does not scramble anything
+    – running XiSort on an already sorted file simply sequentially reads it and writes
+    it out in the same order (the algorithm still goes through motions, but it will
+    never swap or reorder equal elements unnecessarily due to stability and because
+    it sees the data is in order).
+
+
+    Memory Overhead: I measured memory overhead during the external sort: XiSort used
+    about 8 bytes of overhead per element in the worst case (when performing merging
+    it allocates an output buffer equal to input size for each merge pass, typical
+    of merge sort). This is comparable to other stable sorts. For internal sort, memory
+    overhead was roughly n (for temporary arrays) plus negligible stack overhead for
+    recursion. For the 100GB test, I indeed needed 16GB memory for buffers as planned.
+    This was exactly within my set limit. No memory leaks or growth beyond expected
+    was observed.
+
+
+    ### 5.3 Reproducibility in Scientific and Financial Workflows
+
+
+    To simulate scenarios in scientific computing, I integrated XiSort into a fluid
+    dynamics simulation pipeline where at certain steps a large array of particle
+    data needs to be sorted (by cell ID or by spatial coordinate) for neighborhood
+    queries. In such simulations, if the sort order of particles with equal keys (say,
+    identical density or coordinate within machine epsilon) were to change from run
+    to run, the floating-point rounding in subsequent calculations could diverge.
+    Using XiSort, I ensured that the order of processing particles remained consistent
+    across runs. I found that two runs of the simulation (with identical initial conditions)
+    produced binary-identical outputs across all time steps when using XiSort in the
+    pipeline, whereas using an unstable sort for the same step led to slight discrepancies
+    that grew over time in the simulation (eventually leading to divergent states
+    after many time steps, due to chaotic nature of fluid simulations). This experiment
+    highlights that bitwise reproducibility is not only an aesthetic or debugging
+    convenience, but can be essential for correctness in long-running sensitive computations.
+    Prior work in HPC has noted that floating-point reductions and order of operations
+    can affect results; my observation here is analogous but for data ordering operations.
+
+
+    In high-frequency trading (HFT) and financial pipelines, deterministic behavior
+    is often required for auditability and fairness. I tested XiSort on a stream of
+    trade messages where each message has a timestamp. In real trading engines, if
+    two messages share the exact same timestamp, the engine must decide an execution
+    order (some systems use an ID or sequence number as a tiebreak). I simulated a
+    scenario with messages having identical timestamps and used XiSort to sort by
+    timestamp. XiSort''s stable nature preserved the input arrival order of those
+    ties (or any specified secondary key, if I augmented the key). This means the
+    processing order of equal-timestamp messages was well-defined and reproducible.
+    If a naive sort were used, it''s conceivable that on different runs (or different
+    hardware) the ordering might differ, which could lead to inconsistent outcomes
+    (e.g., which trade is matched first might affect pricing). By using XiSort or
+    the principles thereof, the pipeline gains a guarantee that the sorted list of
+    messages is always in the same order given identical inputs, fulfilling a requirement
+    for consistency in trading algorithms.
+
+
+    Finally, I ran a test on cross-platform reproducibility. I sorted a dataset on
+    an x86 64 Linux machine and on an ARM-based machine (Graviton processor). Both
+    adhered to IEEE-754 and my code produced the same total order. The outputs (after
+    transferring one output file to the other machine) were identical. This indicates
+    that XiSort''s determinism extends to heterogeneous systems as long as they implement
+    the comparison logic the same way. I did ensure that endianness does not affect
+    the sorting order (since my comparator isn''t simply using in-memory bitwise comparison,
+    but rather extracting sign/exponent/mantissa in a consistent way). This is important
+    if, say, data were to be sorted on one architecture and checked on another.
+
+
+    A summary of key results is given in the table below:
+
+
+    The results demonstrate that XiSort achieves performance on par with industrystandard
+    algorithms, while providing strong determinism guarantees. For external sorting,
+    the slight overhead in my implementation (1020 vs 1000 seconds estimated for an
+    ideal case) comes from additional safety checks and perhaps less optimized I/O
+    scheduling; however, the determinism is achieved with no algorithmic cost. In
+    memory, the overhead of stability and tie-breaking is minimal, especially when
+    considering the benefits.
+
+
+    It''s worth noting that in many cases, using a stable sort or adding a secondary
+    key could also yield determinism; XiSort essentially automates this process and
+    formalizes it. The advantage of XiSort is not magical performance, but rather
+    the peace of mind that comes from its rigorous definition: no matter the data
+    or environment, XiSort will produce a single well-defined outcome.
+
+
+    | Experiment                     | Dataset                         | Size                  |
+    XiSort Time<br>(s) | Standard Sort<br>Time (s)  |
+
+    |--------------------------------|---------------------------------|-----------------------|--------------------|----------------------------|
+
+    | In-memory sort<br>(1 thread)   | Gaussian random,<br>100M        | 800 MB                |
+    12.4               | 11.8<br>(std::sort)        |
+
+    | In-memory sort<br>(16 threads) | Gaussian random,<br>100M        | 800 MB                |
+    1.0<br>(wallclock) | 0.9<br>(TBB parallel sort) |
+
+    | In-memory sort<br>(1 thread)   | Stock prices<br>(duplicates)    | 80 MB<br>(10M
+    floats) | 1.2                | 1.2<br>(std::sort)         |
+
+    | External sort<br>(SSD)         | Uniform random,<br>1e10 (100GB) | 100 GB                |
+    1020               | 1000<br>(est. other sort)  |
+
+    | Simulation<br>parti<br>cle     | 1M particles ×                  | 8 MB                  |
+    0.05               | 0.05                       |
+
+    | sort (multi-step)              | 1000 steps                      | per step              |
+    per step           | (same complexity)          |
+
+    | HFT<br>messages<br>sort        | 1M messages                     | ˜64 MB                |
+    0.15               | 0.15                       |
+
+    | (tie timestamps)               | (10% ties)                      |                       |                    |                            |
+
+
+    Table 1: Performance comparison of XiSort with standard sorting algorithms across
+    different scenarios. Lower values indicate faster performance. Times measured
+    in seconds.
+
+
+    ### 6 Conclusions
+
+
+    I presented XiSort, an algorithm that marries the practical requirements of sorting
+    with theoretical rigor to ensure deterministic, reproducible behavior. By leveraging
+    the IEEE-754 total ordering for floating-point values, XiSort extends the definition
+    of sorting to all bit patterns, resolving ambiguities with zeros and NaNs in a
+    standards-compliant way. I showed that sorting can be viewed through an information-theoretic
+    lens: XiSort systematically removes entropy from the sequence arrangement, down
+    to zero uncertainty in the output for a given input. The introduction of a rigorous
+    sorting metric (and its curved variants) provides a quantitative measure of disorder
+    that XiSort minimizes. This perspective not only aids in understanding the algorithm''s
+    behavior but also ties into how sorting can act as a preprocessing step that simplifies
+    (compresses) data.
+
+
+    Integrating XiSort into the Alpay Algebra framework allowed me to reason about
+    its properties in a high-level, symbolic manner. Within this framework, XiSort
+    emerges as a prime example of a recursive operator that is convergent (with a
+    monotonic improvement function Φ), deterministic, and idempotent. These properties
+    are exactly those desired in any well-behaved transformation in a computational
+    pipeline: closure (sorted output remains a sequence of the same form) means the
+    operation can be composed arbitrarily; deterministic idempotence (sorting an already
+    sorted sequence does nothing) means no unintended side-effects or oscillations
+    occur if the operation is repeated. Alpay Algebra''s emphasis on recursion and
+    fixed points resonates with XiSort''s design, the sorted state is a fixed point
+    that the recursive process aims to reach, and I proved that once reached, further
+    applications of the sort operator have no effect, as expected. This kind of formal
+    reassurance is valuable in critical systems.
+
+
+    From a performance standpoint, XiSort proves that I do not have to trade speed
+    for reproducibility. It achieves competitive speeds in memory, and efficient utilization
+    of I/O bandwidth externally. The determinism of XiSort makes it particularly suitable
+    for reproducible scientific computing: experiments and simulations can rely on
+    it to produce consistent ordering, eliminating one source of run-to-run variability.
+    In high-frequency finance and other real-time systems, XiSort''s stable sorting
+    ensures that tie situations are handled in a predictable, auditable manner. As
+    data workflows increasingly emphasize reproducibility (e.g., for regulatory compliance
+    or scientific transparency), algorithms like XiSort become essential tools.
+
+
+    In future work, I plan to explore extending XiSort''s principles to parallel and
+    distributed sorting in even larger scales, such as MPI-based sorting of terabyte
+    datasets on clusters. The main challenge there is ensuring that the distributed
+    merge respects a global deterministic order – something my approach is naturally
+    suited for, since I can define an unambiguous global ordering of all elements
+    (using global indices or a hierarchical tie-break). Preliminary ideas involve
+    using deterministic sample sort (where sampling and partitioning decisions are
+    fixed given the data) combined with XiSort locally. Another avenue is to integrate
+    XiSort as a building block in database systems (for ORDER BY operations) to guarantee
+    that query results are not just sorted but also deterministic in the presence
+    of ties, which can be important for caching and incremental view maintenance.
+
+
+    To conclude, XiSort demonstrates that by carefully combining classical algorithm
+    design with modern insights from information theory and algebraic frameworks,
+    I can achieve robust algorithms that fulfill both performance and reproducibility
+    demands. I encourage adoption of deterministic sorting in any context where reproducibility
+    matters, and hope that the formal treatment provided here serves as a template
+    for analyzing and designing other deterministic algorithms in the future.
+
+
+    ### References
+
+
+    - [1] Impacts of floating-point non-associativity on reproducibility for HPC and
+    deep learning applications. UT-Battelle, LLC under Contract No. DE-AC05- 00OR22725
+    with the U.S. Department of Energy.
+
+    - [2] IEEE 754 Wikipedia. https://en.wikipedia.org/wiki/IEEE 754
+
+    - [3] Sorting algorithm Wikipedia. https://en.wikipedia.org/wiki/Sorting algorithm
+
+    - [4] PivotCompress: Compression by Sorting. https://arxiv.org/abs/1411.5127
+
+    - [5] TOTALORDER. https://www.ibm.com/docs/en/i/7.3?topic=functionstotalorder
+
+    - [6] STXXL sorting of very large file (ubuntu) Stack Overflow. https://stackoverflow.com/questions/27935683/stxxl-sorting-of-very-largefile-ubuntu
+
+    - [7] Python Is pandas sort values() deterministic in case of ties? Stack Overflow.
+    https://stackoverflow.com/questions/70188386/is-pandas-sort-valuesdeterministic-in-case-of-ties
+
+    - [8] Wells, D. (1999). Discrete Mathematics.
+
+    - [9] Alpay, F. (2025). Alpay Algebra: Simplifying Adaptive and Explainable AI.
+    Medium. https://medium.com/@lightcapai/alpay-algebra-simplifyingadaptive-and-explainable-ai-c989659d185e
+
+    - [10] Alpay, F. (2025). Alpay Algebra: Foundations for Recursive Compression
+    and Intelligent Evolution. ResearchGate.'
+  decisions:
+    evaluation_prompt: 'Qualified. Reason: The paper contains a dedicated section
+      titled "Experimental Evaluation" that reports empirical results, including performance
+      measurements and comparisons with standard sorting algorithms. It provides concrete
+      use of datasets and metrics, and includes tables presenting quantifiable outcomes,
+      fulfilling the criteria for structured evaluation.'
+    related_work_prompt: '- Disqualified: no related work. Reason: The paper does
+      not meaningfully engage with prior research. It contains few academic citations,
+      and the references included are either general resources (e.g., Wikipedia) or
+      do not provide context or discussion of related work. There is no explanation
+      or comparison of the method to previous work, and the paper lacks a discussion
+      of prior research, even outside a "Related Work" section.'
+    novelty_prompt: '- Qualified. Reason: The paper proposes a new deterministic sorting
+      algorithm, XiSort, which leverages IEEE-754 total ordering and entropy minimization
+      principles. It introduces novel concepts such as treating sorting as an entropy-minimization
+      process and integrates the algorithm into the Alpay Algebra framework. The paper
+      also claims novelty in its deterministic tie-breaking mechanism and its application
+      to reproducible scientific computing and high-frequency finance, making clear
+      contributions to the field.'
+    review_only_prompt: 'Qualified. Reason: The paper introduces XiSort, a novel deterministic
+      sorting algorithm with unique contributions such as leveraging IEEE-754 total
+      ordering and entropy minimization. It provides new methods, detailed algorithmic
+      design, empirical results, and integration with Alpay Algebra, demonstrating
+      originality and practical applications.'
+  token_usage: 57465
+  time_usage: 9.416693210601807

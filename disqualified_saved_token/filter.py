@@ -3,6 +3,7 @@ import litellm
 import os
 import re
 import argparse
+import time
 
 # === Load disqualification prompts from YAML ===
 with open("prompt.yaml", "r", encoding="utf-8") as f:
@@ -17,12 +18,13 @@ PROMPT_ORDER = [
     ("review_only_prompt", "disqualify_result_review.yaml"),
 ]
 
-def extract_introduction(document_text):
+def extract_introduction(document_text, abstract_text=""):
+    # Step 1: Try to find an explicit "INTRODUCTION" section
     intro_match = re.search(
         r"""
         ^\s*                                              # Optional leading whitespace
         (?:<[^>]+>\s*)*                                   # Optional inline HTML like <span>
-        [#]+\s*                                           # Markdown heading ##, ### etc.
+        [#]+\s*                                           # Markdown header ##, ### etc.
         (?:<[^>]+>\s*)*                                   # More inline HTML if needed
         (?:[\*\_]*\s*)*                                   # Optional markdown styling
         (?:[IVXLCDM0-9]+[\.\-\)]?\s+)?                    # Optional section number (1, I., etc.)
@@ -33,17 +35,40 @@ def extract_introduction(document_text):
         (?=                                               
             ^\s*                                          # Start of line
             (?:<[^>]+>\s*)*                               # Optional HTML span
-            [#]+                                          # Next heading
+            [#]+                                          # Next markdown header
             |
             ^\s*\*\*?[A-Z]                                # Or something like "**A"
             |
-            \Z                                            # Or end of file
+            \Z                                            # Or end of document
         )
         """,
         document_text,
         flags=re.IGNORECASE | re.MULTILINE | re.DOTALL | re.VERBOSE
     )
-    return intro_match.group(1).strip() if intro_match else ""
+
+    if intro_match:
+        return intro_match.group(1).strip()
+
+    abstract_text = abstract_text.strip()
+    if abstract_text:
+        norm_doc = re.sub(r'\s+', ' ', document_text)
+        norm_abstract = re.sub(r'\s+', ' ', abstract_text)
+
+        abstract_pos = norm_doc.find(norm_abstract)
+        if abstract_pos != -1:
+
+            raw_pos = document_text.lower().find(abstract_text[:30].lower())
+            content_after = document_text[raw_pos + len(abstract_text):]
+
+            section_match = re.search(
+                r"^#{1,6}.*?\n+(.*?)(?=^#{1,6}|\Z)", 
+                content_after,
+                flags=re.DOTALL | re.MULTILINE
+            )
+            if section_match:
+                return section_match.group(1).strip()
+
+    return ""
 
 def is_disqualified(paper, prompt_text, prompt_key=None):
     abstract_text = paper.get("abstract", "").strip()
@@ -66,7 +91,7 @@ def is_disqualified(paper, prompt_text, prompt_key=None):
             if fallback_match:
                 abstract_text = fallback_match.group(1).strip()
                 
-    intro_text = extract_introduction(paper.get("document", ""))
+    intro_text = extract_introduction(paper.get("document", ""), paper.get("abstract", ""))
 
     markdown_text = ""
     if abstract_text:
@@ -89,12 +114,23 @@ Answer using one of:
 - Qualified. Reason: <brief explanation>
 - Disqualified: <reason>. Reason: <brief explanation>
 """
+    start_time = time.time()
     response = litellm.completion(
         model="gpt-4o",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.2,
         max_tokens=200
     )
+    elapsed = time.time() - start_time
+    tokens_used = response.get("usage", {}).get("total_tokens", 0)
+
+    paper.setdefault("token_usage", 0)
+    paper["token_usage"] += tokens_used if isinstance(tokens_used, int) else 0
+
+    paper.setdefault("time_usage", 0.0)
+    paper["time_usage"] += elapsed
+
+    print(f"[DEBUG] {paper['title']} → {prompt_key}: {tokens_used} tokens, {elapsed:.2f}s")
     return response["choices"][0]["message"]["content"].strip().strip('"').strip("'")
 
 def run_all_checks(papers):
@@ -126,7 +162,6 @@ def is_fully_qualified(paper):
 def main(input_yaml):
     qualified_output_yaml = "qualified_papers.yaml"
     disqualified_output_yaml = "disqualified_papers.yaml"
-    full_log_yaml = "all_papers_with_reasons.yaml"
 
     with open(input_yaml, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
@@ -143,12 +178,16 @@ def main(input_yaml):
     with open(disqualified_output_yaml, "w", encoding="utf-8") as f:
         yaml.dump({"papers": disqualified}, f, allow_unicode=True, sort_keys=False)
 
-    with open(full_log_yaml, "w", encoding="utf-8") as f:
-        yaml.dump({"papers": papers}, f, allow_unicode=True, sort_keys=False)
-
     print(f"\n🎉 Qualified papers saved to {qualified_output_yaml}")
     print(f"❌ Disqualified papers (with reasons) saved to {disqualified_output_yaml}")
-    print(f"📋 All decision logs saved to {full_log_yaml}")
+
+    token_vals = [p.get("token_usage", 0) for p in papers]
+    time_vals = [p.get("time_usage", 0.0) for p in papers]
+
+    if token_vals:
+        print(f"\n📊 Avg Total Tokens per Paper: {sum(token_vals) / len(token_vals):.1f}")
+    if time_vals:
+        print(f"⏱  Avg Total Time per Paper: {sum(time_vals) / len(time_vals):.2f}s")
 
     for _, filename in PROMPT_ORDER:
         if os.path.exists(filename):

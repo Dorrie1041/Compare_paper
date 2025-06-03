@@ -1,0 +1,705 @@
+papers:
+- title: "Trust, But Verify: A Self-Verification Approach to Reinforcement\n  Learning\
+    \ with Verifiable Rewards"
+  id: trust_but_verify_a_self_verification_approach_to_reinforcement_learning_with_verifiable_rewards_trust_but_verify_a_self_verification_approach_to_reinforcement_learning_with_verifiable_rewards
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract and introduction clearly mention
+      extensive experiments on diverse mathematical reasoning benchmarks, comparisons
+      with a Zero-RL baseline, and improvements in reasoning and verification accuracy.
+      These indicate structured evaluation through empirical and quantitative methods.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction of the
+      paper engage with prior research by citing several previous works, such as those
+      by Gao et al., DeepSeek-AI et al., Lambert et al., Yue et al., Liu et al., Xi
+      et al., and Xie et al. These citations indicate that the paper builds upon existing
+      methods and findings in the field of reinforcement learning with verifiable
+      rewards and self-verification in large language models. Additionally, the introduction
+      discusses the limitations of current approaches and how the proposed RISE framework
+      addresses these issues, demonstrating engagement with prior research.'
+    novelty_prompt: 'Qualified. Reason: The paper introduces RISE, a novel online
+      reinforcement learning framework designed to improve both problem-solving and
+      self-verification abilities of large language models. The abstract and introduction
+      clearly state the novelty of the approach, emphasizing the integration of problem-solving
+      and self-verification within a single RL process, which is a new contribution
+      to the field.'
+    review_only_prompt: '- Qualified. Reason: The paper introduces RISE, a novel online
+      reinforcement learning framework, and presents new methods, experiments, and
+      contributions, including improvements in problem-solving and self-verification
+      capabilities of LLMs.'
+  token_usage: 6515
+  time_usage: 8.6
+- title: "LRSCwait: Enabling Scalable and Efficient Synchronization in Manycore\n\
+    \  Systems through Polling-Free and Retry-Free Operation"
+  id: lrscwait_enabling_scalable_and_efficient_synchronization_in_manycore_systems_through_polling_free_and_retry_free_operation_lrscwait_enabling_scalable_and_efficient_synchronization_in_manycore_systems_through_polling_free_and_retry_free_operation
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: '- Qualified. Reason: The abstract and introduction provide
+      evidence of structured evaluation, mentioning "extensive benchmarking on an
+      open-source RISC-V platform with 256 cores," and stating that "Colibri outperforms
+      current synchronization approaches" in terms of "throughput, fairness, and energy
+      efficiency." Additionally, the introduction notes that "we evaluate the performance
+      of Colibri against various hardware and software approaches," indicating empirical
+      validation.'
+    related_work_prompt: '- Qualified. Reason: The introduction references prior work
+      and existing systems, such as RISC-V''s load-reserved/store-conditional (LRSC)
+      operations and commercial chips like GAP9 and RC64. It also discusses the challenges
+      with current approaches and compares the proposed solution, Colibri, to existing
+      methods, indicating engagement with prior research.'
+    novelty_prompt: 'Qualified. Reason: The abstract and introduction clearly claim
+      novelty by proposing a new synchronization pair (LRwait and SCwait) and a scalable
+      implementation called Colibri. The paper explicitly states contributions such
+      as eliminating polling in shared-memory manycore systems and providing a scalable
+      solution that outperforms existing approaches.'
+    review_only_prompt: 'Qualified. Reason: The paper proposes new methods (LRwait
+      and SCwait instructions), presents a scalable implementation (Colibri), and
+      includes experimental results demonstrating the performance improvements of
+      these contributions.'
+  token_usage: 7259
+  time_usage: 7.79
+- title: Analyzing and Improving Hardware Modeling of Accel-Sim
+  id: analyzing_and_improving_hardware_modeling_of_accel_sim_rodrigo_huerta_https_orcid_org_0000_0003_0052_7710_rodrigo_huerta_ganan_upc_edu_universitat_politècnica_de_catalunya_barcelona_spain
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: '- Qualified. Reason: The introduction mentions an evaluation
+      methodology in section 3, which is later used in section 4 to analyze the effects
+      of the proposed modifications, indicating structured evaluation.'
+    related_work_prompt: '- Qualified. Reason: The abstract and introduction contain
+      multiple references to prior work, including citations [\[4\]], [\[13\]], [\[14\]],
+      [\[15\]], [\[16\]], [\[17\]], [\[18\]], [\[21\]], [\[20\]], and [\[9\]]. The
+      introduction discusses existing GPU architectures and simulators, such as NVIDIA
+      Architectural Simulator (NVArchSim) and MGPUSim, and compares them to the Accel-Sim
+      framework, indicating engagement with prior research.'
+    novelty_prompt: 'Qualified. Reason: The paper claims novelty by presenting improvements
+      to the Accel-sim simulator model, specifically in the front-end, result bus,
+      and memory pipeline. It explicitly states the development of a more realistic
+      model and proposes a cost-effective design for the memory pipeline, indicating
+      new contributions to the field.'
+    review_only_prompt: 'Qualified. Reason: The abstract and introduction describe
+      improvements to the Accel-sim simulator, including developing more realistic
+      models for various components. The paper proposes new methods and enhancements,
+      indicating contributions beyond merely summarizing existing work.'
+  token_usage: 6985
+  time_usage: 7.57
+- title: "Study on the Particle Sorting Performance for Reactor Monte Carlo\n  Neutron\
+    \ Transport on Apple Unified Memory GPUs"
+  id: study_on_the_particle_sorting_performance_for_reactor_monte_carlo_neutron_transport_on_apple_unified_memory_gpus_study_on_the_particle_sorting_performance_for_reactor_monte_carlo_neutron_transport_on_apple_unified_memory_gpus
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: '- Qualified. Reason: The abstract mentions performance evaluation
+      using the ExaSMR whole core benchmark problems and the HTR-10 high temperature
+      gas reactor fuel pebble problem. It also discusses achieving power efficiency
+      compared to OpenMC, indicating structured evaluation through benchmarks and
+      comparisons.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction of the
+      paper engage with prior research by mentioning recent studies on performance
+      improvements of the Monte Carlo method on GPUs, referencing specific works by
+      Hamilton, Joo, and others. It also compares its approach with existing methods
+      and codes such as Pragma, Shift, MagiC, OpenMC, and Warp, indicating a clear
+      engagement with prior work.'
+    novelty_prompt: 'Qualified. Reason: The paper claims novelty by proposing the
+      use of Apple unified memory computing devices to study the collaboration between
+      CPUs and GPUs in Monte Carlo neutron transport methods. It also explicitly states
+      contributions such as discussing programming for the Apple M2 Max chip, studying
+      sorting performance on CPU-GPU for partially sorted data, and verifying in-house
+      merged CPU-GPU code, which indicates new contributions in this domain.'
+    review_only_prompt: '- Qualified. Reason: The abstract and introduction describe
+      new contributions, including the proposal of using Apple unified memory computing
+      devices for Monte Carlo neutron transport methods, a study of sorting performance
+      on CPU-GPU for partially sorted data, and verification of in-house merged CPU-GPU
+      code. These elements indicate that the paper is not solely a survey or review
+      but includes new methods and results.'
+  token_usage: 5413
+  time_usage: 6.74
+- title: "An Irredundant and Compressed Data Layout to Optimize Bandwidth\n  Utilization\
+    \ of FPGA Accelerators"
+  id: an_irredundant_and_compressed_data_layout_to_optimize_bandwidth_utilization_of_fpga_accelerators_corentin_ferry_univ_rennes_cnrs_inria_irisa_rennes_france_cferry_mail_colostate_edu
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract mentions that the approach
+      can decrease I/O cycles up to 7× compared to un-optimized memory accesses, and
+      the introduction states that there is an evaluation of the approach on FPGA
+      accelerators, indicating empirical validation through benchmarks.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction reference
+      prior work by mentioning that a large body of work focuses on reducing off-chip
+      transfers and that few authors try to improve the efficiency of transfers. Additionally,
+      the introduction includes citations [16] and [17], indicating engagement with
+      existing research on memory bandwidth issues and FPGA-specific constraints.'
+    novelty_prompt: 'Qualified. Reason: The paper claims novelty by proposing a compiler-based
+      approach to optimize data layout for FPGA accelerators, introducing data packing
+      and runtime compression techniques, and presenting an automatic HLS optimization
+      flow. These contributions are explicitly stated in both the abstract and introduction.'
+    review_only_prompt: 'Qualified. Reason: The paper proposes new methods, including
+      a compiler-based approach to data layout, data packing, and runtime compression
+      techniques. It also introduces an automated code generation framework and evaluates
+      the approach on FPGA accelerators, indicating new contributions and experiments.'
+  token_usage: 4328
+  time_usage: 9.1
+- title: Efficient yet Accurate End-to-End SC Accelerator Design
+  id: efficient_yet_accurate_end_to_end_sc_accelerator_design_meng_li213_yixuan_hu1_tengyu_zhang1_renjie_wei1_yawen_zhang4_ru_huang134_and_runsheng_wang134
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The paper contains sections titled "Experimental
+      Results" and provides tables, figures, and quantitative comparisons of the proposed
+      methods against state-of-the-art designs, demonstrating structured evaluation.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction contain
+      multiple references to prior work, including citations [1]–[9]. The paper discusses
+      existing SC-based accelerators and their limitations, indicating engagement
+      with previous research in the field.'
+    novelty_prompt: 'Qualified. Reason: The paper claims novelty by introducing an
+      accurate end-to-end SC accelerator based on a deterministic coding and sorting
+      network, proposing an SC-friendly model, and introducing approximate computing
+      techniques to optimize SC nonlinear adders. These contributions are explicitly
+      stated in the abstract, indicating new methods and designs in the field of SC
+      neural network acceleration.'
+    review_only_prompt: '- Qualified. Reason: The abstract and introduction describe
+      new contributions, including an accurate end-to-end SC accelerator, an SC-friendly
+      model, and new SC designs for arithmetic operations. The paper proposes methods
+      and improvements, indicating it is not solely a survey or review.'
+  token_usage: 12011
+  time_usage: 9.41
+- title: 'TOP: Towards Open & Predictable Heterogeneous SoCs'
+  id: top_towards_open_predictable_heterogeneous_socs_luca_valente_francesco_restuccia_davide_rossi_member_ieee_ryan_kastner_fellow_ieee_luca_benini_fellow_ieee
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract mentions that the methodology
+      is validated on a sample heterogeneous low-power RISC-V architecture through
+      RTL simulation and FPGA implementation, which indicates empirical evaluation.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction contain
+      multiple references to prior work, including citations of previous studies and
+      comparisons with existing methodologies. The paper discusses the limitations
+      of previous research efforts and positions its contributions in relation to
+      these works, demonstrating engagement with prior research.'
+    novelty_prompt: 'Qualified. Reason: The abstract explicitly states that the study
+      introduces an "innovative methodology for modeling and analyzing State-of-the-Art
+      (SoA) open-source SoCs for low-power cyber-physical systems," indicating a clear
+      claim of novelty.'
+    review_only_prompt: 'Qualified. Reason: The abstract and introduction describe
+      an innovative methodology for modeling and analyzing open-source SoCs, including
+      validation through RTL simulation and FPGA implementation. This indicates the
+      paper proposes new methods and results, rather than solely summarizing existing
+      work.'
+  token_usage: 6092
+  time_usage: 6.02
+- title: 'STAR: An Efficient Softmax Engine for Attention Model with RRAM Crossbar'
+  id: star_an_efficient_softmax_engine_for_attention_model_with_rram_crossbar_yifeng_zhai1_bing_li1_bonan_yan2_jing_wang3
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: '- Qualified. Reason: The abstract mentions "experimental results
+      evaluated on several datasets" and provides specific improvements in computing
+      efficiency, indicating structured evaluation.'
+    related_work_prompt: '- Qualified. Reason: The abstract and introduction mention
+      prior RRAM-based accelerators and compare the proposed STAR system''s efficiency
+      against them. The introduction also references specific prior works ([1]–[3])
+      and discusses the limitations of existing approaches, indicating engagement
+      with prior research.'
+    novelty_prompt: 'Qualified. Reason: The paper clearly claims novelty by proposing
+      STAR, a new RRAM-based softmax engine and a fine-grained global pipeline specifically
+      designed to improve computing efficiency for attention models. The introduction
+      explicitly states the novelty of tailoring an efficient softmax engine in RRAM-based
+      accelerators, which addresses a specific efficiency bottleneck in existing systems.'
+    review_only_prompt: '- Qualified. Reason: The abstract and introduction describe
+      the proposal of a new method, STAR, which includes an RRAM-based softmax engine
+      and a fine-grained global pipeline. The paper also mentions experimental results
+      and improvements over existing methods, indicating new contributions.'
+  token_usage: 2991
+  time_usage: 6.75
+- title: "AssertLLM: Generating and Evaluating Hardware Verification Assertions\n\
+    \  from Design Specifications via Multi-LLMs"
+  id: assertllm_generating_and_evaluating_hardware_verification_assertions_from_design_specifications_via_multi_llms_assertllm_generating_and_evaluating_hardware_verification_assertions_from_design_specifications_via_multi_llms
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract and introduction mention that
+      the evaluation of AssertLLM was conducted on a full design, with specific metrics
+      such as the accuracy of generated assertions being both syntactically and functionally
+      correct. Additionally, the paper provides an open-source benchmark for assertion
+      generation and evaluation, indicating a structured evaluation approach.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction of the
+      paper engage extensively with prior research. The introduction references multiple
+      existing methods for generating assertions, including dynamic and static approaches,
+      and discusses their limitations. It cites numerous prior works ([1]–[17]) and
+      compares the proposed AssertLLM framework with these existing methods, highlighting
+      its novel contributions and improvements over previous approaches.'
+    novelty_prompt: 'Qualified. Reason: The paper clearly claims novelty by proposing
+      AssertLLM, a new automatic assertion generation framework that processes complete
+      specification files using customized Large Language Models (LLMs). The paper
+      explicitly states its contributions, such as being the first method to handle
+      full-size specification files and providing the first open-source benchmark
+      for assertion generation and evaluation.'
+    review_only_prompt: '- Qualified. Reason: The paper introduces AssertLLM, a novel
+      framework for automatic assertion generation, which is a new contribution. It
+      describes the development of a method incorporating customized LLMs and provides
+      an open-source benchmark, indicating new contributions beyond a survey or review.'
+  token_usage: 9305
+  time_usage: 7.66
+- title: 'Bullying the Machine: How Personas Increase LLM Vulnerability'
+  id: bullying_the_machine_how_personas_increase_llm_vulnerability_ziwei_xu_udit_sanghi_mohan_kankanhalli_school_of_computing_national_university_of_singapore_ziwei_xu_udit_sanghi_u_nus_edu_mohan_comp_nus_edu_sg
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract and introduction mention experiments
+      using multiple open-source LLMs, a simulation framework, and the evaluation
+      of persona configurations and bullying tactics, indicating structured evaluation.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction of the
+      paper engage with prior research by referencing several studies that have examined
+      the psychological dimensions of LLM behavior, including works that have shown
+      LLMs'' conditioning towards personas and their varying safety profiles. The
+      introduction also cites specific studies that have explored stress effects on
+      LLM performance and adversarial prompts bypassing model guardrails. These references
+      indicate meaningful engagement with existing literature.'
+    novelty_prompt: 'Qualified. Reason: The paper introduces a new class of psychologically
+      grounded safety risks in LLMs, specifically focusing on their vulnerability
+      to bullying tactics. It proposes a simulation framework to study these interactions
+      and identifies novel implications for the safety and alignment of LLMs, clearly
+      claiming novelty in its contributions.'
+    review_only_prompt: '- Qualified. Reason: The paper introduces a new simulation
+      framework, proposes new bullying tactics, and identifies a novel class of safety
+      risks in LLMs, indicating new contributions beyond summarizing existing work.'
+  token_usage: 4148
+  time_usage: 7.25
+- title: "Optimization of a Line Detection Algorithm for Autonomous Vehicles on a\n\
+    \  RISC-V with Accelerator"
+  id: optimization_of_a_line_detection_algorithm_for_autonomous_vehicles_on_a_risc_v_with_accelerator_optimization_of_a_line_detection_algorithm_for_autonomous_vehicles_on_a_risc_v_with_accelerator
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract and introduction mention an
+      experimental evaluation, specifically noting that the code is executed on a
+      hardware platform to verify performance requirements, and reports a 3.7x speedup
+      with the use of an accelerator. This indicates a structured evaluation involving
+      empirical validation.'
+    related_work_prompt: '- Qualified. Reason: The abstract and introduction of the
+      paper contain multiple references to prior work, including citations [1], [2],
+      [3], [4], [5], and [6]. The paper discusses existing algorithms and technologies
+      used in autonomous vehicles, such as the Canny algorithm and Hough transform,
+      and compares its approach to these existing methods. Additionally, it references
+      the RISC-V architecture and the Gemmini accelerator, indicating engagement with
+      prior research and technologies.'
+    novelty_prompt: 'Qualified. Reason: The paper claims novelty by proposing the
+      acceleration of a line detection application in autonomous vehicles using a
+      heterogeneous system composed of a general-purpose RISC-V core and a domain-specific
+      accelerator. The introduction explicitly states, "In this paper we propose to
+      accelerate a line detection application employed in autonomous cars by using
+      different heterogeneous systems," indicating a new approach or method in this
+      domain.'
+    review_only_prompt: '- Qualified. Reason: The paper proposes a method for accelerating
+      a line detection application in autonomous vehicles using a heterogeneous system.
+      It describes the analysis and adaptation of the application for efficient processing
+      and reports experimental results, indicating new contributions beyond a mere
+      survey of existing work.'
+  token_usage: 5305
+  time_usage: 7.88
+- title: 'Reuse Detector: Improving the Management of STT-RAM SLLCs'
+  id: reuse_detector_improving_the_management_of_stt_ram_sllcs_1_artecs_group_facultad_de_informatica_university_complutense_of_madrid_2_computer_architecture_group_university_of_zaragoza_3_computer_architecture_department_technical_university_of_catalonia_email_rrodriguezr_ucm_es_jdmaag_unizar_es_fcastror_ucm_es_imarin_unizar_es_dani02_ucm_es_victor_unizar_es_jcsaezal_ucm_es_mpmatias_ucm_es_lpinuel_ucm_es_teresa_ac_upc_edu_llaberia_ac_upc_edu
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract and introduction clearly mention
+      empirical evaluation, including specific metrics and comparisons. The abstract
+      states that the evaluation reveals energy reductions and performance improvements,
+      and it compares the proposed method to a baseline and a state-of-the-art approach
+      (DASCA). Additionally, the introduction mentions experimental results from evaluations
+      on quad, eight, and 16-core systems.'
+    related_work_prompt: '- Qualified. Reason: The abstract and introduction reference
+      prior work, such as the mention of DASCA as the state-of-the-art STT-RAM SLLC
+      management and the discussion of previous research on conventional SLLC designs
+      being inefficient. Additionally, citations [1], [2], [3], and [4] indicate engagement
+      with existing literature.'
+    novelty_prompt: 'Qualified. Reason: The paper proposes a new management mechanism
+      for STT-RAM shared last-level caches (SLLCs) that leverages reuse locality to
+      improve energy efficiency and performance. This includes the introduction of
+      a novel hardware component, the Reuse Detector, which is a clear claim of novelty.'
+    review_only_prompt: '- Qualified. Reason: The paper proposes a new management
+      mechanism for STT-RAM SLLCs, introduces a novel hardware resource called the
+      Reuse Detector, and presents experimental results demonstrating improvements
+      in energy consumption and performance. These elements indicate that the paper
+      includes new contributions rather than being solely a survey or review of existing
+      work.'
+  token_usage: 6708
+  time_usage: 10.12
+- title: "ChromFound: Towards A Universal Foundation Model for Single-Cell\n  Chromatin\
+    \ Accessibility Data"
+  id: chromfound_towards_a_universal_foundation_model_for_single_cell_chromatin_accessibility_data_chromfound_towards_a_universal_foundation_model_for_single_cell_chromatin_accessibility_data
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract and introduction mention comprehensive
+      evaluations across multiple tasks and datasets, improvements in metrics such
+      as ARI, accuracy, and macro F1 score, and comparisons to baselines, indicating
+      structured empirical evaluation.'
+    related_work_prompt: '- Qualified. Reason: The abstract and introduction contain
+      multiple references to prior work, including citations of existing methods,
+      datasets, and challenges in the field of scATAC-seq. The paper discusses the
+      limitations of current methods and compares its contributions with existing
+      approaches, demonstrating engagement with prior research.'
+    novelty_prompt: 'Qualified. Reason: The paper clearly claims novelty by proposing
+      "ChromFound," a new foundation model tailored for scATAC-seq. The abstract and
+      introduction highlight the unique aspects of ChromFound, such as its hybrid
+      architecture, genome-aware tokenization, and its ability to address specific
+      challenges in scATAC-seq data. The paper explicitly states its contributions,
+      including being the first scATAC-seq foundation model and demonstrating strong
+      zero-shot performance and transfer learning capabilities.'
+    review_only_prompt: 'Qualified. Reason: The paper introduces ChromFound, a new
+      foundation model for scATAC-seq data, which is a novel contribution. The abstract
+      and introduction describe the development and evaluation of this model, highlighting
+      its capabilities and improvements over existing methods. This indicates that
+      the paper is not merely a survey or review but presents new methods and results.'
+  token_usage: 8248
+  time_usage: 7.36
+- title: "Cocco: Hardware-Mapping Co-Exploration towards Memory\n  Capacity-Communication\
+    \ Optimization"
+  id: cocco_hardware_mapping_co_exploration_towards_memory_capacity_communication_optimization_cocco_hardware_mapping_co_exploration_towards_memory_capacity_communication_optimization
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: '- Qualified. Reason: The abstract mentions that experiments
+      demonstrate the effectiveness of the proposed framework, Cocco, by comparing
+      it to other methods and showing reductions in costs and memory access. This
+      indicates the presence of structured evaluation.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction of the
+      paper clearly engage with prior research by mentioning previous works that have
+      proposed memory-oriented optimizations and comparing the proposed method (Cocco)
+      with existing methods such as the greedy algorithm and dynamic programming.
+      The introduction also cites numerous prior studies related to neural network
+      topologies and memory design, indicating a meaningful reference to earlier research.'
+    novelty_prompt: 'Qualified. Reason: The paper claims novelty by introducing a
+      new graph-level execution scheme and a corresponding dataflow and memory management
+      method. It also proposes Cocco, a hardware-mapping co-exploration framework,
+      which is described as leveraging graph-level features to optimize memory and
+      communication overhead. The paper explicitly states its contributions, including
+      a subgraph execution scheme, efficient dataflow and memory management, and a
+      hardware-mapping co-exploration framework, indicating clear claims of novelty.'
+    review_only_prompt: '- Qualified. Reason: The paper introduces new contributions,
+      including a graph-level execution scheme, a memory management method, and a
+      hardware-mapping co-exploration framework called Cocco. It proposes a novel
+      approach to optimize memory and communication overhead in DNN accelerators,
+      supported by experiments demonstrating its effectiveness.'
+  token_usage: 8720
+  time_usage: 8.37
+- title: "A Value of Information-based assessment of strain-based thickness loss\n\
+    \  monitoring in ship hull structures"
+  id: a_value_of_information_based_assessment_of_strain_based_thickness_loss_monitoring_in_ship_hull_structures_a_value_of_information_based_assessment_of_strain_based_thickness_loss_monitoring_in_ship_hull_structures
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract and introduction mention the
+      use of a Bayesian pre-posterior decision analysis to quantify the value of information
+      (VoI) from SHM systems, which involves empirical evaluation. The paper also
+      discusses applying the framework to a large-scale numerical model and examining
+      the benefits of different monitoring strategies, indicating structured evaluation
+      through comparisons and quantitative analysis.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction of the
+      paper contain multiple references to prior research, including specific citations
+      of previous works related to Structural Health Monitoring (SHM), Bayesian inference,
+      and the value of information (VoI) in engineering applications. The paper discusses
+      earlier methods and findings, compares its contributions with existing work,
+      and references prior models and datasets, demonstrating engagement with the
+      academic literature.'
+    novelty_prompt: 'Qualified. Reason: The paper claims novelty by employing a Bayesian
+      pre-posterior decision analysis to quantify the value of information (VoI) from
+      SHM systems for ship hull maintenance, which is stated as a first-of-its-kind
+      analysis for ship structures. Additionally, the authors propose a modified version
+      of linear consequence cost functions and aim to demonstrate a methodology for
+      translating interest in SHM into actionable information, indicating new contributions.'
+    review_only_prompt: '- Qualified. Reason: The paper proposes a novel framework
+      using Bayesian pre-posterior decision analysis to quantify the value of information
+      from SHM systems for ship hull maintenance. It introduces new methods, such
+      as modified consequence cost functions and employs a high-fidelity numerical
+      model, indicating new contributions beyond a mere survey of existing work.'
+  token_usage: 11106
+  time_usage: 10.66
+- title: "Avocado Price Prediction Using a Hybrid Deep Learning Model:\n  TCN-MLP-Attention\
+    \ Architecture"
+  id: avocado_price_prediction_using_a_hybrid_deep_learning_model_tcn_mlp_attention_architecture_avocado_price_prediction_using_a_hybrid_deep_learning_model_tcn_mlp_attention_architecture
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract and introduction clearly mention
+      that the proposed model was trained and evaluated, with experimental results
+      demonstrating its predictive performance. Specific metrics such as RMSE and
+      MSE are provided, indicating a structured evaluation.'
+    related_work_prompt: '- Qualified. Reason: The introduction mentions traditional
+      forecasting methods such as autoregressive (AR) models and moving average (MA)
+      models, indicating engagement with prior research. Additionally, it references
+      the use of deep learning methods based on Transformer architectures in recent
+      years, showing a comparison with existing approaches.'
+    novelty_prompt: 'Qualified. Reason: The paper clearly claims novelty by proposing
+      a new hybrid deep learning model, the TCN-MLP-Attention Architecture, specifically
+      designed for forecasting Hass avocado prices. The introduction and abstract
+      both highlight the integration of Temporal Convolutional Networks, Multi-Layer
+      Perceptrons, and an Attention mechanism as a novel approach to address the challenges
+      in agricultural price prediction.'
+    review_only_prompt: '- Qualified. Reason: The abstract and introduction describe
+      the proposal and evaluation of a new hybrid deep learning model, TCN-MLP-Attention
+      Architecture, for forecasting avocado prices. The paper includes claims of novelty
+      and experimental results, indicating it is not solely a survey or review of
+      existing work.'
+  token_usage: 4542
+  time_usage: 8.07
+- title: 'Patchwork: A Unified Framework for RAG Serving'
+  id: patchwork_a_unified_framework_for_rag_serving_bodun_hu_ut_austin
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract and introduction mention an
+      "experimental evaluation" across four distinct RAG implementations, demonstrating
+      performance improvements and reductions in SLO violations. This indicates the
+      presence of structured evaluation through experiments and performance metrics.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction of the
+      paper contain multiple references to prior work, including citations of previous
+      studies and methods related to Large Language Models (LLMs) and Retrieval-Augmented
+      Generation (RAG) systems. The paper discusses existing challenges and compares
+      its contributions with prior approaches, indicating engagement with earlier
+      research.'
+    novelty_prompt: 'Qualified. Reason: The paper introduces Patchwork, a new end-to-end
+      RAG serving framework with several novel contributions, including a flexible
+      specification interface, a distributed inference system optimized for scalability,
+      and an online scheduling mechanism. The paper explicitly claims novelty by stating,
+      "To the best of our knowledge we provide the first end to end system for deploying
+      RAG pipelines.'
+    review_only_prompt: 'Qualified. Reason: The paper introduces Patchwork, a new
+      framework for deploying Retrieval Augmented Generation (RAG) systems, and describes
+      its novel contributions, including a modular interface, a scheduler for resource
+      allocation, and an online scheduler to minimize SLO violations. The abstract
+      and introduction clearly indicate the proposal of new methods and experimental
+      results, which disqualifies it from being a survey or review paper.'
+  token_usage: 8640
+  time_usage: 7.84
+- title: "Natural Language Programming in Medicine: Administering Evidence Based\n\
+    \  Clinical Workflows with Autonomous Agents Powered by Generative Large\n  Language\
+    \ Models"
+  id: natural_language_programming_in_medicine_administering_evidence_based_clinical_workflows_with_autonomous_agents_powered_by_generative_large_language_models_natural_language_programming_in_medicine_administering_evidence_based_clinical_workflows_with_autonomous_agents_powered_by_generative_large_language_models
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract and introduction mention the
+      evaluation of both proprietary and open-source LLMs, the use of Retrieval Augmented
+      Generation (RAG) to enhance contextual relevance, and the manual evaluation
+      by expert clinicians to validate the models'' outputs. These elements indicate
+      structured evaluation through empirical assessment and expert review.'
+    related_work_prompt: '- Qualified. Reason: The abstract and introduction contain
+      multiple references to prior work, including citations of previous studies and
+      methods (e.g., references to the capabilities of LLMs in healthcare, challenges
+      like hallucinations, and the use of Retrieval Augmented Generation). The paper
+      also discusses the limitations of prior attempts and compares its goals with
+      existing work, indicating engagement with prior research.'
+    novelty_prompt: 'Qualified. Reason: The paper claims novelty by exploring the
+      ability of both proprietary and open-source LLMs to function autonomously within
+      an agent-based workflow in a simulated tertiary care medical center. It also
+      discusses the use of techniques such as Retrieval Augmented Generation (RAG)
+      to enhance LLM knowledge and operation, and emphasizes the shift from Natural
+      Language Processing to Natural Language Programming as a new paradigm in complex
+      systems.'
+    review_only_prompt: '- Qualified. Reason: The abstract and introduction describe
+      the paper as exploring the use of LLMs as autonomous agents in healthcare settings,
+      evaluating their performance, and proposing the use of techniques like Retrieval
+      Augmented Generation (RAG) and Natural Language Programming. These elements
+      indicate the paper includes new contributions and methods rather than merely
+      summarizing existing work.'
+  token_usage: 6133
+  time_usage: 8.8
+- title: 'LLM Harmony: Multi-Agent Communication for Problem Solving'
+  id: llm_harmony_multi_agent_communication_for_problem_solving_sumedh_rasal_georgia_institute_of_technology_chicago_il_srasal3_gatech_edu
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract mentions "extensive experimentation"
+      demonstrating the framework''s performance and adaptability, indicating that
+      the paper includes structured evaluation through empirical methods.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction contain
+      multiple references to prior work, including citations of previous research
+      on Large Language Models (LLMs), their limitations, and existing methodologies.
+      The paper discusses its contributions in the context of these existing approaches,
+      indicating engagement with prior research.'
+    novelty_prompt: 'Qualified. Reason: The paper introduces a novel multi-agent communication
+      framework inspired by the CAMEL model, which is designed to enhance the autonomous
+      problem-solving capabilities of Large Language Models (LLMs). The abstract and
+      introduction clearly claim novelty by proposing a new strategy that employs
+      multiple LLM agents with distinct personas engaged in role-playing communication.
+      This approach is presented as a nuanced and adaptable method to address the
+      limitations of existing LLM models, indicating a clear contribution to the field.'
+    review_only_prompt: '- Qualified. Reason: The paper introduces a novel multi-agent
+      communication framework to enhance LLMs'' problem-solving capabilities, proposes
+      new methods, and includes experimentation to demonstrate its effectiveness.'
+  token_usage: 5861
+  time_usage: 6.94
+- title: Confidence-Based Curriculum Learning for Multi-Agent Path Finding
+  id: confidence_based_curriculum_learning_for_multi_agent_path_finding_thomy_phan_university_of_southern_california_los_angeles_usa_thomy_phan_usc_edu
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract and introduction clearly mention
+      that the paper includes structured evaluation. Specifically, it states, "We
+      evaluate CACTUS in various maps of different sizes, obstacle densities, and
+      numbers of agents," and "Our experiments demonstrate better performance and
+      generalization capabilities than state-of-the-art MARL approaches." These statements
+      indicate empirical validation through experiments and comparisons.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction of the
+      paper contain multiple references to prior work, including citations of existing
+      MAPF solvers and MARL algorithms. The paper discusses the limitations of current
+      approaches and compares its proposed method, CACTUS, to state-of-the-art techniques.
+      It also mentions how prior works have attempted to connect MARL and MAPF, highlighting
+      the complexity and limitations of these approaches.'
+    novelty_prompt: 'Qualified. Reason: The paper claims novelty by proposing a new
+      approach called Confidence-based Auto-Curriculum for Team Update Stability (CACTUS)
+      as a lightweight MARL approach to the Multi-Agent Path Finding (MAPF) problem.
+      The abstract and introduction explicitly state contributions, such as formulating
+      MAPF as a stochastic game and introducing a reverse curriculum scheme, which
+      are presented as novel methods to enhance existing MARL techniques.'
+    review_only_prompt: '- Qualified. Reason: The paper proposes a new method called
+      Confidence-based Auto-Curriculum for Team Update Stability (CACTUS) for solving
+      the Multi-Agent Path Finding (MAPF) problem using multi-agent reinforcement
+      learning (MARL). It introduces a novel approach and evaluates its performance,
+      indicating new contributions beyond summarizing existing work.'
+  token_usage: 7505
+  time_usage: 10.22
+- title: "A mechanism for discovering semantic relationships among agent\n  communication\
+    \ protocols"
+  id: a_mechanism_for_discovering_semantic_relationships_among_agent_communication_protocols_a_mechanism_for_discovering_semantic_relationships_among_agent_communication_protocols
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The paper contains structured evaluation
+      sections, including detailed algorithm descriptions, examples of protocol comparisons,
+      and figures illustrating the generation of fluents and protocol relationships.'
+    related_work_prompt: '- Qualified. Reason: The abstract and introduction of the
+      paper reference prior work, including a recent work by Greenwood and M. Lyell
+      (2007) and FIPA (2005), as well as the social approach by Singh (1998, 2000).
+      The paper also discusses its contributions in the context of existing technologies
+      and methodologies, indicating engagement with prior research.'
+    novelty_prompt: 'Qualified. Reason: The paper introduces a new mechanism for discovering
+      semantic relationships among communication protocols, which includes the development
+      of a communication acts ontology called CommOnt. The paper explicitly states
+      its contributions, such as promoting flexible interoperation among heterogeneous
+      systems and facilitating the customization of standard communication protocols.
+      These claims of novelty qualify the paper.'
+    review_only_prompt: '- Qualified. Reason: The paper introduces a new mechanism
+      for discovering semantic relationships among communication protocols, proposes
+      a communication acts ontology, and describes a method for semantic analysis
+      of protocols. These elements indicate new contributions rather than merely summarizing
+      existing work.'
+  token_usage: 28076
+  time_usage: 20.32
+- title: 'LiteCUA: Computer as MCP Server for Computer-Use Agent on AIOS'
+  id: litecua_computer_as_mcp_server_for_computer_use_agent_on_aios_kai_mei_1_xi_zhu_1_hang_gao_1_shuhang_lin_1_yongfeng_zhang_1_2
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: '- Qualified. Reason: The abstract mentions that the platform''s
+      effectiveness is demonstrated through LiteCUA, which achieves a 14.66% success
+      rate on the OSWorld benchmark, indicating the use of structured evaluation through
+      benchmarks and performance metrics.'
+    related_work_prompt: '- Qualified. Reason: The abstract and introduction contain
+      numerous citations and references to prior work, including discussions of existing
+      approaches, comparisons with current methods, and mentions of related research
+      in the field of large language models and computer-use agents.'
+    novelty_prompt: 'Qualified. Reason: The abstract clearly claims novelty by introducing
+      AIOS 1.0 as a "novel platform" and a "Model Context Protocol (MCP) server architecture"
+      to address the semantic disconnect in computer-use agents. The paper also highlights
+      the introduction of LiteCUA, a new agent built on this platform, and suggests
+      that their approach represents a promising direction for developing more capable
+      computer-use agents.'
+    review_only_prompt: '- Qualified. Reason: The abstract and introduction describe
+      the development of a novel platform (AIOS 1.0) and a lightweight computer-use
+      agent (LiteCUA) with specific contributions, including a new Model Context Protocol
+      (MCP) server architecture and experimental results demonstrating improved performance.
+      These elements indicate new contributions rather than a survey of existing work.'
+  token_usage: 7331
+  time_usage: 7.95
+- title: "Active Learning-Enhanced Dual Control for Angle-Only Initial Relative\n\
+    \  Orbit Determination"
+  id: active_learning_enhanced_dual_control_for_angle_only_initial_relative_orbit_determination_active_learning_enhanced_dual_control_for_angle_only_initial_relative_orbit_determination
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract mentions that the proposed
+      method is validated through numerical simulations, demonstrating its effectiveness
+      and robustness. This indicates that the paper includes structured evaluation
+      through empirical validation.'
+    related_work_prompt: '- Qualified. Reason: The abstract and introduction of the
+      paper contain multiple references to prior work, including citations [\[1\]](#page-6-0)
+      through [\[17\]](#page-7-12). The paper discusses existing challenges and approaches
+      in angle-only initial relative orbit determination (IROD), compares its proposed
+      method with previous methods, and builds upon the mathematical framework and
+      logic described in earlier research.'
+    novelty_prompt: 'Qualified. Reason: The paper claims novelty by proposing a novel
+      approach that leverages active learning techniques to design the input excitation
+      signal for angle-only initial relative orbit determination (IROD). This approach
+      is presented as a new method to enhance observability without requiring additional
+      hardware or predefined maneuvers, which indicates a clear claim of novelty.'
+    review_only_prompt: '- Qualified. Reason: The paper proposes a novel approach
+      using active learning techniques to enhance observability in angle-only relative
+      orbit determination. It introduces a new method and validates it through numerical
+      simulations, indicating new contributions beyond a mere survey of existing work.'
+  token_usage: 6322
+  time_usage: 9.2
+- title: "Learning mechanical systems from real-world data using discrete forced\n\
+    \  Lagrangian dynamics"
+  id: learning_mechanical_systems_from_real_world_data_using_discrete_forced_lagrangian_dynamics_learning_mechanical_systems_from_real_world_data_using_discrete_forced_lagrangian_dynamics
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract and introduction mention that
+      the method is validated on a variety of synthetic and real-world datasets, and
+      comparisons are made to baseline methods. Additionally, there is a table comparing
+      the proposed model to other models, indicating structured evaluation through
+      empirical validation.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction of the
+      paper contain multiple references to prior work, including citations of seminal
+      examples like Hamiltonian and Lagrangian neural networks. The paper compares
+      its proposed method with existing approaches and discusses the advantages over
+      traditional modeling strategies. Additionally, it references specific prior
+      methods and datasets, demonstrating engagement with existing research.'
+    novelty_prompt: 'Qualified. Reason: The paper claims novelty by proposing a new
+      method called the Discrete Forced Lagrangian Neural Network (DFLNN), which is
+      a structure-preserving approach for learning dynamics directly from position
+      data without requiring velocity or momentum data. The introduction and abstract
+      explicitly state the novelty of this method and its advantages over existing
+      models.'
+    review_only_prompt: 'Qualified. Reason: The abstract and introduction describe
+      the proposal of a new method called the Discrete Forced Lagrangian Neural Network
+      (DFLNN), which is a data-driven approach for learning the equations of motion
+      from position data. The paper discusses the validation of this method on various
+      datasets and highlights its advantages over existing models, indicating that
+      it is not merely a survey or review of existing work.'
+  token_usage: 6093
+  time_usage: 7.56
+- title: "An Autocovariance Least-Squares-Based Data-Driven Kalman Filter for\n  Unknown\
+    \ Systems"
+  id: an_autocovariance_least_squares_based_data_driven_kalman_filter_for_unknown_systems_an_autocovariance_least_squares_based_data_driven_kalman_filter_for_unknown_systems
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: '- Qualified. Reason: The abstract mentions numerical simulations
+      that validate the robustness and effectiveness of the proposed ADKF, indicating
+      empirical evaluation. Additionally, it discusses quantifying the performance
+      gap between the ADKF and the traditional Kalman filter, which suggests structured
+      evaluation through comparisons.'
+    related_work_prompt: 'Qualified. Reason: The introduction of the paper references
+      prior work, including the foundational Kalman filter and its applications in
+      various fields. It discusses the challenges of obtaining precise prior models
+      and mentions recent research on data-driven filtering methods, indicating engagement
+      with existing research.'
+    novelty_prompt: 'Qualified. Reason: The abstract clearly states the proposal of
+      a new method, the Autocovariance Least-squares-based Data-driven Kalman Filter
+      (ADKF), which provides a unified framework for simultaneous system identification
+      and state estimation. This indicates a novel contribution to the field.'
+    review_only_prompt: 'Qualified. Reason: The abstract and introduction describe
+      the proposal of a new method, the Autocovariance Least-squares-based Data-driven
+      Kalman Filter (ADKF), which includes a novel algorithm for estimating noise
+      covariances and introduces a feedback control mechanism. The paper also mentions
+      numerical simulations to validate the proposed method, indicating new contributions
+      beyond a mere survey of existing work.'
+  token_usage: 3381
+  time_usage: 6.53
+- title: 'IRCopilot: Automated Incident Response with Large Language Models'
+  id: ircopilot_automated_incident_response_with_large_language_models_xihuan_lin_fujian_agriculture_and_forestry_university_fuzhou_china_xihuan_lin_fafu_edu_cn
+  decisions:
+    language: '- Qualified. Reason: English Paper'
+    evaluation_prompt: 'Qualified. Reason: The abstract and introduction clearly mention
+      the use of an incremental benchmark to evaluate the performance of LLMs in incident
+      response tasks. The paper discusses experimental results demonstrating IRCopilot''s
+      performance across key benchmarks and real-world scenarios, indicating structured
+      evaluation through metrics and comparisons.'
+    related_work_prompt: 'Qualified. Reason: The abstract and introduction of the
+      paper contain multiple references to prior work, including citations of existing
+      methods, models, and benchmarks in the field of incident response and cybersecurity.
+      The paper discusses the limitations of traditional methods and compares its
+      proposed framework, IRCopilot, with existing Large Language Models (LLMs) and
+      benchmarks. Additionally, it references specific prior studies and technologies,
+      such as GPT, BERT, and other LLMs, demonstrating engagement with prior research.'
+    novelty_prompt: 'Qualified. Reason: The paper claims novelty by proposing IRCopilot,
+      a novel framework for automated incident response powered by LLMs. It also introduces
+      a new benchmark for evaluating LLMs in incident response tasks, which is stated
+      to be the first comprehensive benchmark in this domain. These claims indicate
+      clear contributions and novelty.'
+    review_only_prompt: '- Qualified. Reason: The paper proposes a novel framework
+      called IRCopilot for automated incident response, develops a comprehensive benchmark
+      for evaluating LLMs in incident response tasks, and presents experimental results
+      demonstrating the effectiveness of their proposed system. These elements indicate
+      new contributions beyond merely summarizing existing work.'
+  token_usage: 10405
+  time_usage: 6.94

@@ -3,6 +3,7 @@ import litellm
 import os
 import re
 import argparse
+import time
 
 # === Load disqualification prompts from YAML ===
 with open("prompt.yaml", "r", encoding="utf-8") as f:
@@ -33,10 +34,8 @@ def split_by_section(markdown_text):
 def is_disqualified(paper, prompt_text, prompt_key=None):
     markdown_text = paper["document"]
 
-    if len(markdown_text) <= 100_000:
-        # Full context if size allows
-        content_to_use = markdown_text
-        prompt = f"""{prompt_text}
+    content_to_use = markdown_text
+    prompt = f"""{prompt_text}
 
 Here is the paper content (in Markdown):
 
@@ -46,44 +45,24 @@ Answer using one of:
 - Qualified. Reason: <brief explanation>
 - Disqualified: <reason>. Reason: <brief explanation>
 """
-        response = litellm.completion(
-            model="gpt-4o",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.2,
-            max_tokens=200
-        )
-        return response["choices"][0]["message"]["content"].strip().strip('"').strip("'")
 
-    # Too long: split by section and evaluate ALL chunks
-    sections = split_by_section(markdown_text)
-    all_replies = []
-    disqualified_chunks = []
+    start_time = time.time()
+    response = litellm.completion(
+        model="gpt-4o",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.2,
+        max_tokens=200
+    )
+    elapsed = time.time() - start_time
+    tokens_used = response.get("usage", {}).get("total_tokens", "N/A")
 
-    for idx, section in enumerate(sections):
-        section_prompt = f"""{prompt_text}
+    paper.setdefault("token_usage", 0)
+    paper["token_usage"] += tokens_used if isinstance(tokens_used, int) else 0
 
-Here is a section from the paper (chunk {idx + 1}):
+    paper.setdefault("time_usage", 0.0)
+    paper["time_usage"] += elapsed
 
-\"\"\"{section[:8000]}\"\"\"
-
-Answer using one of:
-- Qualified. Reason: <brief explanation>
-- Disqualified: <reason>. Reason: <brief explanation>
-"""
-        response = litellm.completion(
-            model="gpt-4o",
-            messages=[{"role": "user", "content": section_prompt}],
-            temperature=0.2,
-            max_tokens=200
-        )
-        reply = response["choices"][0]["message"]["content"].strip().strip('"').strip("'")
-        all_replies.append(f"Chunk {idx + 1}: {reply}")
-        if reply.lower().startswith("disqualified"):
-            disqualified_chunks.append(f"Chunk {idx + 1}: {reply}")
-
-    if disqualified_chunks:
-        return "Disqualified: " + " | ".join(disqualified_chunks)
-    return "Qualified. Reason: All relevant sections passed."
+    return response["choices"][0]["message"]["content"].strip().strip('"').strip("'")
 
 def run_all_checks(papers):
     for paper in papers:
@@ -114,7 +93,6 @@ def is_fully_qualified(paper):
 def main(input_yaml):
     qualified_output_yaml = "qualified_papers.yaml"
     disqualified_output_yaml = "disqualified_papers.yaml"
-    full_log_yaml = "all_papers_with_reasons.yaml"
 
     with open(input_yaml, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
@@ -131,12 +109,16 @@ def main(input_yaml):
     with open(disqualified_output_yaml, "w", encoding="utf-8") as f:
         yaml.dump({"papers": disqualified}, f, allow_unicode=True, sort_keys=False)
 
-    with open(full_log_yaml, "w", encoding="utf-8") as f:
-        yaml.dump({"papers": papers}, f, allow_unicode=True, sort_keys=False)
-
     print(f"\n🎉 Qualified papers saved to {qualified_output_yaml}")
     print(f"❌ Disqualified papers (with reasons) saved to {disqualified_output_yaml}")
-    print(f"📋 All decision logs saved to {full_log_yaml}")
+
+    token_vals = [p.get("token_usage", 0) for p in papers]
+    time_vals = [p.get("time_usage", 0.0) for p in papers]
+
+    if token_vals:
+        print(f"\n📊 Avg Total Tokens per Paper: {sum(token_vals) / len(token_vals):.1f}")
+    if time_vals:
+        print(f"⏱  Avg Total Time per Paper: {sum(time_vals) / len(time_vals):.2f}s")
 
     for _, filename in PROMPT_ORDER:
         if os.path.exists(filename):
